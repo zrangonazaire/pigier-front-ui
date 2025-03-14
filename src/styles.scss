@@ -1,1 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+  color: black; /* Couleur du texte en noir */
+}
+
+mat-toolbar {
+  background-color: #1976d2;
+  color: white;
+}
+
+.example-icon {
+  color: white;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}

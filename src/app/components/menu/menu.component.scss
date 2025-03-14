@@ -1,0 +1,58 @@
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+mat-toolbar {
+  background-color: #1976d2;
+  color: white;
+  justify-content: flex-start; /* Aligner le contenu à gauche */
+
+  .mat-icon-button {
+    color: white;
+  }
+
+  .mat-button {
+    color: white;
+  }
+
+  span {
+    color: white;
+  }
+
+  button {
+    color: white;
+  }
+
+  mat-icon {
+    color: white;
+  }
+
+  .example-link {
+    color: white;
+    text-decoration: none;
+    margin-left: 16px; /* Ajustez cette valeur pour rapprocher le lien */
+  }
+}
+
+.example-container {
+  width: 500px;
+  height: 100%;
+}
+
+.example-sidenav-content {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-sidenav {
+  padding: 20px;
+  background-color: antiquewhite;
+  width: 200px;
+}
+.active {
+  font-weight: bold;
+  color: white;
+}
+

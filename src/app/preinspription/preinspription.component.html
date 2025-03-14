@@ -1,0 +1,46 @@
+<form [formGroup]="preinscriptionForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="nomprenoms">Avez vous le BAC ?</label>
+    <mat-radio-group aria-label="Avez vous le BAC?">
+        <mat-radio-button value="1">Oui, j'ai le BAC</mat-radio-button>
+        <mat-radio-button value="2">Non, je n'ai pas le BAC</mat-radio-button>
+      </mat-radio-group>
+  </div>
+  <div>
+    <label for="nomprenoms">Nom et Prénoms:</label>
+    <input id="nomprenoms" formControlName="nomprenoms" required />
+  </div>
+
+  <div>
+    <label for="datnais">Date de Naissance:</label>
+    <input id="datnais" type="date" formControlName="datnais" required />
+  </div>
+
+  <div>
+    <label for="lieunais">Lieu de Naissance:</label>
+    <input id="lieunais" formControlName="lieunais" />
+  </div>
+
+  <div>
+    <label for="sexe">Sexe:</label>
+    <select id="sexe" formControlName="sexe">
+      <option value="M">Masculin</option>
+      <option value="F">Féminin</option>
+    </select>
+  </div>
+
+  <!-- Ajoutez d'autres champs de formulaire ici en suivant le même modèle -->
+
+  <div>
+    <label for="Inscrit_Sous_Titre">Inscrit Sous Titre:</label>
+    <input
+      id="Inscrit_Sous_Titre"
+      type="checkbox"
+      formControlName="Inscrit_Sous_Titre"
+    />
+  </div>
+
+  <button type="submit" [disabled]="!preinscriptionForm.valid">
+    Soumettre
+  </button>
+</form>
