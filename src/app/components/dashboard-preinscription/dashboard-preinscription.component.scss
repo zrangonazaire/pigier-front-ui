@@ -1,0 +1,23 @@
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .dashboard-header {
+    flex: 0 0 auto;
+  }
+  
+  .dashboard-content {
+    flex: 1;
+    overflow-y: auto;
+    background-color: #f8f9fa;
+  }
+  
+  .card {
+    height: 100%;
+  }
+  
+  .table {
+    margin-top: 20px;
+  }
