@@ -3,13 +3,14 @@
 html, body { height: 100%; }
 body { 
   margin: 0; 
-  font-family: Roboto, "Helvetica Neue", sans-serif; 
+  font-family: 'Courier New', Courier, monospace; 
   color: black; /* Couleur du texte en noir */
+  font-size: larger;
 }
 
 mat-toolbar {
-  background-color: #1976d2;
-  color: white;
+  background-color: yellow;
+  color: black;
 }
 
 .example-icon {

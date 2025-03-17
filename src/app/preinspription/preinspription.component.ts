@@ -1,22 +1,47 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { MatRadioModule } from '@angular/material/radio';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatStepperModule } from '@angular/material/stepper';
 
 @Component({
-  selector: 'app-preinspription',
-  imports: [ReactiveFormsModule, MatRadioModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatStepperModule
+  ],
+ 
   templateUrl: './preinspription.component.html',
-  styleUrl: './preinspription.component.scss'
+  styleUrl: './preinspription.component.scss',
 })
 export class PreinspriptionComponent implements OnInit {
-  preinscriptionForm!: FormGroup;
-  constructor(private fb: FormBuilder) {}
+onSubmit() {
+throw new Error('Method not implemented.');
+}
+  isLinear = true;
+  firstFormGroup!: FormGroup;
+  secondFormGroup!: FormGroup;
+  thirdFormGroup!: FormGroup;
+  fourthFormGroup!: FormGroup;
 
-  ngOnInit(): void {
-    this.preinscriptionForm = this.fb.group({
-      id: [null],
+  constructor(private _formBuilder: FormBuilder) {}
+
+  ngOnInit() {
+    this.firstFormGroup = this._formBuilder.group({
       nomprenoms: ['', Validators.required],
-      datnais: ['', Validators.required],
+      datnais: [''],
       lieunais: [''],
       sexe: [''],
       nationalite: [''],
@@ -24,9 +49,12 @@ export class PreinspriptionComponent implements OnInit {
       numidentite: [''],
       teletud: [''],
       celetud: [''],
-      emailetud: ['', Validators.email],
+      emailetud: [''],
       viletud: [''],
-      cometud: [''],
+      cometud: ['']
+    });
+
+    this.secondFormGroup = this._formBuilder.group({
       baccalaureat: [''],
       annbac: [''],
       diplequiv: [''],
@@ -38,7 +66,10 @@ export class PreinspriptionComponent implements OnInit {
       specgrad: [''],
       etsfreq: [''],
       formsouh: [''],
-      idperm: [''],
+      idperm: ['']
+    });
+
+    this.thirdFormGroup = this._formBuilder.group({
       nompere: [''],
       nomere: [''],
       titrespo: [''],
@@ -52,7 +83,10 @@ export class PreinspriptionComponent implements OnInit {
       celrespo: [''],
       telburespo: [''],
       teldomrespo: [''],
-      emailrespo: ['', Validators.email],
+      emailrespo: ['']
+    });
+
+    this.fourthFormGroup = this._formBuilder.group({
       copiebac: [''],
       copderndipl: [''],
       contnompren1: [''],
@@ -83,14 +117,5 @@ export class PreinspriptionComponent implements OnInit {
       Etab_source: [''],
       Inscrit_Sous_Titre: [false]
     });
-  }
-
-  onSubmit(): void {
-    if (this.preinscriptionForm.valid) {
-      console.log(this.preinscriptionForm.value);
-      // Envoyer les données au serveur ou effectuer d'autres actions
-    } else {
-      console.log('Formulaire invalide');
-    }
   }
 }

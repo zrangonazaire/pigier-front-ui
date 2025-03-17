@@ -1,46 +1,65 @@
-<form [formGroup]="preinscriptionForm" (ngSubmit)="onSubmit()">
-  <div>
-    <label for="nomprenoms">Avez vous le BAC ?</label>
-    <mat-radio-group aria-label="Avez vous le BAC?">
-        <mat-radio-button value="1">Oui, j'ai le BAC</mat-radio-button>
-        <mat-radio-button value="2">Non, je n'ai pas le BAC</mat-radio-button>
-      </mat-radio-group>
-  </div>
-  <div>
-    <label for="nomprenoms">Nom et Prénoms:</label>
-    <input id="nomprenoms" formControlName="nomprenoms" required />
-  </div>
+<mat-horizontal-stepper [linear]="isLinear" #stepper>
+  <!-- Étape 1: Informations personnelles -->
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Informations Personnelles</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Nom et Prénoms</mat-label>
+        <input matInput formControlName="nomprenoms" required>
+      </mat-form-field>
+      <!-- Ajoutez les autres champs de cette étape ici -->
+      <div>
+        <button mat-button matStepperNext>Suivant</button>
+      </div>
+    </form>
+  </mat-step>
 
-  <div>
-    <label for="datnais">Date de Naissance:</label>
-    <input id="datnais" type="date" formControlName="datnais" required />
-  </div>
+  <!-- Étape 2: Informations académiques -->
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Informations Académiques</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Baccalauréat</mat-label>
+        <input matInput formControlName="baccalaureat">
+      </mat-form-field>
+      <!-- Ajoutez les autres champs de cette étape ici -->
+      <div>
+        <button mat-button matStepperPrevious>Précédent</button>
+        <button mat-button matStepperNext>Suivant</button>
+      </div>
+    </form>
+  </mat-step>
 
-  <div>
-    <label for="lieunais">Lieu de Naissance:</label>
-    <input id="lieunais" formControlName="lieunais" />
-  </div>
+  <!-- Étape 3: Informations sur les responsables -->
+  <mat-step [stepControl]="thirdFormGroup">
+    <form [formGroup]="thirdFormGroup">
+      <ng-template matStepLabel>Informations sur les Responsables</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Nom du Père</mat-label>
+        <input matInput formControlName="nompere">
+      </mat-form-field>
+      <!-- Ajoutez les autres champs de cette étape ici -->
+      <div>
+        <button mat-button matStepperPrevious>Précédent</button>
+        <button mat-button matStepperNext>Suivant</button>
+      </div>
+    </form>
+  </mat-step>
 
-  <div>
-    <label for="sexe">Sexe:</label>
-    <select id="sexe" formControlName="sexe">
-      <option value="M">Masculin</option>
-      <option value="F">Féminin</option>
-    </select>
-  </div>
-
-  <!-- Ajoutez d'autres champs de formulaire ici en suivant le même modèle -->
-
-  <div>
-    <label for="Inscrit_Sous_Titre">Inscrit Sous Titre:</label>
-    <input
-      id="Inscrit_Sous_Titre"
-      type="checkbox"
-      formControlName="Inscrit_Sous_Titre"
-    />
-  </div>
-
-  <button type="submit" [disabled]="!preinscriptionForm.valid">
-    Soumettre
-  </button>
-</form>
+  <!-- Étape 4: Informations supplémentaires -->
+  <mat-step [stepControl]="fourthFormGroup">
+    <form [formGroup]="fourthFormGroup">
+      <ng-template matStepLabel>Informations Supplémentaires</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Copie du Bac</mat-label>
+        <input matInput formControlName="copiebac">
+      </mat-form-field>
+      <!-- Ajoutez les autres champs de cette étape ici -->
+      <div>
+        <button mat-button matStepperPrevious>Précédent</button>
+        <button mat-button (click)="stepper.reset()">Réinitialiser</button>
+        <button mat-button (click)="onSubmit()">Soumettre</button>
+      </div>
+    </form>
+  </mat-step>
+</mat-horizontal-stepper>
