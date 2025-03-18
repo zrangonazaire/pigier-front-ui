@@ -87,7 +87,7 @@ export class FORMATIONService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/vi/formation/creerOrUpdateFormation`;
+        let localVarPath = `/formation/creerOrUpdateFormation`;
         return this.httpClient.request<FormationResponseDto>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -143,7 +143,7 @@ export class FORMATIONService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/vi/formation/deleteFormation/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
+        let localVarPath = `/formation/deleteFormation/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
         return this.httpClient.request<boolean>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -194,7 +194,7 @@ export class FORMATIONService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/vi/formation/findAllFormation`;
+        let localVarPath = `/formation/findAllFormation`;
         return this.httpClient.request<Array<FormationResponseDto>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

@@ -89,7 +89,7 @@ export class EtablissementService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/vi/etablissement/creerOrUpdateEtable`;
+        let localVarPath = `/etablissement/creerOrUpdateEtable`;
         return this.httpClient.request<EtabSourceResponseDto>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -145,7 +145,7 @@ export class EtablissementService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/vi/etablissement/deleteEtab/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
+        let localVarPath = `/etablissement/deleteEtab/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
         return this.httpClient.request<boolean>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -196,7 +196,7 @@ export class EtablissementService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/vi/etablissement/findAllEtabSour`;
+        let localVarPath = `/etablissement/findAllEtabSour`;
         return this.httpClient.request<Array<EtabSourceResponseDto>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

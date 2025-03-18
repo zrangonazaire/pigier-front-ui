@@ -87,7 +87,7 @@ export class PrinscriptionYakroService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/vi/preinscriptionyakro/creerOrUpdatePreinscYakro`;
+        let localVarPath = `/preinscriptionyakro/creerOrUpdatePreinscYakro`;
         return this.httpClient.request<PreinscriptionYakroResponseDto>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -143,7 +143,7 @@ export class PrinscriptionYakroService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/vi/preinscriptionyakro/deletePreinscYakro/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
+        let localVarPath = `/preinscriptionyakro/deletePreinscYakro/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
         return this.httpClient.request<boolean>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -194,7 +194,7 @@ export class PrinscriptionYakroService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/vi/preinscriptionyakro/findAllPreinscYakro`;
+        let localVarPath = `/preinscriptionyakro/findAllPreinscYakro`;
         return this.httpClient.request<Array<PreinscriptionYakroResponseDto>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -249,7 +249,7 @@ export class PrinscriptionYakroService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/vi/preinscriptionyakro/findPreinscYakroById/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
+        let localVarPath = `/preinscriptionyakro/findPreinscYakroById/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
         return this.httpClient.request<PreinscriptionYakroResponseDto>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -304,7 +304,7 @@ export class PrinscriptionYakroService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/vi/preinscriptionyakro/findPreinscYakroByNomEleve/${this.configuration.encodeParam({name: "nomEleve", value: nomEleve, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/preinscriptionyakro/findPreinscYakroByNomEleve/${this.configuration.encodeParam({name: "nomEleve", value: nomEleve, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         return this.httpClient.request<Array<PreinscriptionYakroResponseDto>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
