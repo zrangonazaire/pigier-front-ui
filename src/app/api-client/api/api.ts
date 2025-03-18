@@ -1,5 +1,7 @@
 export * from './etablissement.service';
 import { EtablissementService } from './etablissement.service';
-export * from './formationController.service';
-import { FormationControllerService } from './formationController.service';
-export const APIS = [EtablissementService, FormationControllerService];
+export * from './fORMATION.service';
+import { FORMATIONService } from './fORMATION.service';
+export * from './prinscriptionYakro.service';
+import { PrinscriptionYakroService } from './prinscriptionYakro.service';
+export const APIS = [EtablissementService, FORMATIONService, PrinscriptionYakroService];
