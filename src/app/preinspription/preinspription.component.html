@@ -1,65 +1,289 @@
-<mat-horizontal-stepper [linear]="isLinear" #stepper>
-  <!-- Étape 1: Informations personnelles -->
-  <mat-step [stepControl]="firstFormGroup">
-    <form [formGroup]="firstFormGroup">
-      <ng-template matStepLabel>Informations Personnelles</ng-template>
-      <mat-form-field appearance="fill">
-        <mat-label>Nom et Prénoms</mat-label>
-        <input matInput formControlName="nomprenoms" required>
-      </mat-form-field>
-      <!-- Ajoutez les autres champs de cette étape ici -->
-      <div>
-        <button mat-button matStepperNext>Suivant</button>
-      </div>
-    </form>
-  </mat-step>
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-header">
+      <h3>Préinscription Wizard</h3>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="submitForm()">
+        <!-- Step 1: Informations personnelles -->
+        <div *ngIf="currentStep === 1">
+          <h4>Étape 1: Informations personnelles</h4>
+          <div class="mb-3">
+            <label for="nomprenoms" class="form-label">Nom et Prénoms</label>
+            <input type="text" class="form-control" id="nomprenoms" [(ngModel)]="preinscriptionData.nomprenoms" name="nomprenoms" required>
+          </div>
+          <div class="mb-3">
+            <label for="datnais" class="form-label">Date de naissance</label>
+            <input type="date" class="form-control" id="datnais" [(ngModel)]="preinscriptionData.datnais" name="datnais">
+          </div>
+          <div class="mb-3">
+            <label for="lieunais" class="form-label">Lieu de naissance</label>
+            <input type="text" class="form-control" id="lieunais" [(ngModel)]="preinscriptionData.lieunais" name="lieunais">
+          </div>
+          <div class="mb-3">
+            <label for="sexe" class="form-label">Sexe</label>
+            <select class="form-control" id="sexe" [(ngModel)]="preinscriptionData.sexe" name="sexe">
+              <option value="M">Masculin</option>
+              <option value="F">Féminin</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="nationalite" class="form-label">Nationalité</label>
+            <input type="text" class="form-control" id="nationalite" [(ngModel)]="preinscriptionData.nationalite" name="nationalite">
+          </div>
+          <div class="mb-3">
+            <label for="natident" class="form-label">Nature de l'identité</label>
+            <input type="text" class="form-control" id="natident" [(ngModel)]="preinscriptionData.natident" name="natident">
+          </div>
+          <div class="mb-3">
+            <label for="numidentite" class="form-label">Numéro d'identité</label>
+            <input type="text" class="form-control" id="numidentite" [(ngModel)]="preinscriptionData.numidentite" name="numidentite">
+          </div>
+        </div>
 
-  <!-- Étape 2: Informations académiques -->
-  <mat-step [stepControl]="secondFormGroup">
-    <form [formGroup]="secondFormGroup">
-      <ng-template matStepLabel>Informations Académiques</ng-template>
-      <mat-form-field appearance="fill">
-        <mat-label>Baccalauréat</mat-label>
-        <input matInput formControlName="baccalaureat">
-      </mat-form-field>
-      <!-- Ajoutez les autres champs de cette étape ici -->
-      <div>
-        <button mat-button matStepperPrevious>Précédent</button>
-        <button mat-button matStepperNext>Suivant</button>
-      </div>
-    </form>
-  </mat-step>
+        <!-- Step 2: Informations de contact -->
+        <div *ngIf="currentStep === 2">
+          <h4>Étape 2: Informations de contact</h4>
+          <div class="mb-3">
+            <label for="teletud" class="form-label">Téléphone</label>
+            <input type="text" class="form-control" id="teletud" [(ngModel)]="preinscriptionData.teletud" name="teletud" required>
+          </div>
+          <div class="mb-3">
+            <label for="celetud" class="form-label">Téléphone portable</label>
+            <input type="text" class="form-control" id="celetud" [(ngModel)]="preinscriptionData.celetud" name="celetud">
+          </div>
+          <div class="mb-3">
+            <label for="emailetud" class="form-label">Email</label>
+            <input type="email" class="form-control" id="emailetud" [(ngModel)]="preinscriptionData.emailetud" name="emailetud">
+          </div>
+          <div class="mb-3">
+            <label for="viletud" class="form-label">Ville</label>
+            <input type="text" class="form-control" id="viletud" [(ngModel)]="preinscriptionData.viletud" name="viletud">
+          </div>
+          <div class="mb-3">
+            <label for="cometud" class="form-label">Commune</label>
+            <input type="text" class="form-control" id="cometud" [(ngModel)]="preinscriptionData.cometud" name="cometud">
+          </div>
+        </div>
 
-  <!-- Étape 3: Informations sur les responsables -->
-  <mat-step [stepControl]="thirdFormGroup">
-    <form [formGroup]="thirdFormGroup">
-      <ng-template matStepLabel>Informations sur les Responsables</ng-template>
-      <mat-form-field appearance="fill">
-        <mat-label>Nom du Père</mat-label>
-        <input matInput formControlName="nompere">
-      </mat-form-field>
-      <!-- Ajoutez les autres champs de cette étape ici -->
-      <div>
-        <button mat-button matStepperPrevious>Précédent</button>
-        <button mat-button matStepperNext>Suivant</button>
-      </div>
-    </form>
-  </mat-step>
+        <!-- Step 3: Informations académiques -->
+        <div *ngIf="currentStep === 3">
+          <h4>Étape 3: Informations académiques</h4>
+          <div class="mb-3">
+            <label class="form-label">Avez-vous un diplôme équivalent au baccalauréat ?</label>
+            <div>
+              <input type="radio" id="diplomeOui" name="diplome" [(ngModel)]="hasDiplomeEquivalent" [value]="true" required style="margin-right: 10px;">
+              <label for="diplomeOui">Oui</label>
+            </div>
+            <div>
+              <input type="radio" id="diplomeNon" name="diplome" [(ngModel)]="hasDiplomeEquivalent" [value]="false" required style="margin-right: 10px;">
+              <label for="diplomeNon">Non</label>
+            </div>
+          </div>
+<!-- debut du code pour masquer-->
+          <div *ngIf="hasDiplomeEquivalent">
+          <div class="mb-3">
+            <label for="baccalaureat" class="form-label">Baccalauréat</label>
+            <input type="text" class="form-control" id="baccalaureat" [(ngModel)]="preinscriptionData.baccalaureat" name="baccalaureat">
+          </div>
+              <!-- Question à l'utilisateur -->
 
-  <!-- Étape 4: Informations supplémentaires -->
-  <mat-step [stepControl]="fourthFormGroup">
-    <form [formGroup]="fourthFormGroup">
-      <ng-template matStepLabel>Informations Supplémentaires</ng-template>
-      <mat-form-field appearance="fill">
-        <mat-label>Copie du Bac</mat-label>
-        <input matInput formControlName="copiebac">
-      </mat-form-field>
-      <!-- Ajoutez les autres champs de cette étape ici -->
-      <div>
-        <button mat-button matStepperPrevious>Précédent</button>
-        <button mat-button (click)="stepper.reset()">Réinitialiser</button>
-        <button mat-button (click)="onSubmit()">Soumettre</button>
-      </div>
-    </form>
-  </mat-step>
-</mat-horizontal-stepper>
+          <div class="mb-3">
+            <label for="annbac" class="form-label">Année du baccalauréat</label>
+            <input type="text" class="form-control" id="annbac" [(ngModel)]="preinscriptionData.annbac" name="annbac">
+          </div>
+          <div class="mb-3">
+            <label for="diplequiv" class="form-label">Diplôme équivalent</label>
+            <input type="text" class="form-control" id="diplequiv" [(ngModel)]="preinscriptionData.diplequiv" name="diplequiv">
+          </div>
+
+
+          <div class="mb-3">
+            <label for="anndiplequiv" class="form-label">Année du diplôme équivalent</label>
+            <input type="text" class="form-control" id="anndiplequiv" [(ngModel)]="preinscriptionData.anndiplequiv" name="anndiplequiv">
+          </div>
+          <div class="mb-3">
+            <label for="nivoetud" class="form-label">Niveau d'études</label>
+            <input type="text" class="form-control" id="nivoetud" [(ngModel)]="preinscriptionData.nivoetud" name="nivoetud">
+          </div>
+          <div class="mb-3">
+            <label for="annivoetud" class="form-label">Année du niveau d'études</label>
+            <input type="text" class="form-control" id="annivoetud" [(ngModel)]="preinscriptionData.annivoetud" name="annivoetud">
+          </div>
+          <div class="mb-3">
+            <label for="grade" class="form-label">Grade</label>
+            <input type="text" class="form-control" id="grade" [(ngModel)]="preinscriptionData.grade" name="grade">
+          </div>
+          <div class="mb-3">
+            <label for="anngrad" class="form-label">Année du grade</label>
+            <input type="text" class="form-control" id="anngrad" [(ngModel)]="preinscriptionData.anngrad" name="anngrad">
+          </div>
+          <div class="mb-3">
+            <label for="specgrad" class="form-label">Spécialité du grade</label>
+            <input type="text" class="form-control" id="specgrad" [(ngModel)]="preinscriptionData.specgrad" name="specgrad">
+          </div>
+        </div>
+        <!-- fin du code pour masquer-->
+          <div class="mb-3">
+            <label for="etsfreq" class="form-label">Établissement fréquenté</label>
+            <input type="text" class="form-control" id="etsfreq" [(ngModel)]="preinscriptionData.etsfreq" name="etsfreq">
+          </div>
+          <div class="mb-3">
+            <label for="formsouh" class="form-label">Formation souhaitée</label>
+            <input type="text" class="form-control" id="formsouh" [(ngModel)]="preinscriptionData.formsouh" name="formsouh">
+          </div>
+        </div>
+
+        <!-- Step 4: Informations sur les responsables -->
+        <div *ngIf="currentStep === 4">
+          <h4>Étape 4: Informations sur les responsables</h4>
+          <div class="mb-3">
+            <label for="nompere" class="form-label">Nom du père</label>
+            <input type="text" class="form-control" id="nompere" [(ngModel)]="preinscriptionData.nompere" name="nompere">
+          </div>
+          <div class="mb-3">
+            <label for="nomere" class="form-label">Nom de la mère</label>
+            <input type="text" class="form-control" id="nomere" [(ngModel)]="preinscriptionData.nomere" name="nomere">
+          </div>
+          <div class="mb-3">
+            <label for="titrespo" class="form-label">Titre du responsable</label>
+            <input type="text" class="form-control" id="titrespo" [(ngModel)]="preinscriptionData.titrespo" name="titrespo">
+          </div>
+          <div class="mb-3">
+            <label for="respo" class="form-label">Responsable</label>
+            <input type="text" class="form-control" id="respo" [(ngModel)]="preinscriptionData.respo" name="respo">
+          </div>
+          <div class="mb-3">
+            <label for="nomrespo" class="form-label">Nom du responsable</label>
+            <input type="text" class="form-control" id="nomrespo" [(ngModel)]="preinscriptionData.nomrespo" name="nomrespo">
+          </div>
+          <div class="mb-3">
+            <label for="profrespo" class="form-label">Profession du responsable</label>
+            <input type="text" class="form-control" id="profrespo" [(ngModel)]="preinscriptionData.profrespo" name="profrespo">
+          </div>
+          <div class="mb-3">
+            <label for="emprespo" class="form-label">Employeur du responsable</label>
+            <input type="text" class="form-control" id="emprespo" [(ngModel)]="preinscriptionData.emprespo" name="emprespo">
+          </div>
+          <div class="mb-3">
+            <label for="vilrespo" class="form-label">Ville du responsable</label>
+            <input type="text" class="form-control" id="vilrespo" [(ngModel)]="preinscriptionData.vilrespo" name="vilrespo">
+          </div>
+          <div class="mb-3">
+            <label for="comrespo" class="form-label">Commune du responsable</label>
+            <input type="text" class="form-control" id="comrespo" [(ngModel)]="preinscriptionData.comrespo" name="comrespo">
+          </div>
+          <div class="mb-3">
+            <label for="bprespo" class="form-label">Boîte postale du responsable</label>
+            <input type="text" class="form-control" id="bprespo" [(ngModel)]="preinscriptionData.bprespo" name="bprespo">
+          </div>
+          <div class="mb-3">
+            <label for="celrespo" class="form-label">Téléphone portable du responsable</label>
+            <input type="text" class="form-control" id="celrespo" [(ngModel)]="preinscriptionData.celrespo" name="celrespo">
+          </div>
+          <div class="mb-3">
+            <label for="telburespo" class="form-label">Téléphone bureau du responsable</label>
+            <input type="text" class="form-control" id="telburespo" [(ngModel)]="preinscriptionData.telburespo" name="telburespo">
+          </div>
+          <div class="mb-3">
+            <label for="teldomrespo" class="form-label">Téléphone domicile du responsable</label>
+            <input type="text" class="form-control" id="teldomrespo" [(ngModel)]="preinscriptionData.teldomrespo" name="teldomrespo">
+          </div>
+          <div class="mb-3">
+            <label for="emailrespo" class="form-label">Email du responsable</label>
+            <input type="email" class="form-control" id="emailrespo" [(ngModel)]="preinscriptionData.emailrespo" name="emailrespo">
+          </div>
+        </div>
+
+        <!-- Step 5: Informations médicales -->
+        <div *ngIf="currentStep === 5">
+          <h4>Étape 5: Informations médicales</h4>
+          <div class="mb-3">
+            <label for="clindec" class="form-label">Déclaration clinique</label>
+            <input type="text" class="form-control" id="clindec" [(ngModel)]="preinscriptionData.clindec" name="clindec">
+          </div>
+          <div class="mb-3">
+            <label for="clinnom" class="form-label">Nom du clinicien</label>
+            <input type="text" class="form-control" id="clinnom" [(ngModel)]="preinscriptionData.clinnom" name="clinnom">
+          </div>
+          <div class="mb-3">
+            <label for="clintel" class="form-label">Téléphone du clinicien</label>
+            <input type="text" class="form-control" id="clintel" [(ngModel)]="preinscriptionData.clintel" name="clintel">
+          </div>
+          <div class="mb-3">
+            <label for="clinmed" class="form-label">Médecin clinicien</label>
+            <input type="text" class="form-control" id="clinmed" [(ngModel)]="preinscriptionData.clinmed" name="clinmed">
+          </div>
+          <div class="mb-3">
+            <label for="clinmedcont" class="form-label">Contact du médecin clinicien</label>
+            <input type="text" class="form-control" id="clinmedcont" [(ngModel)]="preinscriptionData.clinmedcont" name="clinmedcont">
+          </div>
+          <div class="mb-3">
+            <label for="maladies" class="form-label">Maladies</label>
+            <input type="text" class="form-control" id="maladies" [(ngModel)]="preinscriptionData.maladies" name="maladies">
+          </div>
+          <div class="mb-3">
+            <label for="soins" class="form-label">Soins</label>
+            <input type="text" class="form-control" id="soins" [(ngModel)]="preinscriptionData.soins" name="soins">
+          </div>
+          <div class="mb-3">
+            <label for="medic" class="form-label">Médicaments</label>
+            <input type="text" class="form-control" id="medic" [(ngModel)]="preinscriptionData.medic" name="medic">
+          </div>
+          <div class="mb-3">
+            <label for="premsoins" class="form-label">Premiers soins</label>
+            <input type="text" class="form-control" id="premsoins" [(ngModel)]="preinscriptionData.premsoins" name="premsoins">
+          </div>
+          <div class="mb-3">
+            <label for="intervchir" class="form-label">Interventions chirurgicales</label>
+            <input type="text" class="form-control" id="intervchir" [(ngModel)]="preinscriptionData.intervchir" name="intervchir">
+          </div>
+        </div>
+
+        <!-- Step 6: Autres informations -->
+        <div *ngIf="currentStep === 6">
+          <h4>Étape 6: Autres informations</h4>
+          <div class="mb-3">
+            <label for="datinscrip" class="form-label">Date d'inscription</label>
+            <input type="date" class="form-control" id="datinscrip" [(ngModel)]="preinscriptionData.datinscrip" name="datinscrip">
+          </div>
+          <div class="mb-3">
+            <label for="decision" class="form-label">Décision</label>
+            <input type="text" class="form-control" id="decision" [(ngModel)]="preinscriptionData.decision" name="decision">
+          </div>
+          <div class="mb-3">
+            <label for="numtabl" class="form-label">Numéro de table</label>
+            <input type="text" class="form-control" id="numtabl" [(ngModel)]="preinscriptionData.numtabl" name="numtabl">
+          </div>
+          <div class="mb-3">
+            <label for="numatri" class="form-label">Numéro d'atrium</label>
+            <input type="text" class="form-control" id="numatri" [(ngModel)]="preinscriptionData.numatri" name="numatri">
+          </div>
+          <div class="mb-3">
+            <label for="totbac" class="form-label">Total baccalauréat</label>
+            <input type="number" class="form-control" id="totbac" [(ngModel)]="preinscriptionData.totbac" name="totbac">
+          </div>
+          <div class="mb-3">
+            <label for="matpc" class="form-label">Matériel PC</label>
+            <input type="text" class="form-control" id="matpc" [(ngModel)]="preinscriptionData.matpc" name="matpc">
+          </div>
+          <div class="mb-3">
+            <label for="anneescolaire" class="form-label">Année scolaire</label>
+            <input type="text" class="form-control" id="anneescolaire" [(ngModel)]="preinscriptionData.anneescolaire" name="anneescolaire">
+          </div>
+          <div class="mb-3">
+            <label for="etab_source" class="form-label">Établissement source</label>
+            <input type="text" class="form-control" id="etab_source" [(ngModel)]="preinscriptionData.etab_source" name="etab_source">
+          </div>
+        </div>
+
+        <!-- Navigation buttons -->
+        <div class="d-flex justify-content-between mt-4">
+          <button type="button" class="btn btn-secondary" (click)="previousStep()" *ngIf="currentStep > 1">Précédent</button>
+          <button type="button" class="btn btn-primary" (click)="nextStep()" *ngIf="currentStep < 6">Suivant</button>
+          <button type="submit" class="btn btn-success" *ngIf="currentStep === 6">Soumettre</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
