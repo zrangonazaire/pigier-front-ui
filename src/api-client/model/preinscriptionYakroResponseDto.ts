@@ -10,7 +10,7 @@
 
 
 export interface PreinscriptionYakroResponseDto { 
-    id?: number;
+    id?: string;
     nomprenoms?: string;
     datnais?: string;
     lieunais?: string;
