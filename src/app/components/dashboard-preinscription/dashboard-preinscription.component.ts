@@ -1,12 +1,13 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { PreinscriptionYakroResponseDto, PrinscriptionYakroService } from '../../../api-client';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
   selector: 'app-dashboard-preinscription',
   standalone: true,
-  imports: [CommonModule
+  imports: [CommonModule,FormsModule
   ],
   templateUrl: './dashboard-preinscription.component.html',
   styleUrl: './dashboard-preinscription.component.scss',
@@ -18,11 +19,30 @@ private preinscritservice=inject(PrinscriptionYakroService);
 eror=signal<string|null>(null);
 loading=signal<boolean>(false);
 status = signal<'loading' | 'error' | 'loaded'>('loading');
+
+ // Pagination
+
+ 
   ngOnInit(): void {
    this.loadPreinscriptions();
   }
+  deletepreinscrit(id:any){
+  ;
+    if (  confirm("Voulez-vous vraiment supprimer cette préinscription ?")==true) {
+      this.preinscritservice.deletePreinscYakro(id).subscribe({
+        next: (preinscrits) => {  
+        alert("La préinscription a été supprimée avec succès");
+        this.loadPreinscriptions();
+    },
+        error: (error) => { }});  
+    } else {
+      
+    }
+  
 
-  loadPreinscriptions(page:number=1,size:number=10) {   
+  }
+
+  loadPreinscriptions(page:number=1,size:number=5) {   
  
     this.eror.set(null);
     this.status.set('loading');
