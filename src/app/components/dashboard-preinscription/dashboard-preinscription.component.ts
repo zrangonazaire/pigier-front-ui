@@ -14,6 +14,12 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './dashboard-preinscription.component.scss',
 })
 export class DashboardPreinscriptionComponent  {
+   // Liste des valeurs disponibles
+   valeurs: number[] = [5, 10, 20, 50, 100];
+
+   // Valeur sélectionnée par défaut
+   selectedValeur: number = this.valeurs[0];
+
   private preinscritservice = inject(PrinscriptionYakroService);
   preinscrits = signal<PreinscriptionYakroResponseDto[]>([]);
   
@@ -33,6 +39,7 @@ export class DashboardPreinscriptionComponent  {
       // || preinscrit.formsouh?.toLowerCase().includes(query)
     });
   });
+sizeLoad=5;
 constructor() {
   this.loadPreinscriptions();
 }
@@ -60,10 +67,12 @@ constructor() {
     }
   }
 
-  loadPreinscriptions(page: number = 1, size: number = 15) {
+  loadPreinscriptions(size: any = 5) {
+
+  console.log("THE SIZE IS ", this.sizeLoad);
     this.eror.set(null);
     this.status.set('loading');
-    this.preinscritservice.findAllPreinscYakro(page, size).subscribe({
+    this.preinscritservice.findAllPreinscYakro(0, this.sizeLoad).subscribe({
       next: (preinscrits) => {
         console.log('PREINSCRITS', preinscrits);
         this.preinscrits.set(preinscrits);        
