@@ -94,6 +94,7 @@
                     <th>Contact</th>
                     <th>Formations Souhaité</th>
                     <th>Décision</th>
+                    <th>Etablissement</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -107,10 +108,11 @@
                       <td>{{pre.celetud}}</td>
                       <td>{{pre.formsouh}}</td>
                       <td>
-                        <span *ngIf="pre.decision=='I'">Inscrit</span>
+                        <span *ngIf="pre.decision=='I'">Inscrit(e)</span>
                         <span *ngIf="pre.decision=='A'">Autorisé(e) à s'inscrit</span>
                         <span *ngIf="pre.decision=='E'">En attente d'autorisation</span>
                       </td>
+                      <td>{{pre.etab_source}}</td>
                       <td>
                         <button  *ngIf="pre.decision!='I'  " class="btn btn- btn-warning me-2">
                           <i class="fas fa-edit"></i> 
