@@ -1,43 +1,166 @@
 <div class="container mt-5">
   <div class="card">
     <div class="card-header">
-      <h3>Préinscription Wizard</h3>
+      <h3>Préinscription</h3>
     </div>
     <div class="card-body">
-      <form (ngSubmit)="submitForm()">
+      <form #form="ngForm" (ngSubmit)="addUnePreinscription()" class="titre">
         <!-- Step 1: Informations personnelles -->
         <div *ngIf="currentStep === 1">
           <h4>Étape 1: Informations personnelles</h4>
           <div class="mb-3">
-            <label for="nomprenoms" class="form-label">Nom et Prénoms</label>
-            <input type="text" class="form-control" id="nomprenoms" [(ngModel)]="preinscriptionData.nomprenoms" name="nomprenoms" required>
+            <label for="nomprenoms" class="form-label">Nom et Prénoms*</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nomprenoms"
+              [(ngModel)]="preinscriptionData.nomprenoms"
+              name="nomprenoms"
+              required
+              minlength="3"
+              #nomprenoms="ngModel"
+            />
+            <div *ngIf="nomprenoms.invalid && (nomprenoms.dirty || nomprenoms.touched)" class="text-danger">
+              <div *ngIf="nomprenoms.errors?.['required']">Le champ Nom et Prénoms est obligatoire.</div>
+              <div *ngIf="nomprenoms.errors?.['minlength']">Le champ doit contenir au moins 3 caractères.</div>
+            </div>
           </div>
           <div class="mb-3">
-            <label for="datnais" class="form-label">Date de naissance</label>
-            <input type="date" class="form-control" id="datnais" [(ngModel)]="preinscriptionData.datnais" name="datnais">
+            <label for="datnais" class="form-label">Date de naissance*</label>
+            <input
+              type="date"
+              class="form-control"
+              id="datnais"
+              [(ngModel)]="preinscriptionData.datnais"
+              name="datnais"
+              required
+              #datnais="ngModel"
+            />
+            <div *ngIf="datnais.invalid && (datnais.dirty || datnais.touched)" class="text-danger">
+              <div *ngIf="datnais.errors?.['required']">Le champ Date de naissance est obligatoire.</div>
+            </div>
           </div>
           <div class="mb-3">
-            <label for="lieunais" class="form-label">Lieu de naissance</label>
-            <input type="text" class="form-control" id="lieunais" [(ngModel)]="preinscriptionData.lieunais" name="lieunais">
+            <label for="lieunais" class="form-label">Lieu de naissance*</label>
+            <input
+              type="text"
+              class="form-control"
+              id="lieunais"
+              [(ngModel)]="preinscriptionData.lieunais"
+              name="lieunais"
+              required
+              #lieunais="ngModel"
+            />
+            <div *ngIf="lieunais.invalid && (lieunais.dirty || lieunais.touched)" class="text-danger">
+              <div *ngIf="lieunais.errors?.['required']">Le champ Lieu de naissance est obligatoire.</div>
+            </div>
           </div>
           <div class="mb-3">
-            <label for="sexe" class="form-label">Sexe</label>
-            <select class="form-control" id="sexe" [(ngModel)]="preinscriptionData.sexe" name="sexe">
+            <label for="sexe" class="form-label">Genre*</label>
+            <select
+              class="form-control"
+              id="sexe"
+              [(ngModel)]="preinscriptionData.sexe"
+              name="sexe"
+              required
+              #sexe="ngModel"
+            >
               <option value="M">Masculin</option>
               <option value="F">Féminin</option>
             </select>
+            <div *ngIf="sexe.invalid && (sexe.dirty || sexe.touched)" class="text-danger">
+              <div *ngIf="sexe.errors?.['required']">Le champ Genre est obligatoire.</div>
+            </div>
           </div>
           <div class="mb-3">
-            <label for="nationalite" class="form-label">Nationalité</label>
-            <input type="text" class="form-control" id="nationalite" [(ngModel)]="preinscriptionData.nationalite" name="nationalite">
+            <label for="nationalite" class="form-label">Nationalité*</label>
+            <select 
+            class="form-control"
+            id="nationalite"
+            [(ngModel)]="preinscriptionData.nationalite"
+            name="nationalite"
+            required
+            #nationalite="ngModel"
+            >
+              <option value="ALGERIENNE">ALGERIENNE</option>
+              <option value="ANGOLAISE">ANGOLAISE</option>
+              <option value="BELGE">BELGE</option>
+              <option value="BENINOISE">BENINOISE</option>
+              <option value="BURKINABE">BURKINABE</option>
+              <option value="BURUNDAISE">BURUNDAISE</option>
+              <option value="CAMBODGIENNE">CAMBODGIENNE</option>
+              <option value="CAMEROUNAISE">CAMEROUNAISE</option>
+              <option value="CAP-VERDIENNE">CAP-VERDIENNE</option>
+              <option value="CENTRAFRICAINE">CENTRAFRICAINE</option>
+              <option value="COMORIENNE">COMORIENNE</option>
+              <option value="CONGOLAISE">CONGOLAISE</option>
+              <option value="CONGOLAISE(RDC)">CONGOLAISE(RDC)</option>
+              <option value="COREENNE">COREENNE</option>
+              <option value="ESPAGNOLE">ESPAGNOLE</option>
+              <option value="FRANCAISE">FRANCAISE</option>
+              <option value="GABONAISE">GABONAISE</option>
+              <option value="GAMBIENNE">GAMBIENNE</option>
+              <option value="GHANEENNE">GHANEENNE</option>
+              <option value="GUINEENNE">GUINEENNE</option>
+              <option value="IRLANDAISE">IRLANDAISE</option>
+              <option value="IVOIRIENNE">IVOIRIENNE</option>
+              <option value="LIBANAIS">LIBANAIS</option>
+              <option value="LIBERIENNE">LIBERIENNE</option>
+              <option value="MALGACHE">MALGACHE</option>
+              <option value="MALIENNE">MALIENNE</option>
+              <option value="MAROCAINE">MAROCAINE</option>
+              <option value="MAURICIENNE">MAURICIENNE</option>
+              <option value="MAURITANIENNE">MAURITANIENNE</option>
+              <option value="NIGERIANNE">NIGERIANNE</option>
+              <option value="NIGERIENNE">NIGERIENNE</option>
+              <option value="PALESTINIENNE">PALESTINIENNE</option>
+              <option value="RWANDAISE">RWANDAISE</option>
+              <option value="SENEGALAISE">SENEGALAISE</option>
+              <option value="SIERRA-LEONAISE">SIERRA-LEONAISE</option>
+              <option value="SIERRA-LEONNAIS">SIERRA-LEONNAIS</option>
+              <option value="SOUDANAISE">SOUDANAISE</option>
+              <option value="SUEDOISE">SUEDOISE</option>
+              <option value="TCHADIENNE">TCHADIENNE</option>
+              <option value="TOGOLAISE">TOGOLAISE</option>
+              <option value="TUNISIENNE">TUNISIENNE</option>
+              <option value="VENEZUELIENNE">VENEZUELIENNE</option>
+              <option value="VIETNAMIENNE">VIETNAMIENNE</option>
+              <option value="ZAIROISE">ZAIROISE</option>
+            </select>
+
+            <div *ngIf="nationalite.invalid && (nationalite.dirty || nationalite.touched)" class="text-danger">
+              <div *ngIf="nationalite.errors?.['required']">Le champ Nationalité est obligatoire.</div>
+            </div>
           </div>
           <div class="mb-3">
-            <label for="natident" class="form-label">Nature de l'identité</label>
-            <input type="text" class="form-control" id="natident" [(ngModel)]="preinscriptionData.natident" name="natident">
+            <label for="natident" class="form-label">Nature de l'identité*</label>
+            <input
+              type="text"
+              class="form-control"
+              id="natident"
+              [(ngModel)]="preinscriptionData.natident"
+              name="natident"
+              required
+              #natident="ngModel"
+            />
+            <div *ngIf="natident.invalid && (natident.dirty || natident.touched)" class="text-danger">
+              <div *ngIf="natident.errors?.['required']">Le champ Nature de l'identité est obligatoire.</div>
+            </div>
           </div>
           <div class="mb-3">
-            <label for="numidentite" class="form-label">Numéro d'identité</label>
-            <input type="text" class="form-control" id="numidentite" [(ngModel)]="preinscriptionData.numidentite" name="numidentite">
+            <label for="numidentite" class="form-label">Numéro d'identité*</label>
+            <input
+              type="text"
+              class="form-control"
+              id="numidentite"
+              [(ngModel)]="preinscriptionData.numidentite"
+              name="numidentite"
+              required
+              #numidentite="ngModel"
+            />
+            <div *ngIf="numidentite.invalid && (numidentite.dirty || numidentite.touched)" class="text-danger">
+              <div *ngIf="numidentite.errors?.['required']">Le champ Numéro d'identité est obligatoire.</div>
+            </div>
           </div>
         </div>
 
@@ -45,24 +168,84 @@
         <div *ngIf="currentStep === 2">
           <h4>Étape 2: Informations de contact</h4>
           <div class="mb-3">
-            <label for="teletud" class="form-label">Téléphone</label>
-            <input type="text" class="form-control" id="teletud" [(ngModel)]="preinscriptionData.teletud" name="teletud" required>
+            <label for="teletud" class="form-label">Téléphone*</label>
+            <input
+              type="text"
+              class="form-control"
+              id="teletud"
+              [(ngModel)]="preinscriptionData.teletud"
+              name="teletud"
+              required
+              pattern="[0-9]{10}"
+              #teletud="ngModel"
+            />
+            <div *ngIf="teletud.invalid && (teletud.dirty || teletud.touched)" class="text-danger">
+              <div *ngIf="teletud.errors?.['required']">Le champ Téléphone est obligatoire.</div>
+              <div *ngIf="teletud.errors?.['pattern']">Le numéro de téléphone doit contenir 10 chiffres.</div>
+            </div>
           </div>
           <div class="mb-3">
-            <label for="celetud" class="form-label">Téléphone portable</label>
-            <input type="text" class="form-control" id="celetud" [(ngModel)]="preinscriptionData.celetud" name="celetud">
+            <label for="celetud" class="form-label">Téléphone portable*</label>
+            <input
+              type="text"
+              class="form-control"
+              id="celetud"
+              [(ngModel)]="preinscriptionData.celetud"
+              name="celetud"
+              required
+              pattern="[0-9]{10}"
+              #celetud="ngModel"
+            />
+            <div *ngIf="celetud.invalid && (celetud.dirty || celetud.touched)" class="text-danger">
+              <div *ngIf="celetud.errors?.['required']">Le champ Téléphone portable est obligatoire.</div>
+              <div *ngIf="celetud.errors?.['pattern']">Le numéro de téléphone doit contenir 10 chiffres.</div>
+            </div>
           </div>
           <div class="mb-3">
-            <label for="emailetud" class="form-label">Email</label>
-            <input type="email" class="form-control" id="emailetud" [(ngModel)]="preinscriptionData.emailetud" name="emailetud">
+            <label for="emailetud" class="form-label">Email*</label>
+            <input
+              type="email"
+              class="form-control"
+              id="emailetud"
+              [(ngModel)]="preinscriptionData.emailetud"
+              name="emailetud"
+              required
+              #emailetud="ngModel"
+            />
+            <div *ngIf="emailetud.invalid && (emailetud.dirty || emailetud.touched)" class="text-danger">
+              <div *ngIf="emailetud.errors?.['required']">Le champ Email est obligatoire.</div>
+              <div *ngIf="emailetud.errors?.['email']">Veuillez entrer une adresse email valide.</div>
+            </div>
           </div>
           <div class="mb-3">
-            <label for="viletud" class="form-label">Ville</label>
-            <input type="text" class="form-control" id="viletud" [(ngModel)]="preinscriptionData.viletud" name="viletud">
+            <label for="viletud" class="form-label">Ville*</label>
+            <input
+              type="text"
+              class="form-control"
+              id="viletud"
+              [(ngModel)]="preinscriptionData.viletud"
+              name="viletud"
+              required
+              #viletud="ngModel"
+            />
+            <div *ngIf="viletud.invalid && (viletud.dirty || viletud.touched)" class="text-danger">
+              <div *ngIf="viletud.errors?.['required']">Le champ Ville est obligatoire.</div>
+            </div>
           </div>
           <div class="mb-3">
-            <label for="cometud" class="form-label">Commune</label>
-            <input type="text" class="form-control" id="cometud" [(ngModel)]="preinscriptionData.cometud" name="cometud">
+            <label for="cometud" class="form-label">Commune*</label>
+            <input
+              type="text"
+              class="form-control"
+              id="cometud"
+              [(ngModel)]="preinscriptionData.cometud"
+              name="cometud"
+              required
+              #cometud="ngModel"
+            />
+            <div *ngIf="cometud.invalid && (cometud.dirty || cometud.touched)" class="text-danger">
+              <div *ngIf="cometud.errors?.['required']">Le champ Commune est obligatoire.</div>
+            </div>
           </div>
         </div>
 
@@ -70,67 +253,197 @@
         <div *ngIf="currentStep === 3">
           <h4>Étape 3: Informations académiques</h4>
           <div class="mb-3">
-            <label class="form-label">Avez-vous un diplôme équivalent au baccalauréat ?</label>
+            <label class="form-label">Avez-vous un diplôme équivalent au baccalauréat ?*</label>
             <div>
-              <input type="radio" id="diplomeOui" name="diplome" [(ngModel)]="hasDiplomeEquivalent" [value]="true" required style="margin-right: 10px;">
-              <label for="diplomeOui">Oui</label>
+              <input
+                class="form-check-input"
+                type="radio"
+                id="diplomeOui"
+                name="diplome"
+                [(ngModel)]="hasDiplomeEquivalent"
+                [value]="true"
+                required
+                #diplome="ngModel"
+              />
+              <label class="form-check-label" for="diplomeOui">Oui</label>
             </div>
             <div>
-              <input type="radio" id="diplomeNon" name="diplome" [(ngModel)]="hasDiplomeEquivalent" [value]="false" required style="margin-right: 10px;">
-              <label for="diplomeNon">Non</label>
+              <input
+                class="form-check-input"
+                type="radio"
+                id="diplomeNon"
+                name="diplome"
+                [(ngModel)]="hasDiplomeEquivalent"
+                [value]="false"
+                required
+              />
+              <label class="form-check-label" for="diplomeNon">Non</label>
+            </div>
+            <div *ngIf="diplome.invalid && (diplome.dirty || diplome.touched)" class="text-danger">
+              <div *ngIf="diplome.errors?.['required']">Veuillez sélectionner une option.</div>
             </div>
           </div>
-<!-- debut du code pour masquer-->
           <div *ngIf="hasDiplomeEquivalent">
-          <div class="mb-3">
-            <label for="baccalaureat" class="form-label">Baccalauréat</label>
-            <input type="text" class="form-control" id="baccalaureat" [(ngModel)]="preinscriptionData.baccalaureat" name="baccalaureat">
+            <div class="mb-3">
+              <label for="baccalaureat" class="form-label">Baccalauréat</label>
+              <input
+                type="text"
+                class="form-control"
+                id="baccalaureat"
+                [(ngModel)]="preinscriptionData.baccalaureat"
+                name="baccalaureat"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="annbac" class="form-label">Année du baccalauréat</label>
+              <input
+                type="text"
+                class="form-control"
+                id="annbac"
+                [(ngModel)]="preinscriptionData.annbac"
+                name="annbac"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="diplequiv" class="form-label">Diplôme équivalent</label>
+              <input
+                type="text"
+                class="form-control"
+                id="diplequiv"
+                [(ngModel)]="preinscriptionData.diplequiv"
+                name="diplequiv"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="anndiplequiv" class="form-label">Année du diplôme équivalent</label>
+              <input
+                type="text"
+                class="form-control"
+                id="anndiplequiv"
+                [(ngModel)]="preinscriptionData.anndiplequiv"
+                name="anndiplequiv"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="nivoetud" class="form-label">Niveau d'études</label>
+              <input
+                type="text"
+                class="form-control"
+                id="nivoetud"
+                [(ngModel)]="preinscriptionData.nivoetud"
+                name="nivoetud"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="annivoetud" class="form-label">Année du niveau d'études</label>
+              <input
+                type="text"
+                class="form-control"
+                id="annivoetud"
+                [(ngModel)]="preinscriptionData.annivoetud"
+                name="annivoetud"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="grade" class="form-label">Grade</label>
+              <input
+                type="text"
+                class="form-control"
+                id="grade"
+                [(ngModel)]="preinscriptionData.grade"
+                name="grade"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="anngrad" class="form-label">Année du grade</label>
+              <input
+                type="text"
+                class="form-control"
+                id="anngrad"
+                [(ngModel)]="preinscriptionData.anngrad"
+                name="anngrad"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="specgrad" class="form-label">Spécialité du grade</label>
+              <input
+                type="text"
+                class="form-control"
+                id="specgrad"
+                [(ngModel)]="preinscriptionData.specgrad"
+                name="specgrad"
+              />
+            </div>
           </div>
-              <!-- Question à l'utilisateur -->
+          <div class="mb-3">
+            <label for="etsfreq" class="form-label">Établissement fréquenté*</label>
+            <input
+              type="text"
+              class="form-control"
+              id="etsfreq"
+              [(ngModel)]="preinscriptionData.etsfreq"
+              name="etsfreq"
+              required
+              #etsfreq="ngModel"
+            />
+            <div *ngIf="etsfreq.invalid && (etsfreq.dirty || etsfreq.touched)" class="text-danger">
+              <div *ngIf="etsfreq.errors?.['required']">Le champ Établissement fréquenté est obligatoire.</div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="formsouh" class="form-label">Formation souhaitée*</label>
+            <select 
+            class="form-control"
+            id="formsouh"
+            [(ngModel)]="preinscriptionData.formsouh"
+            name="formsouh"
+            required
+            #formsouh="ngModel">
+              <option value="BTS ANNÉE PRÉPARATOIRE">BTS ANNÉE PRÉPARATOIRE</option>
+              <option value="BTS ASSISTANT(E) DE DIRECTION 2ÈME ANNÉE">BTS ASSISTANT(E) DE DIRECTION 2ÈME ANNÉE</option>
+              <option value="BTS FINANCES COMPTABILITÉ ET GESTION DES ENTREPRISES 2ÈME ANNÉE">BTS FINANCES COMPTABILITÉ ET GESTION DES ENTREPRISES 2ÈME ANNÉE</option>
+              <option value="BTS GESTION COMMERCIALE 2ÈME ANNÉE">BTS GESTION COMMERCIALE 2ÈME ANNÉE</option>
+              <option value="BTS INFORMATIQUE DÉVELOPPEUR D'APPLICATION 2ÈME ANNÉE">BTS INFORMATIQUE DÉVELOPPEUR D'APPLICATION 2ÈME ANNÉE</option>
+              <option value="BTS RESSOURCES HUMAINES ET COMMUNICATION 2ÈME ANNÉE">BTS RESSOURCES HUMAINES ET COMMUNICATION 2ÈME ANNÉE</option>
+              <option value="BTS TOURISME-HÔTELLERIE 1ÈRE ANNÉE">BTS TOURISME-HÔTELLERIE 1ÈRE ANNÉE</option>
+              <option value="BTS TOURISME-HÔTELLERIE 2ÈME ANNÉE">BTS TOURISME-HÔTELLERIE 2ÈME ANNÉE</option>
+              <option value="DIPLOME PROFESSIONNEL DE SPECIALITE MARKETING 3ÈME ANNÉE">DIPLOME PROFESSIONNEL DE SPECIALITE MARKETING 3ÈME ANNÉE</option>
+              <option value="DIPLOME PROFESSIONNEL DE SPECIALITE ASSISTANAT DE DIRECTION 3ÈME ANNÉE">DIPLOME PROFESSIONNEL DE SPECIALITE ASSISTANAT DE DIRECTION 3ÈME ANNÉE</option>
+              <option value="DIPLOME PROFESSIONNEL DE SPECIALITE GESTION DES ENTREPRISES 3ÈME ANNÉE">DIPLOME PROFESSIONNEL DE SPECIALITE GESTION DES ENTREPRISES 3ÈME ANNÉE</option>
+              <option value="DIPLOME PROFESSIONNEL DE SPECIALITE GESTION DES RESSOURCES HUMAINES 3ÈME ANNÉE">DIPLOME PROFESSIONNEL DE SPECIALITE GESTION DES RESSOURCES HUMAINES 3ÈME ANNÉE</option>
+              <option value="DIPLOME PROFESSIONNEL DE SPECIALITE RÉSEAUX ET GÉNIE LOGICIEL">DIPLOME PROFESSIONNEL DE SPECIALITE RÉSEAUX ET GÉNIE LOGICIEL</option>
+              <option value="DIPLOME PROFESSIONNEL D'ETUDES SUPERIEUSES ADMINISTRATION DES ENTREPRISES 1ÈRE ANNÉE">DIPLOME PROFESSIONNEL D'ETUDES SUPERIEUSES ADMINISTRATION DES ENTREPRISES 1ÈRE ANNÉE</option>
+              <option value="DIPLOME PROFESSIONNEL D'ETUDES SUPERIEUSES MARKETING 1ÈRE ANNÉE">DIPLOME PROFESSIONNEL D'ETUDES SUPERIEUSES MARKETING 1ÈRE ANNÉE</option>
+              <option value="LICENCE PRO ASSISTANT(E) DE DIRECTION 1ÈRE ANNÉE">LICENCE PRO ASSISTANT(E) DE DIRECTION 1ÈRE ANNÉE</option>
+              <option value="LICENCE PRO ASSISTANT(E) DE DIRECTION 3ÈME ANNÉE">LICENCE PRO ASSISTANT(E) DE DIRECTION 3ÈME ANNÉE</option>
+              <option value="LICENCE PRO AUDIT COMPTABLE ET CONTRÔLE DE GESTION 1ÈRE ANNÉE">LICENCE PRO AUDIT COMPTABLE ET CONTRÔLE DE GESTION 1ÈRE ANNÉE</option>
+              <option value="LICENCE PRO AUDIT COMPTABLE ET CONTRÔLE DE GESTION 3ÈME ANNÉE">LICENCE PRO AUDIT COMPTABLE ET CONTRÔLE DE GESTION 3ÈME ANNÉE</option>
+              <option value="LICENCE PRO COMMUNICATION ET DÉVELOPPEMENT DES MARQUES 1ÈRE ANNÉE">LICENCE PRO COMMUNICATION ET DÉVELOPPEMENT DES MARQUES 1ÈRE ANNÉE</option>
+              <option value="LICENCE PRO COMMUNICATION ET DÉVELOPPEMENT DES MARQUES 3ÈME ANNÉE">LICENCE PRO COMMUNICATION ET DÉVELOPPEMENT DES MARQUES 3ÈME ANNÉE</option>
+              <option value="LICENCE PRO COMPTABILITÉ FINANCES 1ÈRE ANNÉE">LICENCE PRO COMPTABILITÉ FINANCES 1ÈRE ANNÉE</option>
+              <option value="LICENCE PRO COMPTABILITÉ FINANCES 3ÈME ANNÉE">LICENCE PRO COMPTABILITÉ FINANCES 3ÈME ANNÉE</option>
+              <option value="LICENCE PRO GESTION ADMINISTRATIVE DU PERSONNEL 3ÈME ANNÉE">LICENCE PRO GESTION ADMINISTRATIVE DU PERSONNEL 3ÈME ANNÉE</option>
+              <option value="LICENCE PRO GESTION DES ENTREPRISES 3ÈME ANNÉE">LICENCE PRO GESTION DES ENTREPRISES 3ÈME ANNÉE</option>
+              <option value="LICENCE PRO GESTION DES RESSOURCES HUMAINES 3ÈME ANNÉE">LICENCE PRO GESTION DES RESSOURCES HUMAINES 3ÈME ANNÉE</option>
+              <option value="LICENCE PRO MARKETING ET COMMUNICATION PUBLICITAIRE 1ÈRE ANNÉE">LICENCE PRO MARKETING ET COMMUNICATION PUBLICITAIRE 1ÈRE ANNÉE</option>
+              <option value="LICENCE PRO MARKETING ET COMMUNICATION PUBLICITAIRE 3ÈME ANNÉE">LICENCE PRO MARKETING ET COMMUNICATION PUBLICITAIRE 3ÈME ANNÉE</option>
+              <option value="LICENCE PRO RÉSEAUX ET GÉNIE LOGICIEL 1ÈRE ANNÉE">LICENCE PRO RÉSEAUX ET GÉNIE LOGICIEL 1ÈRE ANNÉE</option>
+              <option value="LICENCE PRO RÉSEAUX ET GÉNIE LOGICIEL 3ÈME ANNÉE">LICENCE PRO RÉSEAUX ET GÉNIE LOGICIEL 3ÈME ANNÉE</option>
+              <option value="MASTER PRO ADMINISTRATION DES ENTREPRISES 1ÈRE ANNÉE">MASTER PRO ADMINISTRATION DES ENTREPRISES 1ÈRE ANNÉE</option>
+              <option value="MASTER PRO ADMINISTRATION DES ENTREPRISES 2ÈME ANNÉE">MASTER PRO ADMINISTRATION DES ENTREPRISES 2ÈME ANNÉE</option>
+              <option value="MASTER PRO AUDIT ET CONTRÔLE DE GESTION 1ÈRE ANNÉE">MASTER PRO AUDIT ET CONTRÔLE DE GESTION 1ÈRE ANNÉE</option>
+              <option value="MASTER PRO FINANCES COMPTABILITÉ 1ÈRE ANNÉE">MASTER PRO FINANCES COMPTABILITÉ 1ÈRE ANNÉE</option>
+              <option value="MASTER PRO FINANCES COMPTABILITÉ 2ÈME ANNÉE">MASTER PRO FINANCES COMPTABILITÉ 2ÈME ANNÉE</option>
+              <option value="MASTER PRO FISCALITÉ ET DROIT DES AFFAIRES 1ÈRE ANNÉE">MASTER PRO FISCALITÉ ET DROIT DES AFFAIRES 1ÈRE ANNÉE</option>
+              <option value="MASTER PRO GÉNIE INFORMATIQUE ET RÉSEAUX 1ÈME ANNÉE">MASTER PRO GÉNIE INFORMATIQUE ET RÉSEAUX 1ÈME ANNÉE</option>
+              <option value="MASTER PRO GÉNIE INFORMATIQUE ET RÉSEAUX 2ÈME ANNÉE">MASTER PRO GÉNIE INFORMATIQUE ET RÉSEAUX 2ÈME ANNÉE</option>
+              <option value="MASTER PRO MARKETING 1ÈRE ANNÉE">MASTER PRO MARKETING 1ÈRE ANNÉE</option>
+              <option value="MBA MANAGEMENT GESTION ET FINANCES 1">MBA MANAGEMENT GESTION ET FINANCES 1</option>
+            </select>
 
-          <div class="mb-3">
-            <label for="annbac" class="form-label">Année du baccalauréat</label>
-            <input type="text" class="form-control" id="annbac" [(ngModel)]="preinscriptionData.annbac" name="annbac">
-          </div>
-          <div class="mb-3">
-            <label for="diplequiv" class="form-label">Diplôme équivalent</label>
-            <input type="text" class="form-control" id="diplequiv" [(ngModel)]="preinscriptionData.diplequiv" name="diplequiv">
-          </div>
-
-
-          <div class="mb-3">
-            <label for="anndiplequiv" class="form-label">Année du diplôme équivalent</label>
-            <input type="text" class="form-control" id="anndiplequiv" [(ngModel)]="preinscriptionData.anndiplequiv" name="anndiplequiv">
-          </div>
-          <div class="mb-3">
-            <label for="nivoetud" class="form-label">Niveau d'études</label>
-            <input type="text" class="form-control" id="nivoetud" [(ngModel)]="preinscriptionData.nivoetud" name="nivoetud">
-          </div>
-          <div class="mb-3">
-            <label for="annivoetud" class="form-label">Année du niveau d'études</label>
-            <input type="text" class="form-control" id="annivoetud" [(ngModel)]="preinscriptionData.annivoetud" name="annivoetud">
-          </div>
-          <div class="mb-3">
-            <label for="grade" class="form-label">Grade</label>
-            <input type="text" class="form-control" id="grade" [(ngModel)]="preinscriptionData.grade" name="grade">
-          </div>
-          <div class="mb-3">
-            <label for="anngrad" class="form-label">Année du grade</label>
-            <input type="text" class="form-control" id="anngrad" [(ngModel)]="preinscriptionData.anngrad" name="anngrad">
-          </div>
-          <div class="mb-3">
-            <label for="specgrad" class="form-label">Spécialité du grade</label>
-            <input type="text" class="form-control" id="specgrad" [(ngModel)]="preinscriptionData.specgrad" name="specgrad">
-          </div>
-        </div>
-        <!-- fin du code pour masquer-->
-          <div class="mb-3">
-            <label for="etsfreq" class="form-label">Établissement fréquenté</label>
-            <input type="text" class="form-control" id="etsfreq" [(ngModel)]="preinscriptionData.etsfreq" name="etsfreq">
-          </div>
-          <div class="mb-3">
-            <label for="formsouh" class="form-label">Formation souhaitée</label>
-            <input type="text" class="form-control" id="formsouh" [(ngModel)]="preinscriptionData.formsouh" name="formsouh">
+            <div *ngIf="formsouh.invalid && (formsouh.dirty || formsouh.touched)" class="text-danger">
+              <div *ngIf="formsouh.errors?.['required']">Le champ Formation souhaitée est obligatoire.</div>
+            </div>
           </div>
         </div>
 
@@ -138,60 +451,181 @@
         <div *ngIf="currentStep === 4">
           <h4>Étape 4: Informations sur les responsables</h4>
           <div class="mb-3">
-            <label for="nompere" class="form-label">Nom du père</label>
-            <input type="text" class="form-control" id="nompere" [(ngModel)]="preinscriptionData.nompere" name="nompere">
+            <label for="nompere" class="form-label">Nom du père*</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nompere"
+              [(ngModel)]="preinscriptionData.nompere"
+              name="nompere"
+              required
+              #nompere="ngModel"
+            />
+            <div *ngIf="nompere.invalid && (nompere.dirty || nompere.touched)" class="text-danger">
+              <div *ngIf="nompere.errors?.['required']">Le champ Nom du père est obligatoire.</div>
+            </div>
           </div>
           <div class="mb-3">
-            <label for="nomere" class="form-label">Nom de la mère</label>
-            <input type="text" class="form-control" id="nomere" [(ngModel)]="preinscriptionData.nomere" name="nomere">
+            <label for="nomere" class="form-label">Nom de la mère*</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nomere"
+              [(ngModel)]="preinscriptionData.nomere"
+              name="nomere"
+              required
+              #nomere="ngModel"
+            />
+            <div *ngIf="nomere.invalid && (nomere.dirty || nomere.touched)" class="text-danger">
+              <div *ngIf="nomere.errors?.['required']">Le champ Nom de la mère est obligatoire.</div>
+            </div>
           </div>
           <div class="mb-3">
             <label for="titrespo" class="form-label">Titre du responsable</label>
-            <input type="text" class="form-control" id="titrespo" [(ngModel)]="preinscriptionData.titrespo" name="titrespo">
+            <input
+              type="text"
+              class="form-control"
+              id="titrespo"
+              [(ngModel)]="preinscriptionData.titrespo"
+              name="titrespo"
+            />
           </div>
           <div class="mb-3">
-            <label for="respo" class="form-label">Responsable</label>
-            <input type="text" class="form-control" id="respo" [(ngModel)]="preinscriptionData.respo" name="respo">
+            <label for="respo" class="form-label">Responsable*</label>
+            <input
+              type="text"
+              class="form-control"
+              id="respo"
+              [(ngModel)]="preinscriptionData.respo"
+              name="respo"
+              required
+              #respo="ngModel"
+            />
+            <div *ngIf="respo.invalid && (respo.dirty || respo.touched)" class="text-danger">
+              <div *ngIf="respo.errors?.['required']">Le champ Responsable est obligatoire.</div>
+            </div>
           </div>
           <div class="mb-3">
-            <label for="nomrespo" class="form-label">Nom du responsable</label>
-            <input type="text" class="form-control" id="nomrespo" [(ngModel)]="preinscriptionData.nomrespo" name="nomrespo">
+            <label for="nomrespo" class="form-label">Nom du responsable*</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nomrespo"
+              [(ngModel)]="preinscriptionData.nomrespo"
+              name="nomrespo"
+              required
+              #nomrespo="ngModel"
+            />
+            <div *ngIf="nomrespo.invalid && (nomrespo.dirty || nomrespo.touched)" class="text-danger">
+              <div *ngIf="nomrespo.errors?.['required']">Le champ Nom du responsable est obligatoire.</div>
+            </div>
           </div>
           <div class="mb-3">
             <label for="profrespo" class="form-label">Profession du responsable</label>
-            <input type="text" class="form-control" id="profrespo" [(ngModel)]="preinscriptionData.profrespo" name="profrespo">
+            <input
+              type="text"
+              class="form-control"
+              id="profrespo"
+              [(ngModel)]="preinscriptionData.profrespo"
+              name="profrespo"
+            />
           </div>
           <div class="mb-3">
             <label for="emprespo" class="form-label">Employeur du responsable</label>
-            <input type="text" class="form-control" id="emprespo" [(ngModel)]="preinscriptionData.emprespo" name="emprespo">
+            <input
+              type="text"
+              class="form-control"
+              id="emprespo"
+              [(ngModel)]="preinscriptionData.emprespo"
+              name="emprespo"
+            />
           </div>
           <div class="mb-3">
-            <label for="vilrespo" class="form-label">Ville du responsable</label>
-            <input type="text" class="form-control" id="vilrespo" [(ngModel)]="preinscriptionData.vilrespo" name="vilrespo">
+            <label for="vilrespo" class="form-label">Ville du responsable*</label>
+            <input
+              type="text"
+              class="form-control"
+              id="vilrespo"
+              [(ngModel)]="preinscriptionData.vilrespo"
+              name="vilrespo"
+              required
+              #vilrespo="ngModel"
+            />
+            <div *ngIf="vilrespo.invalid && (vilrespo.dirty || vilrespo.touched)" class="text-danger">
+              <div *ngIf="vilrespo.errors?.['required']">Le champ Ville du responsable est obligatoire.</div>
+            </div>
           </div>
           <div class="mb-3">
-            <label for="comrespo" class="form-label">Commune du responsable</label>
-            <input type="text" class="form-control" id="comrespo" [(ngModel)]="preinscriptionData.comrespo" name="comrespo">
+            <label for="comrespo" class="form-label">Commune du responsable*</label>
+            <input
+              type="text"
+              class="form-control"
+              id="comrespo"
+              [(ngModel)]="preinscriptionData.comrespo"
+              name="comrespo"
+              required
+              #comrespo="ngModel"
+            />
+            <div *ngIf="comrespo.invalid && (comrespo.dirty || comrespo.touched)" class="text-danger">
+              <div *ngIf="comrespo.errors?.['required']">Le champ Commune du responsable est obligatoire.</div>
+            </div>
           </div>
           <div class="mb-3">
             <label for="bprespo" class="form-label">Boîte postale du responsable</label>
-            <input type="text" class="form-control" id="bprespo" [(ngModel)]="preinscriptionData.bprespo" name="bprespo">
+            <input
+              type="text"
+              class="form-control"
+              id="bprespo"
+              [(ngModel)]="preinscriptionData.bprespo"
+              name="bprespo"
+            />
           </div>
           <div class="mb-3">
-            <label for="celrespo" class="form-label">Téléphone portable du responsable</label>
-            <input type="text" class="form-control" id="celrespo" [(ngModel)]="preinscriptionData.celrespo" name="celrespo">
+            <label for="celrespo" class="form-label">Téléphone portable du responsable*</label>
+            <input
+              type="text"
+              class="form-control"
+              id="celrespo"
+              [(ngModel)]="preinscriptionData.celrespo"
+              name="celrespo"
+              required
+              pattern="[0-9]{10}"
+              #celrespo="ngModel"
+            />
+            <div *ngIf="celrespo.invalid && (celrespo.dirty || celrespo.touched)" class="text-danger">
+              <div *ngIf="celrespo.errors?.['required']">Le champ Téléphone portable du responsable est obligatoire.</div>
+              <div *ngIf="celrespo.errors?.['pattern']">Le numéro de téléphone doit contenir 10 chiffres.</div>
+            </div>
           </div>
           <div class="mb-3">
             <label for="telburespo" class="form-label">Téléphone bureau du responsable</label>
-            <input type="text" class="form-control" id="telburespo" [(ngModel)]="preinscriptionData.telburespo" name="telburespo">
+            <input
+              type="text"
+              class="form-control"
+              id="telburespo"
+              [(ngModel)]="preinscriptionData.telburespo"
+              name="telburespo"
+            />
           </div>
           <div class="mb-3">
             <label for="teldomrespo" class="form-label">Téléphone domicile du responsable</label>
-            <input type="text" class="form-control" id="teldomrespo" [(ngModel)]="preinscriptionData.teldomrespo" name="teldomrespo">
+            <input
+              type="text"
+              class="form-control"
+              id="teldomrespo"
+              [(ngModel)]="preinscriptionData.teldomrespo"
+              name="teldomrespo"
+            />
           </div>
           <div class="mb-3">
             <label for="emailrespo" class="form-label">Email du responsable</label>
-            <input type="email" class="form-control" id="emailrespo" [(ngModel)]="preinscriptionData.emailrespo" name="emailrespo">
+            <input
+              type="email"
+              class="form-control"
+              id="emailrespo"
+              [(ngModel)]="preinscriptionData.emailrespo"
+              name="emailrespo"
+            />
           </div>
         </div>
 
@@ -200,43 +634,103 @@
           <h4>Étape 5: Informations médicales</h4>
           <div class="mb-3">
             <label for="clindec" class="form-label">Déclaration clinique</label>
-            <input type="text" class="form-control" id="clindec" [(ngModel)]="preinscriptionData.clindec" name="clindec">
+            <input
+              type="text"
+              class="form-control"
+              id="clindec"
+              [(ngModel)]="preinscriptionData.clindec"
+              name="clindec"
+            />
           </div>
           <div class="mb-3">
             <label for="clinnom" class="form-label">Nom du clinicien</label>
-            <input type="text" class="form-control" id="clinnom" [(ngModel)]="preinscriptionData.clinnom" name="clinnom">
+            <input
+              type="text"
+              class="form-control"
+              id="clinnom"
+              [(ngModel)]="preinscriptionData.clinnom"
+              name="clinnom"
+            />
           </div>
           <div class="mb-3">
             <label for="clintel" class="form-label">Téléphone du clinicien</label>
-            <input type="text" class="form-control" id="clintel" [(ngModel)]="preinscriptionData.clintel" name="clintel">
+            <input
+              type="text"
+              class="form-control"
+              id="clintel"
+              [(ngModel)]="preinscriptionData.clintel"
+              name="clintel"
+            />
           </div>
           <div class="mb-3">
             <label for="clinmed" class="form-label">Médecin clinicien</label>
-            <input type="text" class="form-control" id="clinmed" [(ngModel)]="preinscriptionData.clinmed" name="clinmed">
+            <input
+              type="text"
+              class="form-control"
+              id="clinmed"
+              [(ngModel)]="preinscriptionData.clinmed"
+              name="clinmed"
+            />
           </div>
           <div class="mb-3">
             <label for="clinmedcont" class="form-label">Contact du médecin clinicien</label>
-            <input type="text" class="form-control" id="clinmedcont" [(ngModel)]="preinscriptionData.clinmedcont" name="clinmedcont">
+            <input
+              type="text"
+              class="form-control"
+              id="clinmedcont"
+              [(ngModel)]="preinscriptionData.clinmedcont"
+              name="clinmedcont"
+            />
           </div>
           <div class="mb-3">
             <label for="maladies" class="form-label">Maladies</label>
-            <input type="text" class="form-control" id="maladies" [(ngModel)]="preinscriptionData.maladies" name="maladies">
+            <input
+              type="text"
+              class="form-control"
+              id="maladies"
+              [(ngModel)]="preinscriptionData.maladies"
+              name="maladies"
+            />
           </div>
           <div class="mb-3">
             <label for="soins" class="form-label">Soins</label>
-            <input type="text" class="form-control" id="soins" [(ngModel)]="preinscriptionData.soins" name="soins">
+            <input
+              type="text"
+              class="form-control"
+              id="soins"
+              [(ngModel)]="preinscriptionData.soins"
+              name="soins"
+            />
           </div>
           <div class="mb-3">
             <label for="medic" class="form-label">Médicaments</label>
-            <input type="text" class="form-control" id="medic" [(ngModel)]="preinscriptionData.medic" name="medic">
+            <input
+              type="text"
+              class="form-control"
+              id="medic"
+              [(ngModel)]="preinscriptionData.medic"
+              name="medic"
+            />
           </div>
           <div class="mb-3">
             <label for="premsoins" class="form-label">Premiers soins</label>
-            <input type="text" class="form-control" id="premsoins" [(ngModel)]="preinscriptionData.premsoins" name="premsoins">
+            <input
+              type="text"
+              class="form-control"
+              id="premsoins"
+              [(ngModel)]="preinscriptionData.premsoins"
+              name="premsoins"
+            />
           </div>
           <div class="mb-3">
             <label for="intervchir" class="form-label">Interventions chirurgicales</label>
-            <input type="text" class="form-control" id="intervchir" [(ngModel)]="preinscriptionData.intervchir" name="intervchir">
+            <input
+              type="text"
+              class="form-control"
+              id="intervchir"
+              [(ngModel)]="preinscriptionData.intervchir"
+              name="intervchir"
+            />
           </div>
         </div>
 
@@ -245,43 +739,123 @@
           <h4>Étape 6: Autres informations</h4>
           <div class="mb-3">
             <label for="datinscrip" class="form-label">Date d'inscription</label>
-            <input type="date" class="form-control" id="datinscrip" [(ngModel)]="preinscriptionData.datinscrip" name="datinscrip">
+            <input
+              type="date"
+              class="form-control"
+              id="datinscrip"
+              [(ngModel)]="preinscriptionData.datinscrip"
+              name="datinscrip"
+            />
           </div>
-          <div class="mb-3">
+          <div class="mb-3" hidden="true">
             <label for="decision" class="form-label">Décision</label>
-            <input type="text" class="form-control" id="decision" [(ngModel)]="preinscriptionData.decision" name="decision">
+            <input
+              type="text"
+              class="form-control"
+              id="decision"
+              [(ngModel)]="preinscriptionData.decision"
+              name="decision"
+            />
           </div>
           <div class="mb-3">
             <label for="numtabl" class="form-label">Numéro de table</label>
-            <input type="text" class="form-control" id="numtabl" [(ngModel)]="preinscriptionData.numtabl" name="numtabl">
+            <input
+              type="text"
+              class="form-control"
+              id="numtabl"
+              [(ngModel)]="preinscriptionData.numtabl"
+              name="numtabl"
+            />
           </div>
           <div class="mb-3">
             <label for="numatri" class="form-label">Numéro d'atrium</label>
-            <input type="text" class="form-control" id="numatri" [(ngModel)]="preinscriptionData.numatri" name="numatri">
+            <input
+              type="text"
+              class="form-control"
+              id="numatri"
+              [(ngModel)]="preinscriptionData.numatri"
+              name="numatri"
+            />
           </div>
           <div class="mb-3">
             <label for="totbac" class="form-label">Total baccalauréat</label>
-            <input type="number" class="form-control" id="totbac" [(ngModel)]="preinscriptionData.totbac" name="totbac">
+            <input
+              type="number"
+              class="form-control"
+              id="totbac"
+              [(ngModel)]="preinscriptionData.totbac"
+              name="totbac"
+            />
           </div>
           <div class="mb-3">
             <label for="matpc" class="form-label">Matériel PC</label>
-            <input type="text" class="form-control" id="matpc" [(ngModel)]="preinscriptionData.matpc" name="matpc">
+            <input
+              type="text"
+              class="form-control"
+              id="matpc"
+              [(ngModel)]="preinscriptionData.matpc"
+              name="matpc"
+            />
           </div>
           <div class="mb-3">
             <label for="anneescolaire" class="form-label">Année scolaire</label>
-            <input type="text" class="form-control" id="anneescolaire" [(ngModel)]="preinscriptionData.anneescolaire" name="anneescolaire">
+            <input
+              type="text"
+              class="form-control"
+              id="anneescolaire"
+              [(ngModel)]="preinscriptionData.anneescolaire"
+              name="anneescolaire"
+            />
           </div>
           <div class="mb-3">
-            <label for="etab_source" class="form-label">Établissement source</label>
-            <input type="text" class="form-control" id="etab_source" [(ngModel)]="preinscriptionData.etab_source" name="etab_source">
+            <label for="etab_source" class="form-label">Établissement source*</label>
+            <div>
+              <select
+              class="form-control"
+              id="etab_source"
+              [(ngModel)]="preinscriptionData.etab_source"
+              name="etab_source"          
+              required
+              #etab_source="ngModel"
+            >
+              <option value="ABIDJAN PLATEAU">ABIDJAN PLATEAU</option>
+              <option value="ABIDJAN YOPOUGON">ABIDJAN YOPOUGON</option>
+              <option value="YAMOUSSOUKRO">YAMOUSSOUKRO</option>
+            </select>
+
+  
+            </div>
+            <div *ngIf="etab_source.invalid && (etab_source.dirty || etab_source.touched)" class="text-danger">
+              <div *ngIf="etab_source.errors?.['required']">Le champ Établissement source est obligatoire.</div>
+            </div>
           </div>
         </div>
 
         <!-- Navigation buttons -->
         <div class="d-flex justify-content-between mt-4">
-          <button type="button" class="btn btn-secondary" (click)="previousStep()" *ngIf="currentStep > 1">Précédent</button>
-          <button type="button" class="btn btn-primary" (click)="nextStep()" *ngIf="currentStep < 6">Suivant</button>
-          <button type="submit" class="btn btn-success" *ngIf="currentStep === 6">Soumettre</button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="previousStep()"
+            *ngIf="currentStep > 1"
+          >
+            Précédent
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="nextStep(form)"
+            *ngIf="currentStep < 6"
+          >
+            Suivant
+          </button>
+          <button
+            type="submit"
+            class="btn btn-success"
+            *ngIf="currentStep === 6"
+          >
+            Soumettre
+          </button>
         </div>
       </form>
     </div>
