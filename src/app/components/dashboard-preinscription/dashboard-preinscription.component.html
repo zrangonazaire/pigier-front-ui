@@ -70,15 +70,16 @@
                     <input
                       type="text"
                       class="form-control"
-                      placeholder="Rechercher..."
+                      placeholder="Rechercher une personne préinscrite..."
+                     [ngModel]="searchQuery()"
+                      (ngModelChange)="searchQuery.set($event)"
                   
                     />
-                    <button class="btn btn-primary">
-                      <i class="fas fa-search"></i> Rechercher
-                    </button>
+
                   </div>
                 </div>
               </div>
+
               <table class="table table-striped table-bordered">
                 <thead>
                   <tr>
@@ -90,34 +91,46 @@
                     <th>Actions</th>
                   </tr>
                 </thead>
-               
-                <tbody>
-
-                  <tr *ngFor="let pre of preinscrits()">
-                    <td><pre>{{pre.id}}</pre></td>
-                    <td>{{pre.nomprenoms}}</td>
-                    <td>{{pre.celetud}}</td>
-                    <td>{{pre.formsouh}}</td>
-                    <td>
-                      <span *ngIf="pre.decision=='I'">Inscrit</span>
-                      <span *ngIf="pre.decision=='A'">Autorisé(e) à s'inscrit</span>
-                      <span *ngIf="pre.decision=='E'">En attente d'autorisation</span>
-                    </td>
-                    <td>
-                      <button  *ngIf="pre.decision!='I'  " class="btn btn- btn-warning me-2">
-                        <i class="fas fa-edit"></i> 
-                      </button>
-                      <button class="btn btn-sm btn-primary me-2">
-                        <i class="fas fa-print"></i> 
-                      </button>
-                      <button *ngIf="pre.decision!='A' or pre.decision!='I'  " class="btn btn-sm btn-danger" (click)="deletepreinscrit(pre.id)">
-                        <i class="fas fa-trash"></i> 
-                      </button>
-                    </td>
-                  </tr>
-               
+               @if (filtereUsers().length>0 ) {
+                @for (pre of filtereUsers(); track pre.id) {
+                  <tbody>
+                    <tr >
+                      <td><pre>{{pre.id}}</pre></td>
+                      <td>{{pre.nomprenoms}}</td>
+                      <td>{{pre.celetud}}</td>
+                      <td>{{pre.formsouh}}</td>
+                      <td>
+                        <span *ngIf="pre.decision=='I'">Inscrit</span>
+                        <span *ngIf="pre.decision=='A'">Autorisé(e) à s'inscrit</span>
+                        <span *ngIf="pre.decision=='E'">En attente d'autorisation</span>
+                      </td>
+                      <td>
+                        <button  *ngIf="pre.decision!='I'  " class="btn btn- btn-warning me-2">
+                          <i class="fas fa-edit"></i> 
+                        </button>
+                        <button class="btn btn-sm btn-success me-2" (click)="printMedical(pre.id)">
+                          <i class="fa fa-stethoscope"></i> 
+                        </button>
+                        <button class="btn btn-sm btn-info me-2" (click)="printPreinscrit(pre.id)">
+                          <i class="fa-solid fa-p"></i>
+                        </button>
+                        <button class="btn btn-sm btn-secondary me-2" (click)="printInscri(pre.id)">
+                          <i class="fa-solid fa-i"></i>
+                        </button>
+                        <button *ngIf="pre.decision!='A' or pre.decision!='I'  " class="btn btn-sm btn-danger" (click)="deletepreinscrit(pre.id)">
+                          <i class="fas fa-trash"></i> 
+                        </button>
+                      </td>
+                    </tr>
+                 
+     
+                  </tbody>
+                }
+               }@else {
+                <tr>
+                  <td colspan="6">Aucune préinscription trouvée</td>
+                </tr>}
    
-                </tbody>
               </table>
             </div>
           </div>
