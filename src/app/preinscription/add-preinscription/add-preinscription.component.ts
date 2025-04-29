@@ -1,41 +1,27 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
-import {
-  FormGroup,
-  FormBuilder,
-  Validators,
-  ReactiveFormsModule,
-  FormsModule,
-  NgForm,
-} from '@angular/forms';
+import { ReactiveFormsModule, FormsModule, NgForm } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatStepperModule } from '@angular/material/stepper';
-import {
-  PreinscriptionYakroRequestDto,
-  PreinscriptionYakroResponseDto,
-  PrinscriptionYakroService,
-} from '../../api-client';
+import { PrinscriptionYakroService, PreinscriptionYakroResponseDto, PreinscriptionYakroRequestDto } from '../../../api-client';
 
 @Component({
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatStepperModule,
-    FormsModule,
-  ],
-
-  templateUrl: './preinspription.component.html',
-  styleUrl: './preinspription.component.scss',
+  selector: 'app-add-preinscription',
+  standalone: true,
+  imports: [  ReactiveFormsModule,
+      MatCardModule,
+      MatFormFieldModule,
+      MatInputModule,
+      MatButtonModule,
+      MatStepperModule,
+      FormsModule,],
+  templateUrl: './add-preinscription.component.html',
+  styleUrl: './add-preinscription.component.scss'
 })
-export class PreinspriptionComponent implements OnInit {
-  ngOnInit(): void {
+export class AddPreinscriptionComponent implements OnInit{
+ ngOnInit(): void {
     // throw new Error('Method not implemented.');
   }
   hasDiplomeEquivalent: boolean = false; // Réponse à la question

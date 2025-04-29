@@ -1,0 +1,37 @@
+<div class="container mt-4">
+    <h2 class="text-primary mb-4"><i class="fas fa-list me-2"></i>Liste des Préinscriptions</h2>
+    <div class="table-responsive shadow-lg rounded">
+      <table class="table table-bordered table-hover align-middle">
+        <thead class="table-dark text-white">
+          <tr>
+            <th scope="col" class="text-center">#</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Prénom</th>
+            <th scope="col">Email</th>
+            <th scope="col">Téléphone</th>
+            <th scope="col" class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let preinscription of preinscriptions; let i = index" class="table-light">
+            <th scope="row" class="text-center">{{ i + 1 }}</th>
+            <td>{{ preinscription.nom }}</td>
+            <td>{{ preinscription.prenom }}</td>
+            <td>{{ preinscription.email }}</td>
+            <td>{{ preinscription.telephone }}</td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-outline-primary me-2" (click)="viewDetails(preinscription)">
+                <i class="fas fa-eye"></i> Voir
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deletePreinscription(preinscription)">
+                <i class="fas fa-trash-alt"></i> Supprimer
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="preinscriptions.length === 0">
+            <td colspan="6" class="text-center text-muted">Aucune préinscription trouvée.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
