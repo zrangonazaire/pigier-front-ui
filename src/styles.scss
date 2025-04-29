@@ -1,10 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { 
-  margin: 0; 
-  font-family: 'Courier New', Courier, monospace; 
-  color: black; /* Couleur du texte en noir */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Courier New', Courier, monospace;
+  color: black;
+  /* Couleur du texte en noir */
   font-size: medium;
 }
 
@@ -19,4 +24,31 @@ mat-toolbar {
 
 .example-spacer {
   flex: 1 1 auto;
+}
+
+.input {
+  padding: 10px;
+  background: #eff9fd;
+  border-radius: 2px;
+  outline: none;
+  color: #25a519;
+  border: 1px solid #ccc;
+
+}
+
+.placefolder {
+  position: absolute;
+  top: 10px;
+  left: 8px;
+  font-size: 14px;
+  padding: 0px 5px;
+  color:#25a519;
+  transition: 0.3s;
+  pointer-events: none;
+
+}
+input:not(:placeholder-shown) ~label,
+input:focus ~label {
+ top:-8px;
+ background-color: #eff9fd;
 }

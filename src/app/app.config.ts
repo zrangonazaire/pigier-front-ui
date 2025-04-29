@@ -11,6 +11,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptorsFromDi()),
     importProvidersFrom(
-      ApiModule.forRoot(() => new Configuration({ basePath: 'http://192.168.0.120:8084/api/v1' })) )
+      ApiModule.forRoot(() => new Configuration({ basePath: 'http://localhost:8084/api/v1' })) )
   ],
 };

@@ -1,93 +1,46 @@
-.example-spacer {
-  flex: 1 1 auto;
-}
-
-mat-toolbar {
-  background-color: #1976d2;
-  color: white;
-  justify-content: flex-start; /* Aligner le contenu à gauche */
-
-  .mat-icon-button {
-    color: white;
-  }
-
-  .mat-button {
-    color: white;
-  }
-
-  span {
-    color: white;
-  }
-
-  button {
-    color: white;
-  }
-
-  mat-icon {
-    color: white;
-  }
-
-  .example-link {
-    color: white;
-    text-decoration: none;
-    margin-left: 16px; /* Ajustez cette valeur pour rapprocher le lien */
-  }
-}
-
-.example-container {
-  width: 500px;
-  height: 100%;
-}
-
-.example-sidenav-content {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-}
-
-.example-sidenav {
-  padding: 20px;
-  background-color: antiquewhite;
-  width: 200px;
-}
-.active {
-  font-weight: bold;
-  color: white;
-}
-// NOUVEAU MENU
-/* Ajoutez un fond jaune à la barre de navigation */
 .navbar {
-  background-color: yellow !important; /* Fond jaune */
-  margin-bottom: 20px;
+  transition: all 0.3s ease;
+  padding: 0.8rem 1rem;
 }
 
-/* Style pour le texte du menu pour qu'il soit lisible sur fond jaune */
-.navbar-brand,
-.nav-link,
-.dropdown-toggle {
-  color: #000000 !important; /* Texte en noir pour contraster avec le fond jaune */
+.navbar-brand {
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
 }
 
-/* Style pour les éléments du sous-menu */
+.nav-link {
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  margin: 0 2px;
+  transition: all 0.2s;
+}
+
+.nav-link:hover, .nav-link.active {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
 .dropdown-menu {
-  background-color: yellow; /* Fond jaune pour le sous-menu */
+  border: none;
+  border-radius: 8px;
+  margin-top: 0.5rem;
 }
 
 .dropdown-item {
-  color: #000000 !important; /* Texte en noir pour les éléments du sous-menu */
+  padding: 0.5rem 1rem;
+  transition: all 0.2s;
 }
 
 .dropdown-item:hover {
-  background-color: #ffcc00; /* Couleur de survol plus foncée */
-  color: #000000 !important;
-}
-/* Style pour les boutons à droite */
-.navbar-nav.ms-auto .nav-link {
-  color: #000000 !important; /* Texte en noir */
-  margin-left: 10px; /* Espacement entre les boutons */
+  background-color: #f8f9fa;
+  color: #0d6efd;
+  padding-left: 1.5rem;
 }
 
-.navbar-nav.ms-auto .nav-link:hover {
-  color: #ffcc00 !important; /* Couleur de survol */
+.navbar-toggler {
+  border: none;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none;
 }
