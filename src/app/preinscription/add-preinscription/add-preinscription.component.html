@@ -1,0 +1,669 @@
+<div class="container mt-5">
+    <div class="card shadow-lg">
+      <div class="card-header bg-primary text-white">
+        <h3 class="mb-0 text-center"><i class="fas fa-user-graduate me-2"></i>Préinscription</h3>
+      </div>
+      <div class="card-body">
+        <!-- Progress bar -->
+        <div class="mb-4">
+          <div class="progress" style="height: 10px;">
+            <div class="progress-bar progress-bar-striped bg-success" role="progressbar" 
+                 [style.width]="(currentStep/6)*100 + '%'" 
+                 [attr.aria-valuenow]="currentStep" aria-valuemin="1" aria-valuemax="6">
+            </div>
+          </div>
+          <small class="text-muted">Étape {{currentStep}} sur 6</small>
+        </div>
+  
+        <form #form="ngForm" (ngSubmit)="addUnePreinscription()" class="needs-validation" novalidate>
+          
+          <!-- Step 1: Informations personnelles -->
+          <div *ngIf="currentStep === 1" class="animate__animated animate__fadeIn">
+            <h4 class="text-primary mb-4 border-bottom pb-2">
+              <i class="fas fa-user-circle me-2"></i>Informations personnelles
+            </h4>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="nomprenoms" class="form-label">Nom et Prénoms*</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-user"></i></span>
+                  <input type="text" class="form-control" id="nomprenoms" 
+                         [(ngModel)]="preinscriptionData.nomprenoms" name="nomprenoms"
+                         required minlength="3" #nomprenoms="ngModel">
+                </div>
+                <div *ngIf="nomprenoms.invalid && (nomprenoms.dirty || nomprenoms.touched)" class="invalid-feedback d-block">
+                  <div *ngIf="nomprenoms.errors?.['required']">Le champ Nom et Prénoms est obligatoire.</div>
+                  <div *ngIf="nomprenoms.errors?.['minlength']">Le champ doit contenir au moins 3 caractères.</div>
+                </div>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <label for="datnais" class="form-label">Date de naissance*</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                  <input type="date" class="form-control" id="datnais" 
+                         [(ngModel)]="preinscriptionData.datnais" name="datnais"
+                         required #datnais="ngModel">
+                </div>
+                <div *ngIf="datnais.invalid && (datnais.dirty || datnais.touched)" class="invalid-feedback d-block">
+                  <div *ngIf="datnais.errors?.['required']">Le champ Date de naissance est obligatoire.</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="lieunais" class="form-label">Lieu de naissance*</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                  <input type="text" class="form-control" id="lieunais" 
+                         [(ngModel)]="preinscriptionData.lieunais" name="lieunais"
+                         required #lieunais="ngModel">
+                </div>
+                <div *ngIf="lieunais.invalid && (lieunais.dirty || lieunais.touched)" class="invalid-feedback d-block">
+                  <div *ngIf="lieunais.errors?.['required']">Le champ Lieu de naissance est obligatoire.</div>
+                </div>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <label for="sexe" class="form-label">Genre*</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-venus-mars"></i></span>
+                  <select class="form-select" id="sexe" 
+                          [(ngModel)]="preinscriptionData.sexe" name="sexe"
+                          required #sexe="ngModel">
+                    <option value="" disabled selected>Choisir...</option>
+                    <option value="M">Masculin</option>
+                    <option value="F">Féminin</option>
+                  </select>
+                </div>
+                <div *ngIf="sexe.invalid && (sexe.dirty || sexe.touched)" class="invalid-feedback d-block">
+                  <div *ngIf="sexe.errors?.['required']">Le champ Genre est obligatoire.</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="nationalite" class="form-label">Nationalité*</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-flag"></i></span>
+                  <select class="form-select" id="nationalite" 
+                          [(ngModel)]="preinscriptionData.nationalite" name="nationalite"
+                          required #nationalite="ngModel">
+                    <option value="" disabled selected>Choisir...</option>
+                    <option value="ALGERIENNE">ALGERIENNE</option>
+                    <option value="ANGOLAISE">ANGOLAISE</option>
+                    <!-- Autres options... -->
+                  </select>
+                </div>
+                <div *ngIf="nationalite.invalid && (nationalite.dirty || nationalite.touched)" class="invalid-feedback d-block">
+                  <div *ngIf="nationalite.errors?.['required']">Le champ Nationalité est obligatoire.</div>
+                </div>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <label for="natident" class="form-label">Nature de l'identité*</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                  <input type="text" class="form-control" id="natident" 
+                         [(ngModel)]="preinscriptionData.natident" name="natident"
+                         required #natident="ngModel">
+                </div>
+                <div *ngIf="natident.invalid && (natident.dirty || natident.touched)" class="invalid-feedback d-block">
+                  <div *ngIf="natident.errors?.['required']">Le champ Nature de l'identité est obligatoire.</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="numidentite" class="form-label">Numéro d'identité*</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-id-badge"></i></span>
+                <input type="text" class="form-control" id="numidentite" 
+                       [(ngModel)]="preinscriptionData.numidentite" name="numidentite"
+                       required #numidentite="ngModel">
+              </div>
+              <div *ngIf="numidentite.invalid && (numidentite.dirty || numidentite.touched)" class="invalid-feedback d-block">
+                <div *ngIf="numidentite.errors?.['required']">Le champ Numéro d'identité est obligatoire.</div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Step 2: Informations de contact -->
+          <div *ngIf="currentStep === 2" class="animate__animated animate__fadeIn">
+            <h4 class="text-primary mb-4 border-bottom pb-2">
+              <i class="fas fa-address-book me-2"></i>Informations de contact
+            </h4>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="teletud" class="form-label">Téléphone*</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                  <input type="text" class="form-control" id="teletud" 
+                         [(ngModel)]="preinscriptionData.teletud" name="teletud"
+                         required pattern="[0-9]{10}" #teletud="ngModel">
+                </div>
+                <div *ngIf="teletud.invalid && (teletud.dirty || teletud.touched)" class="invalid-feedback d-block">
+                  <div *ngIf="teletud.errors?.['required']">Le champ Téléphone est obligatoire.</div>
+                  <div *ngIf="teletud.errors?.['pattern']">Le numéro de téléphone doit contenir 10 chiffres.</div>
+                </div>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <label for="celetud" class="form-label">Téléphone portable*</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-mobile-alt"></i></span>
+                  <input type="text" class="form-control" id="celetud" 
+                         [(ngModel)]="preinscriptionData.celetud" name="celetud"
+                         required pattern="[0-9]{10}" #celetud="ngModel">
+                </div>
+                <div *ngIf="celetud.invalid && (celetud.dirty || celetud.touched)" class="invalid-feedback d-block">
+                  <div *ngIf="celetud.errors?.['required']">Le champ Téléphone portable est obligatoire.</div>
+                  <div *ngIf="celetud.errors?.['pattern']">Le numéro de téléphone doit contenir 10 chiffres.</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="emailetud" class="form-label">Email*</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                <input type="email" class="form-control" id="emailetud" 
+                       [(ngModel)]="preinscriptionData.emailetud" name="emailetud"
+                       required #emailetud="ngModel">
+              </div>
+              <div *ngIf="emailetud.invalid && (emailetud.dirty || emailetud.touched)" class="invalid-feedback d-block">
+                <div *ngIf="emailetud.errors?.['required']">Le champ Email est obligatoire.</div>
+                <div *ngIf="emailetud.errors?.['email']">Veuillez entrer une adresse email valide.</div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="viletud" class="form-label">Ville*</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-city"></i></span>
+                  <input type="text" class="form-control" id="viletud" 
+                         [(ngModel)]="preinscriptionData.viletud" name="viletud"
+                         required #viletud="ngModel">
+                </div>
+                <div *ngIf="viletud.invalid && (viletud.dirty || viletud.touched)" class="invalid-feedback d-block">
+                  <div *ngIf="viletud.errors?.['required']">Le champ Ville est obligatoire.</div>
+                </div>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <label for="cometud" class="form-label">Commune*</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-map-marked-alt"></i></span>
+                  <input type="text" class="form-control" id="cometud" 
+                         [(ngModel)]="preinscriptionData.cometud" name="cometud"
+                         required #cometud="ngModel">
+                </div>
+                <div *ngIf="cometud.invalid && (cometud.dirty || cometud.touched)" class="invalid-feedback d-block">
+                  <div *ngIf="cometud.errors?.['required']">Le champ Commune est obligatoire.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Step 3: Informations académiques -->
+          <div *ngIf="currentStep === 3" class="animate__animated animate__fadeIn">
+            <h4 class="text-primary mb-4 border-bottom pb-2">
+              <i class="fas fa-graduation-cap me-2"></i>Informations académiques
+            </h4>
+            
+            <div class="mb-3">
+              <label class="form-label">Avez-vous un diplôme équivalent au baccalauréat ?*</label>
+              <div class="btn-group" role="group">
+                <input type="radio" class="btn-check" id="diplomeOui" name="diplome" 
+                       [(ngModel)]="hasDiplomeEquivalent" [value]="true" required #diplome="ngModel">
+                <label class="btn btn-outline-primary" for="diplomeOui">
+                  <i class="fas fa-check me-1"></i>Oui
+                </label>
+                
+                <input type="radio" class="btn-check" id="diplomeNon" name="diplome" 
+                       [(ngModel)]="hasDiplomeEquivalent" [value]="false" required>
+                <label class="btn btn-outline-primary" for="diplomeNon">
+                  <i class="fas fa-times me-1"></i>Non
+                </label>
+              </div>
+              <div *ngIf="diplome.invalid && (diplome.dirty || diplome.touched)" class="invalid-feedback d-block">
+                <div *ngIf="diplome.errors?.['required']">Veuillez sélectionner une option.</div>
+              </div>
+            </div>
+            
+            <div *ngIf="hasDiplomeEquivalent" class="bg-light p-3 rounded mb-4">
+              <h5 class="mb-3"><i class="fas fa-certificate me-2"></i>Informations sur le diplôme</h5>
+              
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="baccalaureat" class="form-label">Baccalauréat</label>
+                  <input type="text" class="form-control" id="baccalaureat" 
+                         [(ngModel)]="preinscriptionData.baccalaureat" name="baccalaureat">
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="annbac" class="form-label">Année du baccalauréat</label>
+                  <input type="text" class="form-control" id="annbac" 
+                         [(ngModel)]="preinscriptionData.annbac" name="annbac">
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="diplequiv" class="form-label">Diplôme équivalent</label>
+                  <input type="text" class="form-control" id="diplequiv" 
+                         [(ngModel)]="preinscriptionData.diplequiv" name="diplequiv">
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="anndiplequiv" class="form-label">Année du diplôme équivalent</label>
+                  <input type="text" class="form-control" id="anndiplequiv" 
+                         [(ngModel)]="preinscriptionData.anndiplequiv" name="anndiplequiv">
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="nivoetud" class="form-label">Niveau d'études</label>
+                  <input type="text" class="form-control" id="nivoetud" 
+                         [(ngModel)]="preinscriptionData.nivoetud" name="nivoetud">
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="annivoetud" class="form-label">Année du niveau d'études</label>
+                  <input type="text" class="form-control" id="annivoetud" 
+                         [(ngModel)]="preinscriptionData.annivoetud" name="annivoetud">
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="grade" class="form-label">Grade</label>
+                  <input type="text" class="form-control" id="grade" 
+                         [(ngModel)]="preinscriptionData.grade" name="grade">
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="anngrad" class="form-label">Année du grade</label>
+                  <input type="text" class="form-control" id="anngrad" 
+                         [(ngModel)]="preinscriptionData.anngrad" name="anngrad">
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label for="specgrad" class="form-label">Spécialité du grade</label>
+                <input type="text" class="form-control" id="specgrad" 
+                       [(ngModel)]="preinscriptionData.specgrad" name="specgrad">
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="etsfreq" class="form-label">Établissement fréquenté*</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-school"></i></span>
+                <input type="text" class="form-control" id="etsfreq" 
+                       [(ngModel)]="preinscriptionData.etsfreq" name="etsfreq"
+                       required #etsfreq="ngModel">
+              </div>
+              <div *ngIf="etsfreq.invalid && (etsfreq.dirty || etsfreq.touched)" class="invalid-feedback d-block">
+                <div *ngIf="etsfreq.errors?.['required']">Le champ Établissement fréquenté est obligatoire.</div>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="formsouh" class="form-label">Formation souhaitée*</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-book"></i></span>
+                <select class="form-select" id="formsouh" 
+                        [(ngModel)]="preinscriptionData.formsouh" name="formsouh"
+                        required #formsouh="ngModel">
+                  <option value="" disabled selected>Choisir une formation...</option>
+                  <option value="BTS ANNÉE PRÉPARATOIRE">BTS ANNÉE PRÉPARATOIRE</option>
+                  <!-- Autres options... -->
+                </select>
+              </div>
+              <div *ngIf="formsouh.invalid && (formsouh.dirty || formsouh.touched)" class="invalid-feedback d-block">
+                <div *ngIf="formsouh.errors?.['required']">Le champ Formation souhaitée est obligatoire.</div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Step 4: Informations sur les responsables -->
+          <div *ngIf="currentStep === 4" class="animate__animated animate__fadeIn">
+            <h4 class="text-primary mb-4 border-bottom pb-2">
+              <i class="fas fa-users me-2"></i>Informations sur les responsables
+            </h4>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="nompere" class="form-label">Nom du père*</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-male"></i></span>
+                  <input type="text" class="form-control" id="nompere" 
+                         [(ngModel)]="preinscriptionData.nompere" name="nompere"
+                         required #nompere="ngModel">
+                </div>
+                <div *ngIf="nompere.invalid && (nompere.dirty || nompere.touched)" class="invalid-feedback d-block">
+                  <div *ngIf="nompere.errors?.['required']">Le champ Nom du père est obligatoire.</div>
+                </div>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <label for="nomere" class="form-label">Nom de la mère*</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-female"></i></span>
+                  <input type="text" class="form-control" id="nomere" 
+                         [(ngModel)]="preinscriptionData.nomere" name="nomere"
+                         required #nomere="ngModel">
+                </div>
+                <div *ngIf="nomere.invalid && (nomere.dirty || nomere.touched)" class="invalid-feedback d-block">
+                  <div *ngIf="nomere.errors?.['required']">Le champ Nom de la mère est obligatoire.</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="respo" class="form-label">Responsable*</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-user-tie"></i></span>
+                <input type="text" class="form-control" id="respo" 
+                       [(ngModel)]="preinscriptionData.respo" name="respo"
+                       required #respo="ngModel">
+              </div>
+              <div *ngIf="respo.invalid && (respo.dirty || respo.touched)" class="invalid-feedback d-block">
+                <div *ngIf="respo.errors?.['required']">Le champ Responsable est obligatoire.</div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="nomrespo" class="form-label">Nom du responsable*</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-user"></i></span>
+                  <input type="text" class="form-control" id="nomrespo" 
+                         [(ngModel)]="preinscriptionData.nomrespo" name="nomrespo"
+                         required #nomrespo="ngModel">
+                </div>
+                <div *ngIf="nomrespo.invalid && (nomrespo.dirty || nomrespo.touched)" class="invalid-feedback d-block">
+                  <div *ngIf="nomrespo.errors?.['required']">Le champ Nom du responsable est obligatoire.</div>
+                </div>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <label for="profrespo" class="form-label">Profession du responsable</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-briefcase"></i></span>
+                  <input type="text" class="form-control" id="profrespo" 
+                         [(ngModel)]="preinscriptionData.profrespo" name="profrespo">
+                </div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="emprespo" class="form-label">Employeur du responsable</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-building"></i></span>
+                  <input type="text" class="form-control" id="emprespo" 
+                         [(ngModel)]="preinscriptionData.emprespo" name="emprespo">
+                </div>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <label for="vilrespo" class="form-label">Ville du responsable*</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-city"></i></span>
+                  <input type="text" class="form-control" id="vilrespo" 
+                         [(ngModel)]="preinscriptionData.vilrespo" name="vilrespo"
+                         required #vilrespo="ngModel">
+                </div>
+                <div *ngIf="vilrespo.invalid && (vilrespo.dirty || vilrespo.touched)" class="invalid-feedback d-block">
+                  <div *ngIf="vilrespo.errors?.['required']">Le champ Ville du responsable est obligatoire.</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="comrespo" class="form-label">Commune du responsable*</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-map-marked-alt"></i></span>
+                  <input type="text" class="form-control" id="comrespo" 
+                         [(ngModel)]="preinscriptionData.comrespo" name="comrespo"
+                         required #comrespo="ngModel">
+                </div>
+                <div *ngIf="comrespo.invalid && (comrespo.dirty || comrespo.touched)" class="invalid-feedback d-block">
+                  <div *ngIf="comrespo.errors?.['required']">Le champ Commune du responsable est obligatoire.</div>
+                </div>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <label for="bprespo" class="form-label">Boîte postale du responsable</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-envelope-open-text"></i></span>
+                  <input type="text" class="form-control" id="bprespo" 
+                         [(ngModel)]="preinscriptionData.bprespo" name="bprespo">
+                </div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="celrespo" class="form-label">Téléphone portable du responsable*</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-mobile-alt"></i></span>
+                  <input type="text" class="form-control" id="celrespo" 
+                         [(ngModel)]="preinscriptionData.celrespo" name="celrespo"
+                         required pattern="[0-9]{10}" #celrespo="ngModel">
+                </div>
+                <div *ngIf="celrespo.invalid && (celrespo.dirty || celrespo.touched)" class="invalid-feedback d-block">
+                  <div *ngIf="celrespo.errors?.['required']">Le champ Téléphone portable du responsable est obligatoire.</div>
+                  <div *ngIf="celrespo.errors?.['pattern']">Le numéro de téléphone doit contenir 10 chiffres.</div>
+                </div>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <label for="emailrespo" class="form-label">Email du responsable</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                  <input type="email" class="form-control" id="emailrespo" 
+                         [(ngModel)]="preinscriptionData.emailrespo" name="emailrespo">
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Step 5: Informations médicales -->
+          <div *ngIf="currentStep === 5" class="animate__animated animate__fadeIn">
+            <h4 class="text-primary mb-4 border-bottom pb-2">
+              <i class="fas fa-heartbeat me-2"></i>Informations médicales
+            </h4>
+            
+            <div class="bg-light p-3 rounded mb-4">
+              <h5 class="mb-3"><i class="fas fa-user-md me-2"></i>Informations cliniques</h5>
+              
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="clindec" class="form-label">Déclaration clinique</label>
+                  <input type="text" class="form-control" id="clindec" 
+                         [(ngModel)]="preinscriptionData.clindec" name="clindec">
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="clinnom" class="form-label">Nom du clinicien</label>
+                  <input type="text" class="form-control" id="clinnom" 
+                         [(ngModel)]="preinscriptionData.clinnom" name="clinnom">
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="clintel" class="form-label">Téléphone du clinicien</label>
+                  <input type="text" class="form-control" id="clintel" 
+                         [(ngModel)]="preinscriptionData.clintel" name="clintel">
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="clinmed" class="form-label">Médecin clinicien</label>
+                  <input type="text" class="form-control" id="clinmed" 
+                         [(ngModel)]="preinscriptionData.clinmed" name="clinmed">
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label for="clinmedcont" class="form-label">Contact du médecin clinicien</label>
+                <input type="text" class="form-control" id="clinmedcont" 
+                       [(ngModel)]="preinscriptionData.clinmedcont" name="clinmedcont">
+              </div>
+            </div>
+            
+            <div class="bg-light p-3 rounded">
+              <h5 class="mb-3"><i class="fas fa-file-medical me-2"></i>Informations médicales</h5>
+              
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="maladies" class="form-label">Maladies</label>
+                  <input type="text" class="form-control" id="maladies" 
+                         [(ngModel)]="preinscriptionData.maladies" name="maladies">
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="soins" class="form-label">Soins</label>
+                  <input type="text" class="form-control" id="soins" 
+                         [(ngModel)]="preinscriptionData.soins" name="soins">
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="medic" class="form-label">Médicaments</label>
+                  <input type="text" class="form-control" id="medic" 
+                         [(ngModel)]="preinscriptionData.medic" name="medic">
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="premsoins" class="form-label">Premiers soins</label>
+                  <input type="text" class="form-control" id="premsoins" 
+                         [(ngModel)]="preinscriptionData.premsoins" name="premsoins">
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label for="intervchir" class="form-label">Interventions chirurgicales</label>
+                <input type="text" class="form-control" id="intervchir" 
+                       [(ngModel)]="preinscriptionData.intervchir" name="intervchir">
+              </div>
+            </div>
+          </div>
+  
+          <!-- Step 6: Autres informations -->
+          <div *ngIf="currentStep === 6" class="animate__animated animate__fadeIn">
+            <h4 class="text-primary mb-4 border-bottom pb-2">
+              <i class="fas fa-info-circle me-2"></i>Autres informations
+            </h4>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="datinscrip" class="form-label">Date d'inscription</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-calendar-day"></i></span>
+                  <input type="date" class="form-control" id="datinscrip" 
+                         [(ngModel)]="preinscriptionData.datinscrip" name="datinscrip">
+                </div>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <label for="numtabl" class="form-label">Numéro de table</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-table"></i></span>
+                  <input type="text" class="form-control" id="numtabl" 
+                         [(ngModel)]="preinscriptionData.numtabl" name="numtabl">
+                </div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="numatri" class="form-label">Numéro d'atrium</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                  <input type="text" class="form-control" id="numatri" 
+                         [(ngModel)]="preinscriptionData.numatri" name="numatri">
+                </div>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <label for="totbac" class="form-label">Total baccalauréat</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-percentage"></i></span>
+                  <input type="number" class="form-control" id="totbac" 
+                         [(ngModel)]="preinscriptionData.totbac" name="totbac">
+                </div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="matpc" class="form-label">Matériel PC</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-laptop"></i></span>
+                  <input type="text" class="form-control" id="matpc" 
+                         [(ngModel)]="preinscriptionData.matpc" name="matpc">
+                </div>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <label for="anneescolaire" class="form-label">Année scolaire</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                  <input type="text" class="form-control" id="anneescolaire" 
+                         [(ngModel)]="preinscriptionData.anneescolaire" name="anneescolaire">
+                </div>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="etab_source" class="form-label">Établissement source*</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-university"></i></span>
+                <select class="form-select" id="etab_source" 
+                        [(ngModel)]="preinscriptionData.etab_source" name="etab_source"          
+                        required #etab_source="ngModel">
+                  <option value="" disabled selected>Choisir un établissement...</option>
+                  <option value="ABIDJAN PLATEAU">ABIDJAN PLATEAU</option>
+                  <option value="ABIDJAN YOPOUGON">ABIDJAN YOPOUGON</option>
+                  <option value="YAMOUSSOUKRO">YAMOUSSOUKRO</option>
+                </select>
+              </div>
+              <div *ngIf="etab_source.invalid && (etab_source.dirty || etab_source.touched)" class="invalid-feedback d-block">
+                <div *ngIf="etab_source.errors?.['required']">Le champ Établissement source est obligatoire.</div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Navigation buttons -->
+          <div class="d-flex justify-content-between mt-5">
+            <button type="button" class="btn btn-outline-secondary" 
+                    (click)="previousStep()" *ngIf="currentStep > 1">
+              <i class="fas fa-arrow-left me-1"></i> Précédent
+            </button>
+            
+            <button type="button" class="btn btn-primary ms-auto" 
+                    (click)="nextStep(form)" *ngIf="currentStep < 6">
+              Suivant <i class="fas fa-arrow-right ms-1"></i>
+            </button>
+            
+            <button type="submit" class="btn btn-success ms-auto" 
+                    *ngIf="currentStep === 6">
+              <i class="fas fa-paper-plane me-1"></i> Soumettre
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
