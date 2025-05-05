@@ -79,7 +79,8 @@ constructor() {
         this.status.set('loaded');
       },
       error: (error) => {
-        this.eror.set('error chargement preinscriptions');
+        this.eror.set('error chargement preinscriptions : ' + error.message);
+        console.log('error', error);
         this.status.set('error');
       },
     });

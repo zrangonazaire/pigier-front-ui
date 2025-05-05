@@ -8,4 +8,5 @@ export const routes: Routes = [
   {path:'tb-preinscr',component:DashboardPreinscriptionComponent},
   { path: 'login', component: LoginComponent },
   { path: 'preinscription', loadChildren: () => import('./preinscription/preinscription.routes').then(m => m.PREINSCRIPTION_ROUTES) },
+  {path:'caisse',loadChildren: () => import('./caisse/caisse.routes').then(m => m.CAISSE_ROUTES)},
 ];
