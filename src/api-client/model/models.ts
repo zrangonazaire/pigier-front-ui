@@ -1,3 +1,5 @@
+export * from './authenticationRequest';
+export * from './authenticationResponse';
 export * from './etabSourceRequestDto';
 export * from './etabSourceResponseDto';
 export * from './formationRequestDto';

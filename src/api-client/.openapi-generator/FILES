@@ -3,6 +3,8 @@ README.md
 api.base.service.ts
 api.module.ts
 api/api.ts
+api/authentication.service.ts
+api/encaissement.service.ts
 api/etablissement.service.ts
 api/fORMATION.service.ts
 api/prinscriptionYakro.service.ts
@@ -10,6 +12,8 @@ configuration.ts
 encoder.ts
 git_push.sh
 index.ts
+model/authenticationRequest.ts
+model/authenticationResponse.ts
 model/etabSourceRequestDto.ts
 model/etabSourceResponseDto.ts
 model/formationRequestDto.ts

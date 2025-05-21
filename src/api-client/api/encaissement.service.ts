@@ -1,0 +1,118 @@
+
+import { Inject, Injectable, Optional }                      from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams,
+         HttpResponse, HttpEvent, HttpParameterCodec, HttpContext 
+        }       from '@angular/common/http';
+import { CustomHttpParameterCodec }                          from '../encoder';
+import { Observable }                                        from 'rxjs';
+
+
+// @ts-ignore
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
+
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class EncaissementService extends BaseService {
+
+    constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
+        super(basePath, configuration);
+    }
+
+    /**
+     * @param modeRegParam 
+     * @param etablissementSourceParam 
+     * @param paramDateDebut 
+     * @param paramDateFin 
+     * @param paramIDcaisse 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public generateJournalEncaissementsBetweenDatesReport(modeRegParam: Array<string>, etablissementSourceParam: Array<string>, paramDateDebut: string, paramDateFin: string, paramIDcaisse: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<string>;
+    public generateJournalEncaissementsBetweenDatesReport(modeRegParam: Array<string>, etablissementSourceParam: Array<string>, paramDateDebut: string, paramDateFin: string, paramIDcaisse: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
+    public generateJournalEncaissementsBetweenDatesReport(modeRegParam: Array<string>, etablissementSourceParam: Array<string>, paramDateDebut: string, paramDateFin: string, paramIDcaisse: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
+    public generateJournalEncaissementsBetweenDatesReport(modeRegParam: Array<string>, etablissementSourceParam: Array<string>, paramDateDebut: string, paramDateFin: string, paramIDcaisse: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (modeRegParam === null || modeRegParam === undefined) {
+            throw new Error('Required parameter modeRegParam was null or undefined when calling generateJournalEncaissementsBetweenDatesReport.');
+        }
+        if (etablissementSourceParam === null || etablissementSourceParam === undefined) {
+            throw new Error('Required parameter etablissementSourceParam was null or undefined when calling generateJournalEncaissementsBetweenDatesReport.');
+        }
+        if (paramDateDebut === null || paramDateDebut === undefined) {
+            throw new Error('Required parameter paramDateDebut was null or undefined when calling generateJournalEncaissementsBetweenDatesReport.');
+        }
+        if (paramDateFin === null || paramDateFin === undefined) {
+            throw new Error('Required parameter paramDateFin was null or undefined when calling generateJournalEncaissementsBetweenDatesReport.');
+        }
+        if (paramIDcaisse === null || paramIDcaisse === undefined) {
+            throw new Error('Required parameter paramIDcaisse was null or undefined when calling generateJournalEncaissementsBetweenDatesReport.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (modeRegParam) {
+            modeRegParam.forEach((element) => {
+                localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+                  <any>element, 'modeRegParam');
+            })
+        }
+        if (etablissementSourceParam) {
+            etablissementSourceParam.forEach((element) => {
+                localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+                  <any>element, 'etablissementSourceParam');
+            })
+        }
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>paramDateDebut, 'paramDateDebut');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>paramDateFin, 'paramDateFin');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>paramIDcaisse, 'paramIDcaisse');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            '*/*'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/encaissement/journalEncaissementsBetweenDates`;
+        return this.httpClient.request<string>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+}
