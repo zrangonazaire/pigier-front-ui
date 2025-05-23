@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ElevesService } from '../../../api-client';
 
 interface Eleve {
   Matri_Elev: string;
@@ -33,6 +34,8 @@ export class EtatlisteeleveComponent {
   chargement: boolean = false;
   erreur: string = '';
 
+ private eleveService = inject(ElevesService);
+
   constructor(private http: HttpClient) {}
 
   rechercherEleves() {
@@ -58,4 +61,38 @@ export class EtatlisteeleveComponent {
       }
     });
   }
+
+printeleves() {
+this.eleveService.etatListeEtudiant(this.PARAMCLASSE, this.PARAMEANNE.replace(/\s/g, '').substring(0, 4), this.PARAMEANNE.replace(/\s/g, '').slice(-4)).subscribe({
+  next: (response) => {
+    const blob = new Blob([response], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    window.open(url);
+  },
+  error: (error) => {
+    alert('Erreur impression'+error.message);
+  }
+});
+
+//alert(this.PARAMEANNE.replace(/\s/g, '').substring(0, 4));
+
+//alert(this.PARAMEANNE.replace(/\s/g, '').slice(-4));
+
+}
+
+
+
+  /*
+    printInscri(arg0: any) {
+    this.preinscritservice.impressionInscriptionYakro(arg0).subscribe({
+      next: (response) => {
+        const blob = new Blob([response], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        window.open(url);
+      },
+      error: (error) => {
+        alert('Erreur impression');
+      },
+    });
+  } */
 }

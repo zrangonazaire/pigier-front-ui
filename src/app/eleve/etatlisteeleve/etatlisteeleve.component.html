@@ -8,8 +8,8 @@
         <div class="d-flex">
 
        <!-- Bouton d'impression -->
-  <button class="btn btn-light btn-sm me-2">
-    <i class="fas fa-print mr-1"></i> Impression PDF
+  <button class="btn btn-light btn-sm me-2" (click)="printeleves()" [disabled]="chargement">
+    <i class="fas fa-print mr-1" [class.fa-spin]="chargement"></i> {{ chargement ? 'Chargement...' : 'Impression PDF' }}
   </button>
 
       <!-- Bouton d'impression -->
