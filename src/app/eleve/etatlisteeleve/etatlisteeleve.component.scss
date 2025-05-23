@@ -70,3 +70,36 @@
     text-align: left;
   }
 }
+
+
+@media print {
+  .card-header, .form-group, .alert, .btn {
+    display: none !important;
+  }
+
+  body {
+    padding: 20px;
+    font-size: 12px;
+  }
+
+  table {
+    page-break-inside: auto;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+}
+
+
+/* Style pour le bouton d'impression */
+/* etatlisteeleve.component.css */
+.btn-print {
+  margin-right: 0.5rem; /* 8px */
+}
+
+/* Ou pour cibler tous les boutons dans le header */
+.card-header .btn:not(:last-child) {
+  margin-right: 0.5rem;
+}
