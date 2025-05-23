@@ -4,6 +4,7 @@ api.base.service.ts
 api.module.ts
 api/api.ts
 api/authentication.service.ts
+api/eleves.service.ts
 api/encaissement.service.ts
 api/etablissement.service.ts
 api/fORMATION.service.ts

@@ -1,5 +1,7 @@
 export * from './authentication.service';
 import { AuthenticationService } from './authentication.service';
+export * from './eleves.service';
+import { ElevesService } from './eleves.service';
 export * from './encaissement.service';
 import { EncaissementService } from './encaissement.service';
 export * from './etablissement.service';
@@ -8,4 +10,4 @@ export * from './fORMATION.service';
 import { FORMATIONService } from './fORMATION.service';
 export * from './prinscriptionYakro.service';
 import { PrinscriptionYakroService } from './prinscriptionYakro.service';
-export const APIS = [AuthenticationService, EncaissementService, EtablissementService, FORMATIONService, PrinscriptionYakroService];
+export const APIS = [AuthenticationService, ElevesService, EncaissementService, EtablissementService, FORMATIONService, PrinscriptionYakroService];
