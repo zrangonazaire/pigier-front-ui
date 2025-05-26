@@ -11,9 +11,71 @@ import { EncaissementService } from '../../../api-client';
   styleUrl: './journal-caisse.component.scss',
 })
 export class JournalCaisseComponent {
+  //DROIT D'INSCRIPTION
   printDroitInsc() {
-    throw new Error('Method not implemented.');
+       const selectedCampuses = Object.entries(this.campus)
+      .filter(([_, value]) => value)
+      .map(([key, _]) => {
+        switch (key) {
+          case 'plateau':
+            return 'ABIDJAN PLATEAU';
+          case 'yopougon':
+            return 'ABIDJAN YOPOUGON';
+          case 'yamoussoukro':
+            return 'YAMOUSSOUKRO';
+          default:
+            return '';
+        }
+      });
+    const selectedReglement = Object.entries(this.reglement)
+      .filter(([_, value]) => value)
+      .map(([key, _]) => {
+        switch (key) {
+          case 'cheque':
+            return 'C';
+          case 'espece':
+            return 'E';
+
+          case 'carte_bancaire':
+            return 'B';
+          case 'mobile_money':
+            return 'O';
+          case 'virement_banq_a_banque':
+            return 'V';
+          case 'virement_espece_banque':
+            return 'W';
+          default:
+            return '';
+        }
+      });
+    this.encaissementService
+      .generateJournalEncaissementsDroitInscriBetweenDatesReport(
+        selectedReglement,
+        selectedCampuses,
+        this.dateDebut,
+        this.dateFin,
+        this.selectedCaisse
+      )
+      .subscribe({
+        next: (response) => {
+          const blob = new Blob([response], { type: 'application/pdf' });
+          const url = window.URL.createObjectURL(blob);
+          window.open(url);
+        },
+        error: (error) => {
+          alert('Erreur impression');
+          console.error("Erreur lors de l'impression :", error);
+        },
+      });
+    console.log('Configuration :', {
+      campuses: selectedCampuses,
+      reglement: selectedReglement,
+      caisse: this.selectedCaisse,
+      dateDebut: this.dateDebut,
+      dateFin: this.dateFin,
+    });
   }
+  
   campus = {
     plateau: false,
     yopougon: false,
