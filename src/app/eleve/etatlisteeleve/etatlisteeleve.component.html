@@ -13,7 +13,7 @@
   </button>
 
       <!-- Bouton d'impression -->
-  <button class="btn btn-light btn-sm me-2">
+  <button class="btn btn-light btn-sm me-2" (click)="printeleveExcel()" [disabled]="chargement">
     <i class="fas fa-print mr-1"></i> Impression EXCEL
   </button>
 

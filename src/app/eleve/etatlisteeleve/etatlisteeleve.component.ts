@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ElevesService } from '../../../api-client';
 
+import { saveAs } from 'file-saver';
+// Définition de l'interface pour les données des élèves
 interface Eleve {
   Matri_Elev: string;
   Nom_Elev: string;
@@ -79,6 +81,31 @@ this.eleveService.etatListeEtudiant(this.PARAMCLASSE, this.PARAMEANNE.replace(/\
 //alert(this.PARAMEANNE.replace(/\s/g, '').slice(-4));
 
 }
+
+
+
+
+printeleveExcel(){
+
+
+
+
+  this.eleveService.etatListeEtudiantExcel(this.PARAMCLASSE, this.PARAMEANNE.replace(/\s/g, '').substring(0, 4), this.PARAMEANNE.replace(/\s/g, '').slice(-4)).subscribe({
+    next: (response) => {
+      const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      saveAs(blob, `Liste_Eleve_${this.PARAMCLASSE}_${this.PARAMEANNE}.xlsx`);
+    },
+    error: (error) => {
+      alert('Erreur lors de l\'exportation Excel : ' + error.message);
+    }
+  });
+}
+
+
+
+
+
+
 
 
 
