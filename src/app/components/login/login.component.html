@@ -1,1 +1,40 @@
-<p>login works!</p>
+
+<div class="login-container d-flex align-items-center justify-content-center min-vh-100 bg-light">
+  <div class="card shadow-lg p-4 rounded" style="max-width: 400px; width: 100%;">
+    <div class="text-center mb-4">
+      <i class="fas fa-user-circle fa-3x text-primary mb-2"></i>
+      <h3 class="fw-bold text-primary">Connexion</h3>
+    </div>
+    <div class="alert alert-primary text-center mb-4 fw-semibold" role="alert">
+      Bienvenue dans l'application de gestion de Pigier Côte d'Ivoire !<br>
+      Veuillez vous connecter pour continuer.
+    </div>
+    
+    @if (errorMessage()) {
+      <div class="alert alert-danger">
+        {{ errorMessage() }}
+      </div>
+    }
+    <form (ngSubmit)="onLogin()" [formGroup]="loginForm">
+      <div class="mb-3">
+        <label for="email" class="form-label">Login</label>
+        <input type="email" id="email" class="form-control" formControlName="email" placeholder="Entrez votre email" required>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Mot de passe</label>
+        <input type="password" id="password" class="form-control" formControlName="password" placeholder="Mot de passe" required>
+      </div>
+      <button type="submit" class="btn btn-primary w-100" >
+        <i class="fas fa-sign-in-alt me-2"></i>   @if (isLoading()) {
+        <span class="spinner-border spinner-border-sm"></span>
+        Connexion en cours...
+      } @else {
+        Se connecter
+      }
+      </button>
+    </form>
+    <div class="text-center mt-3">
+      <a href="#" class="text-decoration-none text-secondary">Mot de passe oublié ?</a>
+    </div>
+  </div>
+</div>

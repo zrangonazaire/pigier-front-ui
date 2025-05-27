@@ -5,11 +5,12 @@ import {
 } from '../../../api-client';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MenuComponent } from '../menu/menu.component';
 
 @Component({
   selector: 'app-dashboard-preinscription',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,MenuComponent],
   templateUrl: './dashboard-preinscription.component.html',
   styleUrl: './dashboard-preinscription.component.scss',
 })
