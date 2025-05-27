@@ -105,4 +105,76 @@ export class ElevesService extends BaseService {
         );
     }
 
+    /**
+     * @param paramClasse 
+     * @param paramAnneDebut 
+     * @param paramAnneFin 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public etatListeEtudiantExcel(paramClasse: string, paramAnneDebut: string, paramAnneFin: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<string>;
+    public etatListeEtudiantExcel(paramClasse: string, paramAnneDebut: string, paramAnneFin: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
+    public etatListeEtudiantExcel(paramClasse: string, paramAnneDebut: string, paramAnneFin: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
+    public etatListeEtudiantExcel(paramClasse: string, paramAnneDebut: string, paramAnneFin: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (paramClasse === null || paramClasse === undefined) {
+            throw new Error('Required parameter paramClasse was null or undefined when calling etatListeEtudiantExcel.');
+        }
+        if (paramAnneDebut === null || paramAnneDebut === undefined) {
+            throw new Error('Required parameter paramAnneDebut was null or undefined when calling etatListeEtudiantExcel.');
+        }
+        if (paramAnneFin === null || paramAnneFin === undefined) {
+            throw new Error('Required parameter paramAnneFin was null or undefined when calling etatListeEtudiantExcel.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>paramClasse, 'paramClasse');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>paramAnneDebut, 'paramAnneDebut');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>paramAnneFin, 'paramAnneFin');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            '*/*'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/eleves/etatListeEtudiantExcel`;
+        return this.httpClient.request<string>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
 }

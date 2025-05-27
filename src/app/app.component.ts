@@ -6,7 +6,7 @@ import { MenuComponent } from './components/menu/menu.component';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  imports: [RouterOutlet, MenuComponent]
+  imports: [RouterOutlet]
 })
 export class AppComponent {
   title = 'pigier-front-ui';

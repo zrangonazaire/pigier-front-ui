@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ElevesService } from '../../../api-client';
+import { MenuComponent } from '../../components/menu/menu.component';
 
 interface Eleve {
   Matri_Elev: string;
@@ -20,7 +21,8 @@ interface Eleve {
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    MenuComponent
   ],
 
   selector: 'app-etatlisteeleve',

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { MenuComponent } from '../../components/menu/menu.component';
 
 @Component({
   selector: 'app-list-preinscription',
-  imports: [],
+  standalone: true,
+  imports: [MenuComponent],
   templateUrl: './list-preinscription.component.html',
   styleUrl: './list-preinscription.component.scss'
 })
