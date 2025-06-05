@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatStepperModule } from '@angular/material/stepper';
 import { PrinscriptionYakroService, PreinscriptionYakroResponseDto, PreinscriptionYakroRequestDto } from '../../../api-client';
 import { MenuComponent } from '../../components/menu/menu.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-add-preinscription',
@@ -18,7 +19,7 @@ import { MenuComponent } from '../../components/menu/menu.component';
       MatButtonModule,
       MatStepperModule,
       FormsModule,
-    MenuComponent],
+    MenuComponent,CommonModule],
   templateUrl: './add-preinscription.component.html',
   styleUrl: './add-preinscription.component.scss'
 })
