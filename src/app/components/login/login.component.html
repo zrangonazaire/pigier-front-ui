@@ -1,6 +1,14 @@
-<div class="login-container">
-  <form (ngSubmit)="onLogin()" #loginForm="ngForm">
-    <h2>Connexion</h2>
+<div class="elegant-container-wrapper">
+  <div class="elegant-login-container">
+    <div class="elegant-login-header text-center mb-4">
+      <h1 class="app-main-title">KRANJA-APP</h1>
+      <p class="app-main-subtitle">La nouvelle plateforme de gestion de PIGIER CI</p>
+    </div>
+  <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="elegant-login-form">
+    <div class="form-header">
+      <img src="assets/pigier-logo.png" alt="PIGIER COTE D'IVOIRE Logo" class="logo">
+      <h2>ACCÈS SÉCURISÉ</h2>
+    </div>
 
     @if (errorMessage()) {
       <div class="alert alert-error">
@@ -9,7 +17,7 @@
     }
 
     <div class="form-group">
-      <label for="email">Email</label>
+      <label for="email">LOGIN</label>
       <input
         type="text"
         id="email"
@@ -17,12 +25,14 @@
         name="email"
         required
         email
-        class="form-control"
+        class="elegant-input"
+        placeholder="votre.email@pigier.ci"
       >
+      <span class="input-focus-line"></span>
     </div>
 
     <div class="form-group">
-      <label for="password">Mot de passe</label>
+      <label for="password">CODE D'ACCÈS CRYPTÉ</label>
       <input
         type="password"
         id="password"
@@ -30,25 +40,29 @@
         name="password"
         required
         minlength="6"
-        class="form-control"
+        class="elegant-input"
+        placeholder="••••••••"
       >
+      <span class="input-focus-line"></span>
     </div>
 
-    <button 
-      type="submit" 
-      class="btn btn-primary"
+    <button
+      type="submit"
+      class="elegant-btn"
       [disabled]="isLoading()"
     >
       @if (isLoading()) {
-        <span class="spinner"></span>
-        Connexion...
+        <span class="elegant-spinner"></span>
+        INITIATION DE SESSION...
       } @else {
-        Se connecter
+        ACCÉDER AU SYSTÈME
       }
     </button>
 
-    <div class="forgot-password">
-      <a routerLink="/forgot-password">Mot de passe oublié ?</a>
+    <div class="elegant-links">
+      <a routerLink="/forgot-password" class="link-forgot-password">CODE D'ACCÈS OUBLIÉ ?</a>
     </div>
   </form>
 </div>
+
+<div class="elegant-background"></div>

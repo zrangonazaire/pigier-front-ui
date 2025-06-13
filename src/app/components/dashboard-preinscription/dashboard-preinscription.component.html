@@ -1,153 +1,161 @@
 <app-menu></app-menu>
+
 <div class="dashboard-container">
-    <!-- Header -->
-    <header class="dashboard-header bg-dark text-white p-3">
-      <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center">
-          <h2>Tableau de Bord</h2>
-          <div>
-            <button class="btn btn-primary me-2">
-              <i class="fas fa-bell"></i> Notifications
-            </button>
-            <button class="btn btn-danger">
-              <i class="fas fa-sign-out-alt"></i> Déconnexion
-            </button>
-          </div>
-        </div>
-      </div>
-    </header>
-  
-    <!-- Contenu principal -->
-    <main class="dashboard-content p-4">
-      <div class="container-fluid">
-        <h3>Bienvenue sur votre tableau de bord</h3>
-        <p>Ici, vous pouvez gérer votre application et visualiser les données importantes.</p>
-  
-        <!-- Exemple de cartes -->
-        <div class="row">
-          <div class="col-md-4">
-            <div class="card text-white bg-primary mb-3">
-              <div class="card-body">
-                <h5 class="card-title">Utilisateurs</h5>
-                <p class="card-text">Nombre total d'utilisateurs : 120</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card text-white bg-success mb-3">
-              <div class="card-body">
-                <h5 class="card-title">Commandes</h5>
-                <p class="card-text">Commandes ce mois-ci : 45</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card text-white bg-warning mb-3">
-              <div class="card-body">
-                <h5 class="card-title">Revenus</h5>
-                <p class="card-text">Revenus totaux : 12 000 €</p>
-              </div>
-            </div>
-          </div>
-        </div>
- <div [ngSwitch]="status()">
-  <div *ngSwitchCase="'loading'">
-    <h1>Chargement en cours...</h1>
+  <!-- Header responsive -->
+  <div class="dashboard-header">
+    <h1><i class="fas fa-analytics"></i> Tableau de Bord Préinscriptions</h1>
+    <h2>Gestion des candidatures universitaires</h2>
+    <p class="header-description">Interface de suivi des préinscriptions multi-sites</p>
   </div>
-  <div *ngSwitchCase="'error'">
-    <div >
-      <div >Erreur : {{ eror.toString() }}</div>
+
+  <!-- Cartes de statistiques responsive -->
+  <div class="dashboard-stats">
+    <div class="stat-card" *ngFor="let stat of stats()">
+      <i [class]="stat.icon"></i>
+      <h3>{{ stat.title }}</h3>
+      <p>{{ stat.value }}</p>
     </div>
   </div>
-  <div *ngSwitchDefault>
 
-           <!-- Tableau -->
-           <div class="row mt-4">
-            <div class="col-md-12">
-              <h4>Liste des préinscriptions</h4>
-              <div class="row mb-3">
-                <div class="col-md-6">
-                  <div class="input-group">
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Rechercher une personne préinscrite..."
-                     [ngModel]="searchQuery()"
-                      (ngModelChange)="searchQuery.set($event)"
-                  
-                    />
-
-                  </div>
-                </div>
-              </div>
-              <label for="valeur-select">Choisissez une valeur :</label>
-              <select id="valeur-select" (change)="loadPreinscriptions(sizeLoad)" [(ngModel)]="sizeLoad">
-                <option *ngFor="let valeur of valeurs" [value]="valeur">
-                  {{ valeur }}
-                </option>
-              </select>
-              <table class="table table-striped table-bordered">
-                <thead>
-                  <tr>
-                    <th>Id</th>
-                    <th>Date D'Insc.</th>
-                    <th>Nom et prénoms</th>
-                    <th>Contact</th>
-                    <th>Formations Souhaité</th>
-                    <th>Décision</th>
-                    <th>Etablissement</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-               @if (filtereUsers().length>0 ) {
-                @for (pre of filtereUsers(); track pre.id) {
-                  <tbody>
-                    <tr >
-                      <td><pre>{{pre.id}}</pre></td>
-                      <td><pre>{{pre.datinscrip| date:'dd/MM/yyyy'}}</pre></td>
-                      <td>{{pre.nomprenoms}}</td>
-                      <td>{{pre.celetud}}</td>
-                      <td>{{pre.formsouh}}</td>
-                      <td>
-                        <span *ngIf="pre.decision=='I'">Inscrit(e)</span>
-                        <span *ngIf="pre.decision=='A'">Autorisé(e) à s'inscrit</span>
-                        <span *ngIf="pre.decision=='E'">En attente d'autorisation</span>
-                      </td>
-                      <td>{{pre.etab_source}}</td>
-                      <td>
-                        <button  *ngIf="pre.decision!='I'  " class="btn btn- btn-warning me-2">
-                          <i class="fas fa-edit"></i> 
-                        </button>
-                        <button class="btn btn-sm btn-success me-2" (click)="printMedical(pre.id)">
-                          <i class="fa fa-stethoscope"></i> 
-                        </button>
-                        <button class="btn btn-sm btn-info me-2" (click)="printPreinscrit(pre.id)">
-                          <i class="fa-solid fa-p"></i>
-                        </button>
-                        <button class="btn btn-sm btn-secondary me-2" (click)="printInscri(pre.id)">
-                          <i class="fa-solid fa-i"></i>
-                        </button>
-                        <button *ngIf="pre.decision!='A' or pre.decision!='I'  " class="btn btn-sm btn-danger" (click)="deletepreinscrit(pre.id)">
-                          <i class="fas fa-trash"></i> 
-                        </button>
-                      </td>
-                    </tr>
-                 
-     
-                  </tbody>
-                }
-               }@else {
-                <tr>
-                  <td colspan="6">Aucune préinscription trouvée</td>
-                </tr>}
-   
-              </table>
-            </div>
-          </div>
-  </div>
-
- </div>
- 
+  <!-- Contrôles de filtrage responsive -->
+  <div class="control-panel">
+    <div class="filter-group">
+      <div class="selector">
+        <select [(ngModel)]="selectedSite" (change)="filterBySite()">
+          <option value="all">Tous les sites</option>
+          <option value="Abidjan Plateau">Abidjan Plateau</option>
+          <option value="Abidjan Yopougon">Abidjan Yopougon</option>
+          <option value="Yamoussoukro">Yamoussoukro</option>
+        </select>
       </div>
-    </main>
+
+      <div class="selector">
+        <select [(ngModel)]="selectedStatus" (change)="filterByStatus()">
+          <option value="all">Tous les statuts</option>
+          <option value="En attente">En attente</option>
+          <option value="Validée">Validée</option>
+          <option value="Rejetée">Rejetée</option>
+        </select>
+      </div>
+
+      <div class="counter">
+        <span>{{ filteredPreinscriptions().length }} enregistrements</span>
+      </div>
+    </div>
   </div>
+
+  <!-- Tableau responsive -->
+  <div class="table-section">
+    <div class="section-header">
+      <h3><i class="fas fa-database"></i> Liste des Préinscriptions</h3>
+      
+      <div class="search-container">
+        <div class="search-box">
+          <input type="text" 
+                 [(ngModel)]="searchTerm" 
+                 (input)="applySearch()" 
+                 placeholder="Rechercher candidat..." />
+          <button><i class="fas fa-search"></i></button>
+        </div>
+        <button class="action-btn">
+          <i class="fas fa-user-plus"></i> Nouveau
+        </button>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th *ngFor="let column of columns" (click)="sortTable(column.key)">
+              {{ column.label }}
+              <i class="fas fa-sort" *ngIf="sortColumn() !== column.key"></i>
+              <i class="fas fa-sort-up" *ngIf="sortColumn() === column.key && sortDirection() === 'asc'"></i>
+              <i class="fas fa-sort-down" *ngIf="sortColumn() === column.key && sortDirection() === 'desc'"></i>
+            </th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="filteredPreinscriptions().length > 0; else noData">
+            <tr *ngFor="let item of filteredPreinscriptions() | paginate : { itemsPerPage: itemsPerPage(), currentPage: currentPage() }">
+              <td data-label="ID">{{ item.id }}</td>
+              <td data-label="Date">{{ item.datinscrip | date : 'dd/MM/yyyy' }}</td>
+              <td data-label="Créateur">{{ item.utilisateurCreateur }}</td>
+              <td data-label="Nom">{{ item.nomprenoms }}</td>
+              <td data-label="Téléphone">{{ item.celetud }}</td>
+              <td data-label="Formation">{{ item.formsouh }}</td>
+              <td data-label="Statut">
+                @if (item.decision == 'E') {
+                  <span class="status-pending">En attente</span>
+                } @else if (item.decision == 'I') {
+                  <span class="status-approved">Inscrit(e)</span>
+                } @else if (item.decision == 'A') {
+                  <span class="status-warning">Autorisé(e) à s'inscrire</span>
+                }
+              </td>
+              <td data-label="Site">
+                <span class="site-badge">
+                  {{ item.etab_source }}
+                </span>
+              </td>
+              <td class="action-buttons" data-label="Actions">
+                <button class="action-btn" title="Dossier médical" (click)="openMedicalForm(item)">
+                  <i class="fas fa-file-medical"></i>
+                </button>
+                <button class="action-btn" title="Modifier" (click)="viewPreinscription(item)">
+                  <i class="fas fa-user-edit"></i>
+                </button>
+                <button class="action-btn" title="Inscrire" (click)="processInscription(item)">
+                  <i class="fas fa-user-graduate"></i>
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+
+          <ng-template #noData>
+            <tr class="no-data-row">
+              <td [colSpan]="columns.length + 1">
+                <div class="empty-state">
+                  <i class="fas fa-user-slash"></i>
+                  <h3>Aucune préinscription trouvée</h3>
+                  <button class="action-btn">
+                    <i class="fas fa-plus"></i> Ajouter
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination responsive -->
+    <div class="pagination-container">
+      <pagination-controls 
+        (pageChange)="currentPage.set($event)" 
+        previousLabel="Précédent" 
+        nextLabel="Suivant"
+        [responsive]="true">
+      </pagination-controls>
+
+      <div class="items-per-page">
+        <span>Afficher :</span>
+        <select [(ngModel)]="itemsPerPage">
+          <option>5</option>
+          <option>10</option>
+          <option>20</option>
+          <option>50</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer responsive -->
+  <div class="dashboard-footer">
+    <p>© {{ currentYear }} Université - Système de Gestion v3.0</p>
+    <div class="system-status">
+      <span>Système opérationnel</span>
+    </div>
+  </div>
+</div>

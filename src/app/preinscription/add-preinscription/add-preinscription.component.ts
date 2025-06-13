@@ -5,38 +5,54 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatStepperModule } from '@angular/material/stepper';
-import { PrinscriptionYakroService, PreinscriptionYakroResponseDto, PreinscriptionYakroRequestDto } from '../../../api-client';
+import {
+  PrinscriptionService,
+  PreinscriptionResponseDto,
+  PreinscriptionRequestDto,
+} from '../../../api-client';
 import { MenuComponent } from '../../components/menu/menu.component';
 import { CommonModule } from '@angular/common';
+import { jwtDecode } from 'jwt-decode';
+import { TokenService } from '../../services/token.service';
 
 @Component({
   selector: 'app-add-preinscription',
   standalone: true,
-  imports: [  ReactiveFormsModule,
-      MatCardModule,
-      MatFormFieldModule,
-      MatInputModule,
-      MatButtonModule,
-      MatStepperModule,
-      FormsModule,
-    MenuComponent,CommonModule],
+  imports: [
+    ReactiveFormsModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatStepperModule,
+    FormsModule,
+    MenuComponent,
+    CommonModule,
+  ],
   templateUrl: './add-preinscription.component.html',
-  styleUrl: './add-preinscription.component.scss'
+  styleUrl: './add-preinscription.component.scss',
 })
-export class AddPreinscriptionComponent implements OnInit{
- ngOnInit(): void {
-    // throw new Error('Method not implemented.');
+export class AddPreinscriptionComponent implements OnInit {
+  tokken = signal<string | null>(null);
+
+  tokenService = inject(TokenService);
+  
+  ngOnInit(): void {
+    console.log('TokenService:', this.tokenService.getToken());
+
+    console.log('Token:', this.tokken());
   }
+
   hasDiplomeEquivalent: boolean = false; // Réponse à la question
-  private preinscritservice = inject(PrinscriptionYakroService);
-  preinscrits = signal<PreinscriptionYakroResponseDto | null>(null);
+  private preinscritservice = inject(PrinscriptionService);
+  preinscrits = signal<PreinscriptionResponseDto | null>(null);
 
   eror = signal<string | null>(null);
   loading = signal<boolean>(false);
   status = signal<'loading' | 'error' | 'loaded'>('loading');
 
   currentStep = 1; // Étape actuelle
-  preinscriptionData: PreinscriptionYakroRequestDto = {
+  preinscriptionData: PreinscriptionRequestDto = {
     nomprenoms: '',
     teletud: '',
   }; // Données du formulaire
@@ -123,10 +139,10 @@ export class AddPreinscriptionComponent implements OnInit{
       this.preinscriptionData.id = id.toString() + lettre;
     }
   }
+
   printInscri(arg0: any) {
     this.preinscritservice.impressionInscriptionYakro(arg0).subscribe({
       next: (response) => {
-        
         const blob = new Blob([response], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
         window.open(url);
@@ -139,7 +155,6 @@ export class AddPreinscriptionComponent implements OnInit{
   printPreinscrit(arg0: any) {
     this.preinscritservice.impressionPreinscriptionYakro(arg0).subscribe({
       next: (response) => {
-        
         const blob = new Blob([response], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
         window.open(url);
@@ -152,7 +167,6 @@ export class AddPreinscriptionComponent implements OnInit{
   printMedical(arg0: any) {
     this.preinscritservice.impressionFicheMedicaleyakro(arg0).subscribe({
       next: (response) => {
-        
         const blob = new Blob([response], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
         window.open(url);
@@ -161,5 +175,16 @@ export class AddPreinscriptionComponent implements OnInit{
         alert('Erreur impression');
       },
     });
+  }
+}
+function isValidToken(token: string | null): boolean {
+  if (!token) return false;
+  
+  try {
+    // Split the token into parts
+    const parts = token.split('.');
+    return parts.length === 3;
+  } catch (e) {
+    return false;
   }
 }

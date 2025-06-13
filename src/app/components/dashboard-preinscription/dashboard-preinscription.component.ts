@@ -1,125 +1,426 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import {
-  PreinscriptionYakroResponseDto,
-  PrinscriptionYakroService,
-} from '../../../api-client';
-import { CommonModule } from '@angular/common';
+import { Component, computed, inject, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef, signal } from '@angular/core';
+import { PreinscriptionResponseDto, PrinscriptionService } from '../../../api-client';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MenuComponent } from '../menu/menu.component';
+import { Chart, registerables } from 'chart.js';
+import { NgxPaginationModule } from 'ngx-pagination';
+
+Chart.register(...registerables);
+
+interface Preinscription {
+  id: string;
+  datinscrip: Date;
+  nomprenoms: string;
+  celetud: string;
+  formsouh: string;
+  decision: 'En attente' | 'Validée' | 'Rejetée'|'A'|'E'|'I';
+  etab_source: 'Abidjan Plateau' | 'Abidjan Yopougon' | 'Yamoussoukro';
+  isInscrit?: boolean;
+  utilisateurCreateur?: string;
+  
+}
+
+interface StatCard {
+  title: string;
+  value: string;
+  icon: string;
+  class: string;
+}
+
+interface Column {
+  key: string;
+  label: string;
+}
 
 @Component({
   selector: 'app-dashboard-preinscription',
   standalone: true,
-  imports: [CommonModule, FormsModule,MenuComponent],
+  imports: [CommonModule, FormsModule, MenuComponent, DatePipe, NgxPaginationModule],
   templateUrl: './dashboard-preinscription.component.html',
-  styleUrl: './dashboard-preinscription.component.scss',
+  styleUrls: ['./dashboard-preinscription.component.scss']
 })
-export class DashboardPreinscriptionComponent  {
-   // Liste des valeurs disponibles
-   valeurs: number[] = [5, 10, 20, 50, 100];
+export class DashboardPreinscriptionComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('preinscriptionChart') chartCanvas!: ElementRef<HTMLCanvasElement>;
+  private preinscritservice = inject(PrinscriptionService);
 
-   // Valeur sélectionnée par défaut
-   selectedValeur: number = this.valeurs[0];
+  // Données et états
+  allPreinscrits = signal<Preinscription[]>([]);
+  filteredPreinscriptions = signal<Preinscription[]>([]);
+  currentDate = new Date();
+  currentYear = this.currentDate.getFullYear();
 
-  private preinscritservice = inject(PrinscriptionYakroService);
-  preinscrits = signal<PreinscriptionYakroResponseDto[]>([]);
-  
-  searchQuery = signal('');
-  
-  filtereUsers = computed(() => {
-    const query = this.searchQuery().toUpperCase();
-    return this.preinscrits().filter((preinscrit) => {
-      console.log("LE FILTRE EST ", query);
-      console.log("LES PREINSCRI SONT: ", this.preinscrits().length);
-      console.log("LES NOM SONT: ", preinscrit.nomprenoms?.toUpperCase().includes(query));
-  
-      // Retourne explicitement le résultat de la condition
-      return preinscrit.nomprenoms?.toUpperCase().includes(query)|| preinscrit.id?.toLowerCase().includes(query)|| preinscrit.teletud?.toLowerCase().includes(query);
-      // Vous pouvez ajouter d'autres conditions ici si nécessaire
-      // || preinscrit.teletud?.toLowerCase().includes(query)
-      // || preinscrit.formsouh?.toLowerCase().includes(query)
-    });
-  });
-sizeLoad=5;
-constructor() {
-  this.loadPreinscriptions();
-}
-  eror = signal<string | null>(null);
+  // Filtres et pagination
+  searchTerm = signal<string>('');
+  selectedSite = signal<string>('all');
+  selectedStatus = signal<string>('all');
+  itemsPerPage = signal<number>(10);
+  currentPage = signal<number>(1);
+
+  // Configuration des colonnes
+  columns: Column[] = [
+    { key: 'id', label: 'ID' },
+    { key: 'datinscrip', label: 'Date Insc.' },
+    { key: 'utilisateurCreateur', label: 'Commercial' },
+    { key: 'nomprenoms', label: 'Nom et Prénoms' },
+    { key: 'celetud', label: 'Contact' },
+    { key: 'formsouh', label: 'Formation' },
+    { key: 'decision', label: 'Décision' },
+    { key: 'etab_source', label: 'Établissement' }
+  ];
+  sortColumn = signal<string>('id');
+  sortDirection = signal<'asc' | 'desc'>('asc');
+
+  // Cartes de statistiques
+  stats = signal<StatCard[]>([
+    {
+      title: 'Total Préinscriptions',
+      value: '0',
+      icon: 'fas fa-user-graduate',
+      class: 'stat-primary'
+    },
+    {
+      title: 'Abidjan Plateau',
+      value: '0',
+      icon: 'fas fa-university',
+      class: 'stat-secondary'
+    },
+    {
+      title: 'Abidjan Yopougon',
+      value: '0',
+      icon: 'fas fa-university',
+      class: 'stat-tertiary'
+    },
+    {
+      title: 'Yamoussoukro',
+      value: '0',
+      icon: 'fas fa-university',
+      class: 'stat-quaternary'
+    }
+  ]);
+
+  // Modale
+  showModal = signal<boolean>(false);
+  modalTitle = signal<string>('');
+  modalMessage = signal<string>('');
+  modalType = signal<'confirm' | 'alert'>('alert');
+  modalAction: (() => void) | null = null;
+
+  // États
+  error = signal<string | null>(null);
   loading = signal<boolean>(false);
   status = signal<'loading' | 'error' | 'loaded'>('loading');
 
-  // Pagination
+  // Graphique
+  private chart: Chart | undefined;
 
-  // ngOnInit(): void {
-  //   this.loadPreinscriptions();
-  // }
-  deletepreinscrit(id: any) {
-    if (
-      confirm('Voulez-vous vraiment supprimer cette préinscription ?') == true
-    ) {
-      this.preinscritservice.deletePreinscYakro(id).subscribe({
-        next: (preinscrits) => {
-          alert('La préinscription a été supprimée avec succès');
-          this.loadPreinscriptions();
-        },
-        error: (error) => {},
-      });
-    } else {
+  constructor() {
+    this.loadPreinscriptions();
+  }
+
+  ngOnInit(): void {}
+
+  ngAfterViewInit(): void {
+    this.createChart();
+  }
+
+  ngOnDestroy(): void {
+    if (this.chart) {
+      this.chart.destroy();
     }
   }
 
-  loadPreinscriptions(size: any = 5) {
-
-  console.log("THE SIZE IS ", this.sizeLoad);
-    this.eror.set(null);
+  // Chargement des données
+  loadPreinscriptions(): void {
+    this.error.set(null);
     this.status.set('loading');
-    this.preinscritservice.findAllPreinscYakro(0, this.sizeLoad).subscribe({
-      next: (preinscrits) => {
-        console.log('PREINSCRITS', preinscrits);
-        this.preinscrits.set(preinscrits);        
+    this.loading.set(true);
+
+    this.preinscritservice.findAllPreinsc(this.itemsPerPage()).subscribe({
+      next: (preinscritsDto) => {
+        console.log('Chargement des préinscriptions...',this.itemsPerPage());
+        console.log('Préinscriptions chargées:', preinscritsDto);
+        const mappedPreinscrits: Preinscription[] = preinscritsDto.map(dto => ({
+          id: dto.id ? String(dto.id) : '',
+          datinscrip: dto.datinscrip ? new Date(dto.datinscrip) : new Date(),
+          utilisateurCreateur: dto.utilisateurCreateur || '',
+          nomprenoms: dto.nomprenoms || '',
+          celetud: dto.teletud || '',
+          formsouh: dto.formsouh || '',
+          decision: (dto.decision as 'En attente' | 'Validée' | 'Rejetée') || 'En attente',
+          etab_source: (dto.etab_source as 'Abidjan Plateau' | 'Abidjan Yopougon' | 'Yamoussoukro') || 'Abidjan Plateau',
+          isInscrit: dto.decision === 'Validée' ? Math.random() > 0.5 : false,
+        }));
+
+        this.allPreinscrits.set(mappedPreinscrits);
+        this.filteredPreinscriptions.set([...mappedPreinscrits]);
+        this.updateStats();
         this.status.set('loaded');
+        this.loading.set(false);
+        this.updateChartData();
       },
       error: (error) => {
-        this.eror.set('error chargement preinscriptions : ' + error.message);
-        console.log('error', error);
+        console.error('Erreur lors du chargement des préinscriptions:', error);
+        this.error.set('Erreur de chargement : ' + error.message);
         this.status.set('error');
+        this.loading.set(false);
+        this.showAlert('Erreur', 'Impossible de charger les préinscriptions');
       },
     });
   }
-  printInscri(arg0: any) {
-    this.preinscritservice.impressionInscriptionYakro(arg0).subscribe({
+
+  // Filtrage
+  filterBySite(): void {
+    if (this.selectedSite() === 'all') {
+      this.filteredPreinscriptions.set([...this.allPreinscrits()]);
+    } else {
+      this.filteredPreinscriptions.set(
+        this.allPreinscrits().filter(item => item.etab_source === this.selectedSite())
+      );
+    }
+    this.applySearch();
+    this.applySorting();
+    this.currentPage.set(1);
+  }
+
+  filterByStatus(): void {
+    if (this.selectedStatus() === 'all') {
+      this.filteredPreinscriptions.set([...this.allPreinscrits()]);
+    } else {
+      this.filteredPreinscriptions.set(
+        this.allPreinscrits().filter(item => item.decision === this.selectedStatus())
+      );
+    }
+    this.applySearch();
+    this.applySorting();
+    this.currentPage.set(1);
+  }
+
+  applySearch(): void {
+    const term = this.searchTerm().toLowerCase();
+    if (!term) {
+      return;
+    }
+
+    this.filteredPreinscriptions.set(
+      this.filteredPreinscriptions().filter(item =>
+        item.nomprenoms.toLowerCase().includes(term) ||
+        item.id.toString().includes(term) ||
+        item.celetud.toLowerCase().includes(term) ||
+        item.formsouh.toLowerCase().includes(term)
+      )
+    );
+  }
+
+  // Tri
+  sortTable(column: string): void {
+    if (this.sortColumn() === column) {
+      this.sortDirection.set(this.sortDirection() === 'asc' ? 'desc' : 'asc');
+    } else {
+      this.sortColumn.set(column);
+      this.sortDirection.set('asc');
+    }
+    this.applySorting();
+  }
+
+  applySorting(): void {
+    const column = this.sortColumn();
+    const direction = this.sortDirection();
+
+    this.filteredPreinscriptions.set([...this.filteredPreinscriptions()].sort((a, b) => {
+      const valueA = a[column as keyof Preinscription];
+      const valueB = b[column as keyof Preinscription];
+
+      if (valueA == null && valueB == null) return 0;
+      if (valueA == null) return direction === 'asc' ? -1 : 1;
+      if (valueB == null) return direction === 'asc' ? 1 : -1;
+
+      if (valueA < valueB) {
+        return direction === 'asc' ? -1 : 1;
+      }
+      if (valueA > valueB) {
+        return direction === 'asc' ? 1 : -1;
+      }
+      return 0;
+    }));
+  }
+
+  // Mise à jour des statistiques
+  updateStats(): void {
+    const total = this.allPreinscrits().length;
+    const plateau = this.allPreinscrits().filter(p => p.etab_source === 'Abidjan Plateau').length;
+    const yopougon = this.allPreinscrits().filter(p => p.etab_source === 'Abidjan Yopougon').length;
+    const yamoussoukro = this.allPreinscrits().filter(p => p.etab_source === 'Yamoussoukro').length;
+
+    this.stats.set([
+      {
+        title: 'Total Préinscriptions',
+        value: total.toString(),
+        icon: 'fas fa-user-graduate',
+        class: 'stat-primary'
+      },
+      {
+        title: 'Abidjan Plateau',
+        value: plateau.toString(),
+        icon: 'fas fa-university',
+        class: 'stat-secondary'
+      },
+      {
+        title: 'Abidjan Yopougon',
+        value: yopougon.toString(),
+        icon: 'fas fa-university',
+        class: 'stat-tertiary'
+      },
+      {
+        title: 'Yamoussoukro',
+        value: yamoussoukro.toString(),
+        icon: 'fas fa-university',
+        class: 'stat-quaternary'
+      }
+    ]);
+  }
+
+  // Actions
+  openMedicalForm(item: Preinscription): void {
+    this.showConfirm(
+      'Fiche Médicale',
+      `Voulez-vous ouvrir la fiche médicale de ${item.nomprenoms}?`,
+      () => this.printMedical(Number(item.id))
+    );
+  }
+
+  viewPreinscription(item: Preinscription): void {
+    this.loading.set(true);
+    this.preinscritservice.impressionPreinscriptionYakro(item.id.toString()).subscribe({
       next: (response) => {
         const blob = new Blob([response], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
         window.open(url);
+        this.loading.set(false);
       },
       error: (error) => {
-        alert('Erreur impression');
+        this.showAlert('Erreur', 'Échec de l\'impression de la préinscription');
+        this.loading.set(false);
       },
     });
   }
-  printPreinscrit(arg0: any) {
-    this.preinscritservice.impressionPreinscriptionYakro(arg0).subscribe({
+
+  processInscription(item: Preinscription): void {
+    this.showConfirm(
+      'Inscription',
+      `Voulez-vous inscrire ${item.nomprenoms}?`,
+      () => this.printInscri(Number(item.id))
+    );
+  }
+
+  // Fonctions d'impression
+  printMedical(id: number): void {
+    this.loading.set(true);
+    this.preinscritservice.impressionFicheMedicaleyakro(id.toString()).subscribe({
       next: (response) => {
         const blob = new Blob([response], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
         window.open(url);
+        this.loading.set(false);
       },
       error: (error) => {
-        alert('Erreur impression');
+        this.showAlert('Erreur', 'Échec de l\'impression de la fiche médicale');
+        this.loading.set(false);
       },
     });
   }
-  printMedical(arg0: any) {
-    this.preinscritservice.impressionFicheMedicaleyakro(arg0).subscribe({
+
+  printInscri(id: number): void {
+    this.loading.set(true);
+    this.preinscritservice.impressionInscriptionYakro(id.toString()).subscribe({
       next: (response) => {
         const blob = new Blob([response], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
         window.open(url);
+        this.loading.set(false);
       },
       error: (error) => {
-        alert('Erreur impression');
+        this.showAlert('Erreur', 'Échec de l\'impression de l\'inscription');
+        this.loading.set(false);
       },
     });
+  }
+
+  // Gestion des modales
+  showAlert(title: string, message: string): void {
+    this.modalTitle.set(title);
+    this.modalMessage.set(message);
+    this.modalType.set('alert');
+    this.showModal.set(true);
+    this.modalAction = null;
+  }
+
+  showConfirm(title: string, message: string, action: () => void): void {
+    this.modalTitle.set(title);
+    this.modalMessage.set(message);
+    this.modalType.set('confirm');
+    this.modalAction = action;
+    this.showModal.set(true);
+  }
+
+  closeModal(): void {
+    this.showModal.set(false);
+  }
+
+  confirmAction(): void {
+    if (this.modalAction) {
+      this.modalAction();
+    }
+    this.closeModal();
+  }
+
+  // Graphique
+  private createChart(): void {
+    if (this.chartCanvas) {
+      this.chart = new Chart(this.chartCanvas.nativeElement, {
+        type: 'bar',
+        data: {
+          labels: ['Inscrits', 'Validées', 'En attente', 'Rejetées'],
+          datasets: [{
+            label: 'Statut des préinscriptions',
+            data: [0, 0, 0, 0],
+            backgroundColor: [
+              'rgba(0, 255, 136, 0.7)',
+              'rgba(0, 123, 255, 0.7)',
+              'rgba(255, 170, 0, 0.7)',
+              'rgba(255, 0, 102, 0.7)'
+            ],
+            borderColor: [
+              'rgba(0, 255, 136, 1)',
+              'rgba(0, 123, 255, 1)',
+              'rgba(255, 170, 0, 1)',
+              'rgba(255, 0, 102, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: { beginAtZero: true },
+            x: {}
+          }
+        }
+      });
+      this.updateChartData();
+    }
+  }
+
+  private updateChartData(): void {
+    if (this.chart) {
+      const inscrits = this.allPreinscrits().filter(p => p.isInscrit).length;
+      const validees = this.allPreinscrits().filter(p => p.decision === 'Validée').length;
+      const enAttente = this.allPreinscrits().filter(p => p.decision === 'En attente').length;
+      const rejetees = this.allPreinscrits().filter(p => p.decision === 'Rejetée').length;
+
+      this.chart.data.datasets[0].data = [inscrits, validees, enAttente, rejetees];
+      this.chart.update();
+    }
   }
 }

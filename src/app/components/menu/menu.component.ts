@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-menu',
@@ -20,9 +21,26 @@ import { RouterLink } from '@angular/router';
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
 })
-export class MenuComponent {
+export class MenuComponent implements OnInit {
+  currentUser = '';
+  ngOnInit(): void {
+   this.currentUser = localStorage.getItem('access_token') || '';
+   if (this.currentUser) {
+     try {
+       const decodedToken = jwtDecode<any>(this.currentUser);
+       this.currentUser = decodedToken.fullUser.lastname
+ || 'Utilisateur';
+       console.log('Utilisateur actuel:', this.currentUser);
+     } catch (error) {
+       console.error('Erreur lors du décodage du token:', error);
+       this.currentUser = 'Utilisateur';
+     }
+   } else {
+     this.currentUser = 'Utilisateur';
+   }
+  }
   navbarOpen = false;
-  currentUser = 'Admin';
+  // currentUser is already declared above, you can set its value as needed
 
   toggleNavbar() {
     this.navbarOpen = !this.navbarOpen;
