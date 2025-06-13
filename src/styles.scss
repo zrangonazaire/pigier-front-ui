@@ -1,54 +1,260 @@
-/* You can add global styles to this file, and also import other style files */
 
-html,
-body {
-  height: 100%;
+.futuristic-login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  position: relative;
+  z-index: 2;
+  padding: 20px;
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); /* Dégradé statique */
 }
 
-body {
-  margin: 0;
-  font-family: 'Courier New', Courier, monospace;
-  color: black;
-  /* Couleur du texte en noir */
-  font-size: medium;
+.futuristic-login-form {
+  width: 100%;
+  max-width: 450px;
+  padding: 2.5rem;
+  background: rgba(15, 23, 42, 0.9); /* Fond légèrement plus opaque */
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.5),
+              0 0 60px rgba(0, 150, 255, 0.3),
+              inset 0 0 10px rgba(0, 200, 255, 0.2);
+  border: 1px solid #00ffff;
+  backdrop-filter: blur(5px);
 }
 
-mat-toolbar {
-  background-color: yellow;
-  color: black;
+.form-header {
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
-.example-icon {
-  color: white;
+.form-header h2 {
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-shadow: 0 0 10px #00ffff;
+  margin-top: 1rem;
 }
 
-.example-spacer {
-  flex: 1 1 auto;
+.logo {
+  max-width: 180px;
+  margin: 0 auto;
+  display: block;
+  filter: drop-shadow(0 0 8px #00ffff);
 }
 
-.input {
-  padding: 10px;
-  background: #eff9fd;
-  border-radius: 2px;
+.form-group {
+  position: relative;
+  margin-bottom: 1.8rem;
+}
+
+.futuristic-input {
+  width: 100%;
+  padding: 14px 18px;
+  background: rgba(0, 10, 20, 0.6);
+  border: 1px solid #00aaff;
+  border-radius: 8px;
+  color: #00ffea;
+  font-family: 'Arial', sans-serif;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+.futuristic-input::placeholder {
+  color: rgba(0, 200, 255, 0.6);
+}
+
+.futuristic-input:focus {
   outline: none;
-  color: #25a519;
-  border: 1px solid #ccc;
-
+  border-color: #00ffff;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+  background: rgba(0, 20, 40, 0.8);
 }
 
-.placefolder {
+.input-glow {
   position: absolute;
-  top: 10px;
-  left: 8px;
-  font-size: 14px;
-  padding: 0px 5px;
-  color:#25a519;
-  transition: 0.3s;
-  pointer-events: none;
-
+  bottom: -5px;
+  left: 5%;
+  width: 90%;
+  height: 4px;
+  background: rgba(0, 255, 255, 0.5);
+  border-radius: 50%;
+  filter: blur(4px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
-input:not(:placeholder-shown) ~label,
-input:focus ~label {
- top:-8px;
- background-color: #eff9fd;
+
+.futuristic-input:focus ~ .input-glow {
+  opacity: 1;
+}
+
+.futuristic-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #00aaff, #0077ff);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 1.1rem;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.futuristic-btn:hover {
+  background: linear-gradient(135deg, #00ffff, #00aaff);
+  box-shadow: 0 0 20px rgba(0, 200, 255, 0.7);
+  transform: translateY(-2px);
+}
+
+.futuristic-btn:disabled {
+  background: linear-gradient(135deg, #0066aa, #004488);
+  cursor: not-allowed;
+}
+
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #00ffff;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.futuristic-links {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.link-forgot-password {
+  color: #00aaff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.link-forgot-password:hover {
+  color: #00ffff;
+  text-shadow: 0 0 8px rgba(0, 200, 255, 0.8);
+}
+
+.alert-error {
+  padding: 12px;
+  background: rgba(255, 50, 50, 0.2);
+  border: 1px solid #ff0055;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #ff5577;
+}
+/* La barre de navigation elle-même */
+.navbar {
+  /* Assurez-vous que Bootstrap n'écrase pas ces styles importants */
+  background: linear-gradient(90deg, #102a43, #0a1829); /* Dégradé de bleus foncés pour le fond */
+  border-bottom: 2px solid #007bff; /* Ligne bleue vive en bas pour une touche futuriste */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Ombre douce pour la profondeur */
+  padding: 1rem 2rem; /* Augmente le padding pour un look plus "spacieux" */
+  z-index: 100; /* Assure que la nav est au-dessus du contenu */
+  position: relative; /* Pour positionner des éléments internes si besoin */
+}
+
+/* Texte de la marque (PIGIER COTE D'IVOIRE) */
+.navbar-brand {
+  color: #FFEA00 !important; /* Jaune vif pour le nom de la marque */
+  font-weight: bold;
+  font-size: 1.6em;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(255, 234, 0, 0.7); /* Lueur jaune autour du texte */
+  transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+  color: #FFFF00 !important; /* Jaune plus brillant au survol */
+  text-shadow: 0 0 15px rgba(255, 255, 0, 0.9);
+}
+
+/* Liens de navigation (Accueil, Gestion, Paramètres, etc.) */
+.navbar-nav .nav-link {
+  color: #a0c0e0 !important; /* Bleu clair pour les liens par défaut */
+  font-size: 1.05em;
+  padding: 0.8rem 1.2rem; /* Padding pour les liens */
+  margin: 0 0.5rem; /* Espacement entre les liens */
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  position: relative; /* Pour l'effet de survol */
+  overflow: hidden;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #FFEA00 !important; /* Jaune vif au survol */
+  background-color: rgba(65, 105, 225, 0.2); /* Fond légèrement bleu transparent au survol */
+  transform: translateY(-2px); /* Léger soulèvement */
+}
+
+/* Indicateur de lien actif (si utilisé par Bootstrap ou Angular) */
+.navbar-nav .nav-link.active {
+  color: #FFEA00 !important; /* Jaune vif pour le lien actif */
+  background-color: rgba(65, 105, 225, 0.4); /* Fond bleu transparent plus prononcé */
+  border-bottom: 2px solid #FFEA00; /* Ligne jaune en bas du lien actif */
+  transform: translateY(-1px);
+}
+
+/* Boutons de la barre de navigation (Notifications, Déconnexion) */
+.navbar .btn {
+  padding: 0.7rem 1.5rem;
+  font-weight: bold;
+  border-radius: 8px;
+  margin-left: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Bouton Notifications */
+.btn-notifications {
+  background: linear-gradient(45deg, #FFEA00, #FFD700); /* Dégradé de jaunes */
+  color: #333333; /* Texte foncé pour le contraste */
+  border: none; /* Pas de bordure pour un look plus lisse */
+  box-shadow: 0 4px 10px rgba(255, 204, 0, 0.4); /* Ombre jaune */
+}
+
+.btn-notifications:hover {
+  background: linear-gradient(45deg, #FFFF00, #FFEA00); /* Dégradé inversé au survol */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(255, 204, 0, 0.6);
+}
+
+/* Bouton Déconnexion */
+.btn-disconnect {
+  background: linear-gradient(45deg, #dc3545, #c82333); /* Dégradé de rouges vifs */
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 4px 10px rgba(220, 53, 69, 0.4); /* Ombre rouge */
+}
+
+.btn-disconnect:hover {
+  background: linear-gradient(45deg, #c82333, #dc3545);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(220, 53, 69, 0.6);
+}
+
+/* Icônes Bootstrap (si vous les utilisez, ex: pour Notifications) */
+.navbar .bi-bell-fill { /* Exemple pour une icône de cloche de Bootstrap Icons */
+    margin-right: 5px;
+}
+
+/* Petits détails de style pour améliorer le rendu */
+.navbar-toggler {
+  border-color: rgba(255, 234, 0, 0.5) !important; /* Bordure du bouton toggle en jaune */
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 234, 0, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important; /* Icône du hamburger en jaune */
 }

@@ -3,6 +3,7 @@
     <a routerLink="/tb-preinscr" class="navbar-brand fw-bold">
       <i class="fas fa-graduation-cap me-2"></i>KRANJA APP
     </a>
+    
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -43,13 +44,6 @@
       <ul class="dropdown-menu shadow">
         <li><a class="dropdown-item"  routerLink="/caisse/journal-caisse">Journal de Caisse</a></li>
         <li><a class="dropdown-item"  routerLink="/caisse/point-caisse">Point Caisse</a></li>
-        <!-- <li class="dropdown-submenu">
-          <a class="dropdown-item dropdown-submenu-toggle">Sous-menu 1.2.2</a>
-          <ul class="dropdown-menu shadow">
-            <li><a class="dropdown-item">Option 1.2.2.1</a></li>
-            <li><a class="dropdown-item">Option 1.2.2.2</a></li>
-          </ul>
-        </li> -->
       </ul>
     </li>
     <li><a class="dropdown-item">Sous-menu 1.3</a></li>
@@ -61,7 +55,6 @@
             <i class="fas fa-th-list me-1"></i>Gestion pédagogique
           </a>
           <ul class="dropdown-menu shadow" aria-labelledby="navbarDropdownMenuLink2">
-            <!-- <li><a class="dropdown-item"></a>Etudiant</li> -->
             <li class="dropdown-submenu">
               <a class="dropdown-item dropdown-submenu-toggle">Etudiant</a>
               <ul class="dropdown-menu shadow">
@@ -76,16 +69,25 @@
 
       <!-- Boutons à droite -->
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            <i class="fas fa-cog me-1"></i> Paramètres
+        <!-- Affichage du nom et du poste de l'utilisateur -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-user-circle me-1"></i>
+            <span class="d-none d-lg-inline">
+              Bienvenue! {{currentUser}} <!-- Remplacez par la variable de votre utilisateur -->
+              <small class="d-block text-muted">Poste Utilisateur</small> <!-- Remplacez par la variable du poste -->
+            </span>
           </a>
+          <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
+            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Mon profil</a></li>
+            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Paramètres</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i> Déconnexion</a></li>
+          </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            <i class="fas fa-sign-out-alt me-1"></i> Déconnexion
-          </a>
-        </li>
+        
+        <!-- Vous pouvez supprimer les anciens liens Paramètres et Déconnexion 
+             car ils sont maintenant dans le dropdown utilisateur -->
       </ul>
     </div>
   </div>

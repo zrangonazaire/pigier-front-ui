@@ -1,30 +1,138 @@
+/* Styles de base */
 .dashboard-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
-  
-  .dashboard-header {
-    flex: 0 0 auto;
-  }
-  
-  .dashboard-content {
-    flex: 1;
-    overflow-y: auto;
-    background-color: #f8f9fa;
-  }
-  
-  .card {
-    height: 100%;
-  }
-  
-  .table {
-    margin-top: 20px;
-  }
-  .label-bold {
-    font-weight: bold;
+  width: 100%;
+  max-width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+  margin: 0 auto;
 }
 
-.label-color {
-    color: #007BFF; /* Couleur bleue, vous pouvez choisir une autre couleur */
+/* Header responsive */
+.dashboard-header {
+  text-align: left;
+  margin-bottom: 1.5rem;
+}
+
+.dashboard-header h1 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin-bottom: 0.5rem;
+}
+
+.dashboard-header h2 {
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  color: #555;
+}
+
+/* Cartes de statistiques responsive */
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  padding: 1rem;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Filtres responsive */
+.control-panel {
+  margin-bottom: 1.5rem;
+}
+
+.filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.selector select {
+  width: 100%;
+  min-width: 200px;
+  padding: 0.5rem;
+}
+
+/* Tableau responsive */
+.table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th, .data-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+/* Styles pour les écrans petits */
+@media (max-width: 768px) {
+  .data-table {
+    display: block;
+  }
+  
+  .data-table thead {
+    display: none;
+  }
+  
+  .data-table tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  .data-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    border: none;
+  }
+  
+  .data-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-right: 1rem;
+  }
+  
+  .action-buttons {
+    justify-content: flex-end;
+  }
+  
+  .search-container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .search-box {
+    width: 100%;
+  }
+}
+
+/* Statuts */
+.status-pending { color: red; }
+.status-approved { color: green; }
+.status-warning { color: orange; }
+
+/* Pagination responsive */
+.pagination-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.items-per-page {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }

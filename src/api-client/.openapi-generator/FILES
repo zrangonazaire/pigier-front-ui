@@ -8,7 +8,7 @@ api/eleves.service.ts
 api/encaissement.service.ts
 api/etablissement.service.ts
 api/fORMATION.service.ts
-api/prinscriptionYakro.service.ts
+api/prinscription.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -20,7 +20,7 @@ model/etabSourceResponseDto.ts
 model/formationRequestDto.ts
 model/formationResponseDto.ts
 model/models.ts
-model/preinscriptionYakroRequestDto.ts
-model/preinscriptionYakroResponseDto.ts
+model/preinscriptionRequestDto.ts
+model/preinscriptionResponseDto.ts
 param.ts
 variables.ts
