@@ -1,11 +1,38 @@
-import { Component, computed, inject, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef, signal } from '@angular/core';
-import { PreinscriptionResponseDto, PrinscriptionService } from '../../../api-client';
+import {
+  Component,
+  computed,
+  inject,
+  OnInit,
+  OnDestroy,
+  AfterViewInit,
+  ViewChild,
+  ElementRef,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
+import {
+  PreinscriptionResponseDto,
+  PrinscriptionService,
+} from '../../../api-client';
 import { CommonModule, DatePipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MenuComponent } from '../menu/menu.component';
 import { Chart, registerables } from 'chart.js';
 import { NgxPaginationModule } from 'ngx-pagination';
 
+// Ajout des imports Angular Material nécessaires
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import {
+  DateAdapter,
+  MatNativeDateModule,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import moment from 'moment';
+import { MatIconModule } from '@angular/material/icon';
 Chart.register(...registerables);
 
 interface Preinscription {
@@ -14,11 +41,10 @@ interface Preinscription {
   nomprenoms: string;
   celetud: string;
   formsouh: string;
-  decision: 'En attente' | 'Validée' | 'Rejetée'|'A'|'E'|'I';
+  decision: 'En attente' | 'Validée' | 'Rejetée' | 'A' | 'E' | 'I';
   etab_source: 'Abidjan Plateau' | 'Abidjan Yopougon' | 'Yamoussoukro';
   isInscrit?: boolean;
   utilisateurCreateur?: string;
-  
 }
 
 interface StatCard {
@@ -32,15 +58,111 @@ interface Column {
   key: string;
   label: string;
 }
-
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD-MM-YYYY',
+  },
+  display: {
+    dateInput: 'DD-MM-YYYY',
+    monthYearLabel: 'MMMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 @Component({
   selector: 'app-dashboard-preinscription',
   standalone: true,
-  imports: [CommonModule, FormsModule, MenuComponent, DatePipe, NgxPaginationModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MenuComponent,
+    DatePipe,
+    NgxPaginationModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatNativeDateModule,
+    ReactiveFormsModule,
+    MatIconModule,
+  ],
+  providers: [
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+    { provide: DateAdapter, useClass: MomentDateAdapter },
+  ],
+  encapsulation: ViewEncapsulation.None,
   templateUrl: './dashboard-preinscription.component.html',
-  styleUrls: ['./dashboard-preinscription.component.scss']
+  styleUrls: ['./dashboard-preinscription.component.scss'],
 })
-export class DashboardPreinscriptionComponent implements OnInit, AfterViewInit, OnDestroy {
+export class DashboardPreinscriptionComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
+  startDate: Date | null = null;
+  endDate: Date | null = null;
+  formatDisplayDate(date: moment.Moment): string {
+    return date ? date.format('DD-MM-YYYY') : '';
+  }
+
+  filterByDateRange() {
+    if (this.startDate && this.endDate) {
+      const start = moment(this.startDate, 'DD-MM-YYYY');
+      const end = moment(this.endDate, 'DD-MM-YYYY');
+      this.error.set(null);
+      this.status.set('loading');
+      this.loading.set(true);
+
+      this.preinscritservice
+        .findAllPreinscEntreDeuxDate(
+          start.format('DD-MM-YYYY'),
+          end.format('DD-MM-YYYY')
+        )
+        .subscribe({
+          next: (preinscritsDto) => {
+            const mappedPreinscrits: Preinscription[] = preinscritsDto.map(
+              (dto) => ({
+                id: dto.id ? String(dto.id) : '',
+                datinscrip: dto.datinscrip
+                  ? new Date(dto.datinscrip)
+                  : new Date(),
+                utilisateurCreateur: dto.utilisateurCreateur || '',
+                nomprenoms: dto.nomprenoms || '',
+                celetud: dto.contcel1 || '',
+                formsouh: dto.formsouh || '',
+                decision:
+                  (dto.decision as 'En attente' | 'Validée' | 'Rejetée') ||
+                  'En attente',
+                etab_source:
+                  (dto.etab_source as
+                    | 'Abidjan Plateau'
+                    | 'Abidjan Yopougon'
+                    | 'Yamoussoukro') || 'Abidjan Plateau',
+                isInscrit:
+                  dto.decision === 'Validée' ? Math.random() > 0.5 : false,
+              })
+            );
+
+            this.allPreinscrits.set(mappedPreinscrits);
+            this.filteredPreinscriptions.set([...mappedPreinscrits]);
+            this.updateStats();
+            this.status.set('loaded');
+            this.loading.set(false);
+            this.updateChartData();
+          },
+          error: (error) => {
+            console.error(
+              'Erreur lors du chargement des préinscriptions:',
+              error
+            );
+            this.error.set('Erreur de chargement : ' + error.message);
+            this.status.set('error');
+            this.loading.set(false);
+            this.showAlert(
+              'Erreur',
+              'Impossible de charger les préinscriptions'
+            );
+          },
+        });
+    }
+  }
   @ViewChild('preinscriptionChart') chartCanvas!: ElementRef<HTMLCanvasElement>;
   private preinscritservice = inject(PrinscriptionService);
 
@@ -66,7 +188,7 @@ export class DashboardPreinscriptionComponent implements OnInit, AfterViewInit, 
     { key: 'celetud', label: 'Contact' },
     { key: 'formsouh', label: 'Formation' },
     { key: 'decision', label: 'Décision' },
-    { key: 'etab_source', label: 'Établissement' }
+    { key: 'etab_source', label: 'Établissement' },
   ];
   sortColumn = signal<string>('id');
   sortDirection = signal<'asc' | 'desc'>('asc');
@@ -77,26 +199,26 @@ export class DashboardPreinscriptionComponent implements OnInit, AfterViewInit, 
       title: 'Total Préinscriptions',
       value: '0',
       icon: 'fas fa-user-graduate',
-      class: 'stat-primary'
+      class: 'stat-primary',
     },
     {
       title: 'Abidjan Plateau',
       value: '0',
       icon: 'fas fa-university',
-      class: 'stat-secondary'
+      class: 'stat-secondary',
     },
     {
       title: 'Abidjan Yopougon',
       value: '0',
       icon: 'fas fa-university',
-      class: 'stat-tertiary'
+      class: 'stat-tertiary',
     },
     {
       title: 'Yamoussoukro',
       value: '0',
       icon: 'fas fa-university',
-      class: 'stat-quaternary'
-    }
+      class: 'stat-quaternary',
+    },
   ]);
 
   // Modale
@@ -118,7 +240,11 @@ export class DashboardPreinscriptionComponent implements OnInit, AfterViewInit, 
     this.loadPreinscriptions();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.startDate = new Date();
+    this.endDate = new Date();
+    this.filterByDateRange();
+  }
 
   ngAfterViewInit(): void {
     this.createChart();
@@ -132,41 +258,47 @@ export class DashboardPreinscriptionComponent implements OnInit, AfterViewInit, 
 
   // Chargement des données
   loadPreinscriptions(): void {
-    this.error.set(null);
-    this.status.set('loading');
-    this.loading.set(true);
-
-    this.preinscritservice.findAllPreinsc(this.itemsPerPage()).subscribe({
-      next: (preinscritsDto) => {
-        console.log('Chargement des préinscriptions...',this.itemsPerPage());
-        console.log('Préinscriptions chargées:', preinscritsDto);
-        const mappedPreinscrits: Preinscription[] = preinscritsDto.map(dto => ({
-          id: dto.id ? String(dto.id) : '',
-          datinscrip: dto.datinscrip ? new Date(dto.datinscrip) : new Date(),
-          utilisateurCreateur: dto.utilisateurCreateur || '',
-          nomprenoms: dto.nomprenoms || '',
-          celetud: dto.teletud || '',
-          formsouh: dto.formsouh || '',
-          decision: (dto.decision as 'En attente' | 'Validée' | 'Rejetée') || 'En attente',
-          etab_source: (dto.etab_source as 'Abidjan Plateau' | 'Abidjan Yopougon' | 'Yamoussoukro') || 'Abidjan Plateau',
-          isInscrit: dto.decision === 'Validée' ? Math.random() > 0.5 : false,
-        }));
-
-        this.allPreinscrits.set(mappedPreinscrits);
-        this.filteredPreinscriptions.set([...mappedPreinscrits]);
-        this.updateStats();
-        this.status.set('loaded');
-        this.loading.set(false);
-        this.updateChartData();
-      },
-      error: (error) => {
-        console.error('Erreur lors du chargement des préinscriptions:', error);
-        this.error.set('Erreur de chargement : ' + error.message);
-        this.status.set('error');
-        this.loading.set(false);
-        this.showAlert('Erreur', 'Impossible de charger les préinscriptions');
-      },
-    });
+    // this.error.set(null);
+    // this.status.set('loading');
+    // this.loading.set(true);
+    // this.preinscritservice.findAllPreinsc(this.itemsPerPage()).subscribe({
+    //   next: (preinscritsDto) => {
+    //     console.log('Chargement des préinscriptions...', this.itemsPerPage());
+    //     console.log('Préinscriptions chargées:', preinscritsDto);
+    //     const mappedPreinscrits: Preinscription[] = preinscritsDto.map(
+    //       (dto) => ({
+    //         id: dto.id ? String(dto.id) : '',
+    //         datinscrip: dto.datinscrip ? new Date(dto.datinscrip) : new Date(),
+    //         utilisateurCreateur: dto.utilisateurCreateur || '',
+    //         nomprenoms: dto.nomprenoms || '',
+    //         celetud: dto.teletud || '',
+    //         formsouh: dto.formsouh || '',
+    //         decision:
+    //           (dto.decision as 'En attente' | 'Validée' | 'Rejetée') ||
+    //           'En attente',
+    //         etab_source:
+    //           (dto.etab_source as
+    //             | 'Abidjan Plateau'
+    //             | 'Abidjan Yopougon'
+    //             | 'Yamoussoukro') || 'Abidjan Plateau',
+    //         isInscrit: dto.decision === 'Validée' ? Math.random() > 0.5 : false,
+    //       })
+    //     );
+    //     this.allPreinscrits.set(mappedPreinscrits);
+    //     this.filteredPreinscriptions.set([...mappedPreinscrits]);
+    //     this.updateStats();
+    //     this.status.set('loaded');
+    //     this.loading.set(false);
+    //     this.updateChartData();
+    //   },
+    //   error: (error) => {
+    //     console.error('Erreur lors du chargement des préinscriptions:', error);
+    //     this.error.set('Erreur de chargement : ' + error.message);
+    //     this.status.set('error');
+    //     this.loading.set(false);
+    //     this.showAlert('Erreur', 'Impossible de charger les préinscriptions');
+    //   },
+    // });
   }
 
   // Filtrage
@@ -175,7 +307,9 @@ export class DashboardPreinscriptionComponent implements OnInit, AfterViewInit, 
       this.filteredPreinscriptions.set([...this.allPreinscrits()]);
     } else {
       this.filteredPreinscriptions.set(
-        this.allPreinscrits().filter(item => item.etab_source === this.selectedSite())
+        this.allPreinscrits().filter(
+          (item) => item.etab_source === this.selectedSite()
+        )
       );
     }
     this.applySearch();
@@ -188,7 +322,9 @@ export class DashboardPreinscriptionComponent implements OnInit, AfterViewInit, 
       this.filteredPreinscriptions.set([...this.allPreinscrits()]);
     } else {
       this.filteredPreinscriptions.set(
-        this.allPreinscrits().filter(item => item.decision === this.selectedStatus())
+        this.allPreinscrits().filter(
+          (item) => item.decision === this.selectedStatus()
+        )
       );
     }
     this.applySearch();
@@ -203,11 +339,12 @@ export class DashboardPreinscriptionComponent implements OnInit, AfterViewInit, 
     }
 
     this.filteredPreinscriptions.set(
-      this.filteredPreinscriptions().filter(item =>
-        item.nomprenoms.toLowerCase().includes(term) ||
-        item.id.toString().includes(term) ||
-        item.celetud.toLowerCase().includes(term) ||
-        item.formsouh.toLowerCase().includes(term)
+      this.filteredPreinscriptions().filter(
+        (item) =>
+          item.nomprenoms.toLowerCase().includes(term) ||
+          item.id.toString().includes(term) ||
+          item.celetud.toLowerCase().includes(term) ||
+          item.formsouh.toLowerCase().includes(term)
       )
     );
   }
@@ -227,110 +364,129 @@ export class DashboardPreinscriptionComponent implements OnInit, AfterViewInit, 
     const column = this.sortColumn();
     const direction = this.sortDirection();
 
-    this.filteredPreinscriptions.set([...this.filteredPreinscriptions()].sort((a, b) => {
-      const valueA = a[column as keyof Preinscription];
-      const valueB = b[column as keyof Preinscription];
+    this.filteredPreinscriptions.set(
+      [...this.filteredPreinscriptions()].sort((a, b) => {
+        const valueA = a[column as keyof Preinscription];
+        const valueB = b[column as keyof Preinscription];
 
-      if (valueA == null && valueB == null) return 0;
-      if (valueA == null) return direction === 'asc' ? -1 : 1;
-      if (valueB == null) return direction === 'asc' ? 1 : -1;
+        if (valueA == null && valueB == null) return 0;
+        if (valueA == null) return direction === 'asc' ? -1 : 1;
+        if (valueB == null) return direction === 'asc' ? 1 : -1;
 
-      if (valueA < valueB) {
-        return direction === 'asc' ? -1 : 1;
-      }
-      if (valueA > valueB) {
-        return direction === 'asc' ? 1 : -1;
-      }
-      return 0;
-    }));
+        if (valueA < valueB) {
+          return direction === 'asc' ? -1 : 1;
+        }
+        if (valueA > valueB) {
+          return direction === 'asc' ? 1 : -1;
+        }
+        return 0;
+      })
+    );
   }
 
   // Mise à jour des statistiques
   updateStats(): void {
     const total = this.allPreinscrits().length;
-    const plateau = this.allPreinscrits().filter(p => p.etab_source === 'Abidjan Plateau').length;
-    const yopougon = this.allPreinscrits().filter(p => p.etab_source === 'Abidjan Yopougon').length;
-    const yamoussoukro = this.allPreinscrits().filter(p => p.etab_source === 'Yamoussoukro').length;
+    const plateau = this.allPreinscrits().filter(
+      (p) => p.etab_source === 'Abidjan Plateau'
+    ).length;
+    const yopougon = this.allPreinscrits().filter(
+      (p) => p.etab_source === 'Abidjan Yopougon'
+    ).length;
+    const yamoussoukro = this.allPreinscrits().filter(
+      (p) => p.etab_source === 'Yamoussoukro'
+    ).length;
 
     this.stats.set([
       {
         title: 'Total Préinscriptions',
         value: total.toString(),
         icon: 'fas fa-user-graduate',
-        class: 'stat-primary'
+        class: 'stat-primary',
       },
       {
         title: 'Abidjan Plateau',
         value: plateau.toString(),
         icon: 'fas fa-university',
-        class: 'stat-secondary'
+        class: 'stat-secondary',
       },
       {
         title: 'Abidjan Yopougon',
         value: yopougon.toString(),
         icon: 'fas fa-university',
-        class: 'stat-tertiary'
+        class: 'stat-tertiary',
       },
       {
         title: 'Yamoussoukro',
         value: yamoussoukro.toString(),
         icon: 'fas fa-university',
-        class: 'stat-quaternary'
-      }
+        class: 'stat-quaternary',
+      },
     ]);
   }
 
   // Actions
   openMedicalForm(item: Preinscription): void {
+   
     this.showConfirm(
       'Fiche Médicale',
       `Voulez-vous ouvrir la fiche médicale de ${item.nomprenoms}?`,
-      () => this.printMedical(Number(item.id))
+      () => this.printMedical(item.id)
     );
   }
 
   viewPreinscription(item: Preinscription): void {
     this.loading.set(true);
-    this.preinscritservice.impressionPreinscriptionYakro(item.id.toString()).subscribe({
-      next: (response) => {
-        const blob = new Blob([response], { type: 'application/pdf' });
-        const url = window.URL.createObjectURL(blob);
-        window.open(url);
-        this.loading.set(false);
-      },
-      error: (error) => {
-        this.showAlert('Erreur', 'Échec de l\'impression de la préinscription');
-        this.loading.set(false);
-      },
-    });
+    this.preinscritservice
+      .impressionPreinscriptionYakro(item.id.toString())
+      .subscribe({
+        next: (response) => {
+          const blob = new Blob([response], { type: 'application/pdf' });
+          const url = window.URL.createObjectURL(blob);
+          window.open(url);
+          this.loading.set(false);
+        },
+        error: (error) => {
+          this.showAlert(
+            'Erreur',
+            "Échec de l'impression de la préinscription"
+          );
+          this.loading.set(false);
+        },
+      });
   }
 
   processInscription(item: Preinscription): void {
     this.showConfirm(
       'Inscription',
       `Voulez-vous inscrire ${item.nomprenoms}?`,
-      () => this.printInscri(Number(item.id))
+      () => this.printInscri(item.id)
     );
   }
 
   // Fonctions d'impression
-  printMedical(id: number): void {
+  printMedical(id: any): void {
     this.loading.set(true);
-    this.preinscritservice.impressionFicheMedicaleyakro(id.toString()).subscribe({
-      next: (response) => {
-        const blob = new Blob([response], { type: 'application/pdf' });
-        const url = window.URL.createObjectURL(blob);
-        window.open(url);
-        this.loading.set(false);
-      },
-      error: (error) => {
-        this.showAlert('Erreur', 'Échec de l\'impression de la fiche médicale');
-        this.loading.set(false);
-      },
-    });
+    this.preinscritservice
+      .impressionFicheMedicaleyakro(id.toString())
+      .subscribe({
+        next: (response) => {
+          const blob = new Blob([response], { type: 'application/pdf' });
+          const url = window.URL.createObjectURL(blob);
+          window.open(url);
+          this.loading.set(false);
+        },
+        error: (error) => {
+          this.showAlert(
+            'Erreur',
+            "Échec de l'impression de la fiche médicale"
+          );
+          this.loading.set(false);
+        },
+      });
   }
 
-  printInscri(id: number): void {
+  printInscri(id: any): void {
     this.loading.set(true);
     this.preinscritservice.impressionInscriptionYakro(id.toString()).subscribe({
       next: (response) => {
@@ -340,7 +496,7 @@ export class DashboardPreinscriptionComponent implements OnInit, AfterViewInit, 
         this.loading.set(false);
       },
       error: (error) => {
-        this.showAlert('Erreur', 'Échec de l\'impression de l\'inscription');
+        this.showAlert('Erreur', "Échec de l'impression de l'inscription");
         this.loading.set(false);
       },
     });
@@ -380,33 +536,35 @@ export class DashboardPreinscriptionComponent implements OnInit, AfterViewInit, 
       this.chart = new Chart(this.chartCanvas.nativeElement, {
         type: 'bar',
         data: {
-          labels: ['Inscrits', 'Validées', 'En attente', 'Rejetées'],
-          datasets: [{
-            label: 'Statut des préinscriptions',
-            data: [0, 0, 0, 0],
-            backgroundColor: [
-              'rgba(0, 255, 136, 0.7)',
-              'rgba(0, 123, 255, 0.7)',
-              'rgba(255, 170, 0, 0.7)',
-              'rgba(255, 0, 102, 0.7)'
-            ],
-            borderColor: [
-              'rgba(0, 255, 136, 1)',
-              'rgba(0, 123, 255, 1)',
-              'rgba(255, 170, 0, 1)',
-              'rgba(255, 0, 102, 1)'
-            ],
-            borderWidth: 1
-          }]
+          labels: ['Inscrits', 'En Attent', 'Autorisé'],
+          datasets: [
+            {
+              label: 'Statut des préinscriptions',
+              data: [0, 0, 0, 0],
+              backgroundColor: [
+                'rgba(0, 255, 136, 0.7)',
+                'rgba(0, 123, 255, 0.7)',
+                'rgba(255, 170, 0, 0.7)',
+                'rgba(255, 0, 102, 0.7)',
+              ],
+              borderColor: [
+                'rgba(0, 255, 136, 1)',
+                'rgba(0, 123, 255, 1)',
+                'rgba(255, 170, 0, 1)',
+                'rgba(255, 0, 102, 1)',
+              ],
+              borderWidth: 1,
+            },
+          ],
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           scales: {
             y: { beginAtZero: true },
-            x: {}
-          }
-        }
+            x: {},
+          },
+        },
       });
       this.updateChartData();
     }
@@ -414,12 +572,23 @@ export class DashboardPreinscriptionComponent implements OnInit, AfterViewInit, 
 
   private updateChartData(): void {
     if (this.chart) {
-      const inscrits = this.allPreinscrits().filter(p => p.isInscrit).length;
-      const validees = this.allPreinscrits().filter(p => p.decision === 'Validée').length;
-      const enAttente = this.allPreinscrits().filter(p => p.decision === 'En attente').length;
-      const rejetees = this.allPreinscrits().filter(p => p.decision === 'Rejetée').length;
+      const inscrits = this.allPreinscrits().filter((p) => p.isInscrit).length;
+      const validees = this.allPreinscrits().filter(
+        (p) => p.decision === 'I'
+      ).length;
+      const enAttente = this.allPreinscrits().filter(
+        (p) => p.decision === 'E'
+      ).length;
+      const rejetees = this.allPreinscrits().filter(
+        (p) => p.decision === 'A'
+      ).length;
 
-      this.chart.data.datasets[0].data = [inscrits, validees, enAttente, rejetees];
+      this.chart.data.datasets[0].data = [
+        inscrits,
+        validees,
+        enAttente
+        
+      ];
       this.chart.update();
     }
   }
