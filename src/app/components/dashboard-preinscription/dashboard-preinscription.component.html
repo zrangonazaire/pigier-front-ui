@@ -1,7 +1,6 @@
 <app-menu></app-menu>
 
 <div class="dashboard-container">
-  <!-- Header responsive -->
   <div class="dashboard-header">
     <h1><i class="fas fa-analytics"></i> Tableau de Bord Préinscriptions</h1>
     <h2>Gestion des candidatures universitaires</h2>
@@ -20,6 +19,26 @@
   <!-- Contrôles de filtrage responsive -->
   <div class="control-panel">
     <div class="filter-group">
+      <!-- Ajout des datepickers -->
+      <div class="date-range-selector">
+        <mat-form-field appearance="fill" class="dark-theme-field">
+          <mat-label>Date de début</mat-label>
+          <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDate" (dateChange)="filterByDateRange()">
+
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+
+          <mat-datepicker #startPicker panelClass="dark-theme-calendar"></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="dark-theme-field">
+          <mat-label>Date de fin</mat-label>
+          <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDate" (dateChange)="filterByDateRange()">
+
+          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+
+          <mat-datepicker #endPicker panelClass="dark-theme-calendar"></mat-datepicker>
+        </mat-form-field>
+      </div>
       <div class="selector">
         <select [(ngModel)]="selectedSite" (change)="filterBySite()">
           <option value="all">Tous les sites</option>
@@ -32,29 +51,25 @@
       <div class="selector">
         <select [(ngModel)]="selectedStatus" (change)="filterByStatus()">
           <option value="all">Tous les statuts</option>
-          <option value="En attente">En attente</option>
-          <option value="Validée">Validée</option>
-          <option value="Rejetée">Rejetée</option>
+          <option value="E">En attente</option>
+          <option value="A">Autorisé(e)</option>
+          <option value="I">Inscrit(e)</option>
         </select>
       </div>
 
-      <div class="counter">
+      <div class="counter" style="font-weight: bold;">
         <span>{{ filteredPreinscriptions().length }} enregistrements</span>
       </div>
     </div>
   </div>
-
   <!-- Tableau responsive -->
   <div class="table-section">
     <div class="section-header">
       <h3><i class="fas fa-database"></i> Liste des Préinscriptions</h3>
-      
+
       <div class="search-container">
         <div class="search-box">
-          <input type="text" 
-                 [(ngModel)]="searchTerm" 
-                 (input)="applySearch()" 
-                 placeholder="Rechercher candidat..." />
+          <input type="text" [(ngModel)]="searchTerm" (input)="applySearch()" placeholder="Rechercher candidat..." />
           <button><i class="fas fa-search"></i></button>
         </div>
         <button class="action-btn">
@@ -78,7 +93,8 @@
         </thead>
         <tbody>
           <ng-container *ngIf="filteredPreinscriptions().length > 0; else noData">
-            <tr *ngFor="let item of filteredPreinscriptions() | paginate : { itemsPerPage: itemsPerPage(), currentPage: currentPage() }">
+            <tr
+              *ngFor="let item of filteredPreinscriptions() | paginate : { itemsPerPage: itemsPerPage(), currentPage: currentPage() }">
               <td data-label="ID">{{ item.id }}</td>
               <td data-label="Date">{{ item.datinscrip | date : 'dd/MM/yyyy' }}</td>
               <td data-label="Créateur">{{ item.utilisateurCreateur }}</td>
@@ -87,11 +103,11 @@
               <td data-label="Formation">{{ item.formsouh }}</td>
               <td data-label="Statut">
                 @if (item.decision == 'E') {
-                  <span class="status-pending">En attente</span>
+                <span class="status-pending">En attente</span>
                 } @else if (item.decision == 'I') {
-                  <span class="status-approved">Inscrit(e)</span>
+                <span class="status-approved">Inscrit(e)</span>
                 } @else if (item.decision == 'A') {
-                  <span class="status-warning">Autorisé(e) à s'inscrire</span>
+                <span class="status-warning">Autorisé(e) à s'inscrire</span>
                 }
               </td>
               <td data-label="Site">
@@ -103,10 +119,10 @@
                 <button class="action-btn" title="Dossier médical" (click)="openMedicalForm(item)">
                   <i class="fas fa-file-medical"></i>
                 </button>
-                <button class="action-btn" title="Modifier" (click)="viewPreinscription(item)">
+                <button class="action-btn" title="Fiche Préinscription" (click)="viewPreinscription(item)">
                   <i class="fas fa-user-edit"></i>
                 </button>
-                <button class="action-btn" title="Inscrire" (click)="processInscription(item)">
+                <button class="action-btn" title="Fiche d'Inscrire" (click)="processInscription(item)">
                   <i class="fas fa-user-graduate"></i>
                 </button>
               </td>
@@ -132,10 +148,7 @@
 
     <!-- Pagination responsive -->
     <div class="pagination-container">
-      <pagination-controls 
-        (pageChange)="currentPage.set($event)" 
-        previousLabel="Précédent" 
-        nextLabel="Suivant"
+      <pagination-controls (pageChange)="currentPage.set($event)" previousLabel="Précédent" nextLabel="Suivant"
         [responsive]="true">
       </pagination-controls>
 
@@ -150,7 +163,27 @@
       </div>
     </div>
   </div>
-
+<div *ngIf="showModal()" class="modal-backdrop show"></div>
+<div *ngIf="showModal()" class="modal fade show d-block" tabindex="-1" style="background:rgba(0,0,0,0.3)">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ modalTitle() }}</h5>
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ modalMessage() }}</p>
+      </div>
+      <div class="modal-footer" *ngIf="modalType() === 'confirm'">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">Annuler</button>
+        <button type="button" class="btn btn-primary" (click)="confirmAction()">Confirmer</button>
+      </div>
+      <div class="modal-footer" *ngIf="modalType() === 'alert'">
+        <button type="button" class="btn btn-primary" (click)="closeModal()">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
   <!-- Footer responsive -->
   <div class="dashboard-footer">
     <p>© {{ currentYear }} Université - Système de Gestion v3.0</p>
