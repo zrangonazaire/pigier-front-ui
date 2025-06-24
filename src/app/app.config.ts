@@ -22,7 +22,7 @@ export const appConfig: ApplicationConfig = {
     { provide: 'HTTP_INTERCEPTORS', useClass: JwtInterceptor, multi: true },
     importProvidersFrom(
       ApiModule.forRoot(
-        () => new Configuration({ basePath: 'http://localhost:8084/api/v1' })
+        () => new Configuration({ basePath: 'http://192.168.0.134:8084/api/v1' })
       )
     ),
   ],

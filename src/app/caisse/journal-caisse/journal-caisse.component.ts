@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EncaissementService } from '../../../api-client';
+import { MenuComponent } from '../../components/menu/menu.component';
 
 @Component({
   selector: 'app-journal-caisse',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,MenuComponent],
   templateUrl: './journal-caisse.component.html',
   styleUrl: './journal-caisse.component.scss',
 })

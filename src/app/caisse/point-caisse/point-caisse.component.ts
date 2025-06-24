@@ -2,15 +2,17 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { MenuComponent } from '../../components/menu/menu.component';
 
 @Component({
   selector: 'app-point-caisse',
   standalone: true,
-  // imports: [CommonModule, FormsModule, ReactiveFormsModule],
+
   imports: [
 
     FormsModule,
-    CommonModule
+    CommonModule,
+    MenuComponent
   ],
   templateUrl: './point-caisse.component.html',
   styleUrl: './point-caisse.component.scss'
