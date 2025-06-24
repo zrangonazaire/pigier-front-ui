@@ -103,7 +103,7 @@ printeleveExcel(){
   this.eleveService.etatListeEtudiantExcel(this.PARAMCLASSE, this.PARAMEANNE.replace(/\s/g, '').substring(0, 4), this.PARAMEANNE.replace(/\s/g, '').slice(-4), this.PARAMETAB).subscribe({
     next: (response) => {
       const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      saveAs(blob, `Liste_Eleve_${this.PARAMCLASSE}_${this.PARAMEANNE}.xlsx`);
+      saveAs(blob, `Liste_Eleve_${this.PARAMCLASSE}_${this.PARAMEANNE}_${this.PARAMETAB}.xlsx`);
     },
     error: (error) => {
       alert('Erreur lors de l\'exportation Excel : ' + error.message);
