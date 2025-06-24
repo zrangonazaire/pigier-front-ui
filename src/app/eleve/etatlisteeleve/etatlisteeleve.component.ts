@@ -38,6 +38,14 @@ export class EtatlisteeleveComponent {
   chargement: boolean = false;
   erreur: string = '';
 
+  // Ajout des campus et de la sélection
+  campuses = [
+    { id: 'plateau', value: 'ABIDJAN PLATEAU', label: 'ABIDJAN PLATEAU' },
+    { id: 'yopougon', value: 'ABIDJAN YOPOUGON', label: 'ABIDJAN YOPOUGON' },
+    { id: 'yamoussoukro', value: 'YAMOUSSOUKRO', label: 'YAMOUSSOUKRO' } // Correction du nom
+  ];
+  PARAMETAB: string = 'ABIDJAN PLATEAU';
+  //selectedCampus: string = 'ABIDJAN PLATEAU'; // Valeur par défaut
  private eleveService = inject(ElevesService);
 
   constructor(private http: HttpClient) {}
@@ -67,7 +75,7 @@ export class EtatlisteeleveComponent {
   }
 
 printeleves() {
-this.eleveService.etatListeEtudiant(this.PARAMCLASSE, this.PARAMEANNE.replace(/\s/g, '').substring(0, 4), this.PARAMEANNE.replace(/\s/g, '').slice(-4)).subscribe({
+this.eleveService.etatListeEtudiant(this.PARAMCLASSE, this.PARAMEANNE.replace(/\s/g, '').substring(0, 4), this.PARAMEANNE.replace(/\s/g, '').slice(-4), this.PARAMETAB).subscribe({
   next: (response) => {
     const blob = new Blob([response], { type: 'application/pdf' });
     const url = window.URL.createObjectURL(blob);
@@ -92,10 +100,10 @@ printeleveExcel(){
 
 
 
-  this.eleveService.etatListeEtudiantExcel(this.PARAMCLASSE, this.PARAMEANNE.replace(/\s/g, '').substring(0, 4), this.PARAMEANNE.replace(/\s/g, '').slice(-4)).subscribe({
+  this.eleveService.etatListeEtudiantExcel(this.PARAMCLASSE, this.PARAMEANNE.replace(/\s/g, '').substring(0, 4), this.PARAMEANNE.replace(/\s/g, '').slice(-4), this.PARAMETAB).subscribe({
     next: (response) => {
       const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      saveAs(blob, `Liste_Eleve_${this.PARAMCLASSE}_${this.PARAMEANNE}.xlsx`);
+      saveAs(blob, `Liste_Eleve_${this.PARAMCLASSE}_${this.PARAMEANNE}_${this.PARAMETAB}.xlsx`);
     },
     error: (error) => {
       alert('Erreur lors de l\'exportation Excel : ' + error.message);

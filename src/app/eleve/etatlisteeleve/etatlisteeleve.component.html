@@ -28,6 +28,44 @@
       </div>
     </div>
 
+<!--debut insertion campuse -------------------------------------fhfhffffff-->
+
+<div class="form-group">
+  <div class="row align-items-center">
+    <div class="col-md-3"> <!-- Label sur 3 colonnes -->
+      <label class="font-weight-bold mb-0">Campus :</label>
+    </div>
+    <div class="col-md-9"> <!-- Boutons radio sur 9 colonnes -->
+      <div class="d-flex flex-wrap gap-3">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="campus" id="plateau"
+                 value="ABIDJAN PLATEAU" [(ngModel)]="PARAMETAB" checked>
+          <label class="form-check-label" for="plateau">
+            ABIDJAN PLATEAU
+          </label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="campus" id="yopougon"
+                 value="ABIDJAN YOPOUGON" [(ngModel)]="PARAMETAB">
+          <label class="form-check-label" for="yopougon">
+            ABIDJAN YOPOUGON
+          </label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="campus" id="yamoussoukro"
+                 value="YAMOUSSOUKRO" [(ngModel)]="PARAMETAB">
+          <label class="form-check-label" for="yamoussoukro">
+            YAMOUSSOUKRO
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--fin  insertion campuse -------------------------------------fhfhffffff-->
     <div class="card-body">
       <!-- Formulaire de filtrage -->
       <div class="row mb-4">
