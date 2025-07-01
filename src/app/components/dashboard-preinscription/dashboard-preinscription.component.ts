@@ -42,7 +42,7 @@ interface Preinscription {
   celetud: string;
   formsouh: string;
   decision: 'En attente' | 'Validée' | 'Rejetée' | 'A' | 'E' | 'I';
-  etab_source: 'Abidjan Plateau' | 'Abidjan Yopougon' | 'Yamoussoukro';
+  etab_source: 'ABIDJAN PLATEAU' | 'ABIDJAN YOPOUGON' | 'YAMOUSSOUKRO';
   isInscrit?: boolean;
   utilisateurCreateur?: string;
 }
@@ -132,9 +132,9 @@ export class DashboardPreinscriptionComponent
                   'En attente',
                 etab_source:
                   (dto.etab_source as
-                    | 'Abidjan Plateau'
-                    | 'Abidjan Yopougon'
-                    | 'Yamoussoukro') || 'Abidjan Plateau',
+                    | 'ABIDJAN PLATEAU'
+                    | 'ABIDJAN YOPOUGON'
+                    | 'YAMOUSSOUKRO') || 'ABIDJAN PLATEAU',
                 isInscrit:
                   dto.decision === 'Validée' ? Math.random() > 0.5 : false,
               })
@@ -334,6 +334,7 @@ export class DashboardPreinscriptionComponent
 
   applySearch(): void {
     const term = this.searchTerm().toLowerCase();
+    console.log('Recherche appliquée avec le terme:', term);
     if (!term) {
       return;
     }
@@ -388,13 +389,13 @@ export class DashboardPreinscriptionComponent
   updateStats(): void {
     const total = this.allPreinscrits().length;
     const plateau = this.allPreinscrits().filter(
-      (p) => p.etab_source === 'Abidjan Plateau'
+      (p) => p.etab_source === 'ABIDJAN PLATEAU'
     ).length;
     const yopougon = this.allPreinscrits().filter(
-      (p) => p.etab_source === 'Abidjan Yopougon'
+      (p) => p.etab_source === 'ABIDJAN YOPOUGON'
     ).length;
     const yamoussoukro = this.allPreinscrits().filter(
-      (p) => p.etab_source === 'Yamoussoukro'
+      (p) => p.etab_source === 'YAMOUSSOUKRO'
     ).length;
 
     this.stats.set([
