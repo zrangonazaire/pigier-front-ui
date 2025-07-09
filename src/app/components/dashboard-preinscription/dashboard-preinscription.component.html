@@ -72,7 +72,7 @@
           <input type="text" [(ngModel)]="searchTerm" (input)="applySearch()" placeholder="Rechercher candidat..." />
           <button><i class="fas fa-search"></i></button>
         </div>
-        <button class="action-btn">
+        <button class="action-btn" (click)="nouvellePreinscription()">
           <i class="fas fa-user-plus"></i> Nouveau
         </button>
       </div>
@@ -135,7 +135,7 @@
                 <div class="empty-state">
                   <i class="fas fa-user-slash"></i>
                   <h3>Aucune préinscription trouvée</h3>
-                  <button class="action-btn">
+                  <button class="action-btn" (click)="nouvellePreinscription()">
                     <i class="fas fa-plus"></i> Ajouter
                   </button>
                 </div>

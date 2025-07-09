@@ -1,6 +1,5 @@
 import {
   Component,
-  computed,
   inject,
   OnInit,
   OnDestroy,
@@ -11,7 +10,6 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import {
-  PreinscriptionResponseDto,
   PrinscriptionService,
 } from '../../../api-client';
 import { CommonModule, DatePipe } from '@angular/common';
@@ -19,7 +17,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MenuComponent } from '../menu/menu.component';
 import { Chart, registerables } from 'chart.js';
 import { NgxPaginationModule } from 'ngx-pagination';
-
+import { startOfDay, endOfDay } from 'date-fns';
 // Ajout des imports Angular Material nécessaires
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -27,12 +25,12 @@ import { MatInputModule } from '@angular/material/input';
 import {
   DateAdapter,
   MatNativeDateModule,
-  MAT_DATE_LOCALE,
 } from '@angular/material/core';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import moment from 'moment';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 Chart.register(...registerables);
 
 interface Preinscription {
@@ -96,6 +94,7 @@ export const MY_DATE_FORMATS = {
 export class DashboardPreinscriptionComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
+  router = inject(Router);
   startDate: Date | null = null;
   endDate: Date | null = null;
   formatDisplayDate(date: moment.Moment): string {
@@ -104,16 +103,17 @@ export class DashboardPreinscriptionComponent
 
   filterByDateRange() {
     if (this.startDate && this.endDate) {
-      const start = moment(this.startDate, 'DD-MM-YYYY');
-      const end = moment(this.endDate, 'DD-MM-YYYY');
+      const start = moment(this.startDate, 'DD-MM-YYYY hh:mm');
+      const end = moment(this.endDate, 'DD-MM-YYYY hh:mm');
       this.error.set(null);
       this.status.set('loading');
       this.loading.set(true);
-
+console.log('Filtrage des préinscriptions entre:', start.format('DD-MM-YYYY hh:mm'),
+        end.format('DD-MM-YYYY hh:mm'));
       this.preinscritservice
         .findAllPreinscEntreDeuxDate(
-          start.format('DD-MM-YYYY'),
-          end.format('DD-MM-YYYY')
+          start.format('DD-MM-YYYY hh:mm'),
+          end.format('DD-MM-YYYY hh:mm')
         )
         .subscribe({
           next: (preinscritsDto) => {
@@ -240,12 +240,12 @@ export class DashboardPreinscriptionComponent
     this.loadPreinscriptions();
   }
 
-  ngOnInit(): void {
-    this.startDate = new Date();
-    this.endDate = new Date();
-    this.filterByDateRange();
-  }
-
+ngOnInit(): void {
+  const today = new Date();
+  this.startDate = startOfDay(today); // 00:00:00
+  this.endDate = endOfDay(today);    // 23:59:59
+  this.filterByDateRange();
+}
   ngAfterViewInit(): void {
     this.createChart();
   }
@@ -334,7 +334,6 @@ export class DashboardPreinscriptionComponent
 
   applySearch(): void {
     const term = this.searchTerm().toLowerCase();
-    console.log('Recherche appliquée avec le terme:', term);
     if (!term) {
       return;
     }
@@ -592,5 +591,8 @@ export class DashboardPreinscriptionComponent
       ];
       this.chart.update();
     }
+  }
+  nouvellePreinscription(): void {
+    this.router.navigate(['/preinscription/add-preins']);  
   }
 }
