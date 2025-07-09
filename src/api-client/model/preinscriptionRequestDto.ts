@@ -78,5 +78,6 @@ export interface PreinscriptionRequestDto {
     anneescolaire?: string;
     utilisateurCreateur?: string;
     etab_source?: string;
+    inscrit_Sous_Titre?: boolean;
 }
 
