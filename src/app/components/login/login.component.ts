@@ -55,15 +55,10 @@ export class LoginComponent {
     this.errorMessage.set('');
     this.subscription.push(
       this.authService.login(this.authLogin).subscribe({
-      next: (response:any) => {      
-       
+      next: (response:any) => {           
        this.tokenService.saveToken(response.token!);
       localStorage.setItem('access_token', response.token!);
         this.router.navigate(['/tb-preinscr']);
-        // this.tokken.set(response);
-        // this.authResponse.set(JSON.stringify(response));
-       
-        // You can redirect or perform other actions here
       },
       error: (error) => {
         this.errorMessage.set('Email ou mot de passe incorrect');

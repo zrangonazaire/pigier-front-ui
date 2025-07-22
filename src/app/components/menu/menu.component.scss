@@ -1,4 +1,66 @@
-/* Styles pour les sous-menus multi-niveaux */
+/* Ajoutez ces styles dans votre fichier CSS global */
+.navbar {
+  background: linear-gradient(135deg, #1a2a6c, #2a4a8c, #3a6aac);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.logo-icon {
+  transition: all 0.3s ease;
+}
+
+.navbar-brand:hover .logo-icon {
+  transform: rotate(-10deg) scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.nav-link {
+  padding: 0.8rem 1.2rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  position: relative;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.nav-link:hover, .nav-link:focus {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff !important;
+}
+
+.nav-link::after {
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover::after {
+  transform: translateY(2px);
+}
+
+.dropdown-menu {
+  min-width: 280px;
+  border: none !important;
+  background: linear-gradient(to bottom, #2c3e50, #1a2a3a);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+.dropdown-item {
+  padding: 0.75rem 1.25rem;
+  color: #f8f9fa;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-left: 3px solid #4e73df;
+}
+
+.dropdown-item.active {
+  background: linear-gradient(90deg, rgba(78, 115, 223, 0.2), transparent);
+  color: #fff;
+  border-left: 3px solid #4e73df;
+}
+
 .dropdown-submenu {
   position: relative;
 }
@@ -6,58 +68,73 @@
 .dropdown-submenu > .dropdown-menu {
   top: 0;
   left: 100%;
-  margin-top: -6px;
+  margin-top: -8px;
   margin-left: -1px;
-  display: none;
+  border-radius: 0 4px 4px 4px;
 }
 
 .dropdown-submenu:hover > .dropdown-menu {
   display: block;
 }
 
-/* Icônes flèches personnalisées */
-.dropdown-submenu-toggle::after {
-  content: "›"; /* Chevron simple */
-  font-family: Arial, sans-serif;
-  font-size: 1.2em;
-  font-weight: bold;
-  float: right;
-  margin-left: 10px;
-  transition: transform 0.2s;
+.dropdown-submenu > .dropdown-item::after {
+  content: "›";
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.4rem;
 }
 
-.dropdown-submenu:hover > .dropdown-submenu-toggle::after {
-  transform: rotate(90deg);
+.icon-container {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Styles pour mobile */
-@media (max-width: 991.98px) {
-  .dropdown-submenu {
-    position: static;
+.avatar {
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.nav-link:hover .avatar {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Animation pour les dropdowns */
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
   }
-  
-  .dropdown-submenu > .dropdown-menu {
-    position: static !important;
-    margin-left: 15px !important;
-    margin-right: 15px !important;
-    border-left: 2px solid rgba(255, 255, 255, 0.2);
-    box-shadow: none !important;
-  }
-  
-  .dropdown-submenu-toggle::after {
-    transform: rotate(90deg);
-  }
-  
-  .dropdown-submenu:hover > .dropdown-submenu-toggle::after {
-    transform: rotate(180deg);
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* Amélioration de l'accessibilité */
 .dropdown-menu {
-  z-index: 1080;
+  animation: slideIn 0.3s ease forwards;
 }
 
-.navbar-nav .nav-link {
-  position: relative;
+/* Responsive design */
+@media (max-width: 992px) {
+  .dropdown-submenu > .dropdown-menu {
+    position: static;
+    margin: 0.5rem 0 0 1.5rem;
+    box-shadow: none;
+    border-left: 2px solid rgba(255, 255, 255, 0.1) !important;
+  }
+  
+  .dropdown-submenu > .dropdown-item::after {
+    transform: rotate(90deg) translateX(-50%);
+  }
+  
+  .navbar-nav .nav-link {
+    padding: 0.75rem 1rem;
+  }
 }

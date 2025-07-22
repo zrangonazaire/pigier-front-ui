@@ -1,0 +1,323 @@
+<app-menu></app-menu>
+<!-- app.component.html -->
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar -->
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+      <div class="sidebar-sticky">
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>TABLEAU DE BORD ENCAISSEMENTS</span>
+        </h6>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">
+              <i class="fas fa-cash-register mr-2"></i>
+              Encaissements
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="fas fa-file-invoice-dollar mr-2"></i>
+              Factures impayées
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="fas fa-chart-pie mr-2"></i>
+              Analyse par filière
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="fas fa-calendar-alt mr-2"></i>
+              Calendrier des échéances
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Suivi des Encaissements</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group mr-2">
+            <button class="btn btn-sm btn-outline-secondary">
+              <i class="fas fa-download"></i> Exporter
+            </button>
+          </div>
+          <div class="input-group">
+            <select class="form-control form-control-sm">
+              <option>Année académique 2024-2025</option>
+              <option>Année académique 2023-2024</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="row">
+        <!-- Total des scolarités dues -->
+        <div class="col-xl-2 col-md-4 mb-4">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    Total dû
+                  </div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">12 850 000 XAF</div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-file-invoice fa-2x text-gray-300"></i>
+                </div>
+              </div>
+              <div class="mt-2 text-muted">
+                <small>Pour 850 étudiants</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Encaissements à ce jour -->
+        <div class="col-xl-2 col-md-4 mb-4">
+          <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                    Encaissé
+                  </div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">9 230 000 XAF</div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-cash-register fa-2x text-gray-300"></i>
+                </div>
+              </div>
+              <div class="mt-2 text-success">
+                <small><i class="fas fa-arrow-up"></i> 72%</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Restant à recouvrer -->
+        <div class="col-xl-2 col-md-4 mb-4">
+          <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                    Restant dû
+                  </div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">3 620 000 XAF</div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-exclamation-circle fa-2x text-gray-300"></i>
+                </div>
+              </div>
+              <div class="mt-2 text-warning">
+                <small>28% du total</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Retards de paiement -->
+        <div class="col-xl-2 col-md-4 mb-4">
+          <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                    En retard
+                  </div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">1 480 000 XAF</div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-clock fa-2x text-gray-300"></i>
+                </div>
+              </div>
+              <div class="mt-2">
+                <small class="text-danger">42 étudiants</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Moyenne encaissement/étudiant -->
+        <div class="col-xl-2 col-md-4 mb-4">
+          <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                    Moyenne/étudiant
+                  </div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">10 858 XAF</div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-user-graduate fa-2x text-gray-300"></i>
+                </div>
+              </div>
+              <div class="mt-2 text-info">
+                <small>Sur 850 étudiants</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Taux de recouvrement -->
+        <div class="col-xl-2 col-md-4 mb-4">
+          <div class="card border-left-dark shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                    Taux de recouvrement
+                  </div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">72%</div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-percent fa-2x text-gray-300"></i>
+                </div>
+              </div>
+              <div class="progress mt-2" style="height: 5px;">
+                <div class="progress-bar bg-success" role="progressbar" style="width: 72%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="row">
+        <!-- Évolution des encaissements -->
+        <div class="col-xl-8 col-lg-7">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Évolution des encaissements (2024-2025)</h6>
+              <div class="dropdown no-arrow">
+                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" 
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" 
+                     aria-labelledby="dropdownMenuLink">
+                  <div class="dropdown-header">Options:</div>
+                  <a class="dropdown-item" href="#">Export PDF</a>
+                  <a class="dropdown-item" href="#">Données brutes</a>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart-area">
+                <canvas id="encaissementsChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Répartition par filière -->
+        <div class="col-xl-4 col-lg-5">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Encaissements par filière</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-pie pt-4">
+                <canvas id="filiereChart"></canvas>
+              </div>
+              <div class="mt-4 text-center small">
+                <span class="mr-2">
+                  <i class="fas fa-circle text-primary"></i> Médecine
+                </span>
+                <span class="mr-2">
+                  <i class="fas fa-circle text-success"></i> Ingénierie
+                </span>
+                <span class="mr-2">
+                  <i class="fas fa-circle text-info"></i> Droit
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Derniers encaissements -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+              <h6 class="m-0 font-weight-bold text-primary">Derniers encaissements</h6>
+              <button class="btn btn-sm btn-primary">
+                <i class="fas fa-plus"></i> Nouvel encaissement
+              </button>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead class="thead-light">
+                    <tr>
+                      <th>Date</th>
+                      <th>Étudiant</th>
+                      <th>Filière</th>
+                      <th>Niveau</th>
+                      <th>Type</th>
+                      <th>Montant</th>
+                      <th>Mode paiement</th>
+                      <th>Statut</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>22/07/2025</td>
+                      <td>Koffi Mensah</td>
+                      <td>Médecine</td>
+                      <td>Master 2</td>
+                      <td>Scolarité</td>
+                      <td>350 000 XAF</td>
+                      <td>Virement</td>
+                      <td><span class="badge badge-success">Complet</span></td>
+                    </tr>
+                    <tr>
+                      <td>21/07/2025</td>
+                      <td>Aïcha Diallo</td>
+                      <td>Ingénierie</td>
+                      <td>Licence 3</td>
+                      <td>Scolarité</td>
+                      <td>250 000 XAF</td>
+                      <td>Espèces</td>
+                      <td><span class="badge badge-success">Complet</span></td>
+                    </tr>
+                    <tr>
+                      <td>20/07/2025</td>
+                      <td>Jean Dupont</td>
+                      <td>Droit</td>
+                      <td>Licence 1</td>
+                      <td>Inscription</td>
+                      <td>75 000 XAF</td>
+                      <td>Chèque</td>
+                      <td><span class="badge badge-warning">En attente</span></td>
+                    </tr>
+                    <tr>
+                      <td>19/07/2025</td>
+                      <td>Fatou Ndiaye</td>
+                      <td>Médecine</td>
+                      <td>Doctorat</td>
+                      <td>Scolarité</td>
+                      <td>420 000 XAF</td>
+                      <td>Mobile Money</td>
+                      <td><span class="badge badge-success">Complet</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

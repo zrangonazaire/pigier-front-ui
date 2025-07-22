@@ -77,7 +77,7 @@ export interface PreinscriptionRequestDto {
     matpc?: string;
     anneescolaire?: string;
     utilisateurCreateur?: string;
-    etab_source?: string;
     inscrit_Sous_Titre?: boolean;
+    etab_source?: string;
 }
 
