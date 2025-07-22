@@ -8,7 +8,10 @@ api/eleves.service.ts
 api/encaissement.service.ts
 api/etablissement.service.ts
 api/fORMATION.service.ts
+api/permissions.service.ts
 api/prinscription.service.ts
+api/roles.service.ts
+api/utilisateurController.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -20,7 +23,15 @@ model/etabSourceResponseDto.ts
 model/formationRequestDto.ts
 model/formationResponseDto.ts
 model/models.ts
+model/permission.ts
+model/permissionRequest.ts
+model/permissionResponse.ts
 model/preinscriptionRequestDto.ts
 model/preinscriptionResponseDto.ts
+model/roleRequest.ts
+model/roleResponse.ts
+model/uRole.ts
+model/userRequest.ts
+model/userResponse.ts
 param.ts
 variables.ts
