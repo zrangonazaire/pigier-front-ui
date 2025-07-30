@@ -157,6 +157,7 @@ export class AddPreinscriptionComponent {
         comrespo: this.preinscriptionForm.value.cometud,
         celrespo: this.preinscriptionForm.value.celetud,
         emailrespo: this.preinscriptionForm.value.emailetud,
+        decision: "A",
       });
     } else if (type === 'pere') {
       this.preinscriptionForm.patchValue({
