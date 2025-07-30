@@ -69,7 +69,7 @@ export interface PreinscriptionRequestDto {
     medic?: string;
     premsoins?: string;
     intervchir?: string;
-    datinscrip?: string;
+    dateInscription?: string;
     decision?: string;
     numtabl?: string;
     numatri?: string;

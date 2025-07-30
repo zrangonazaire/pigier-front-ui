@@ -42,10 +42,10 @@ export class PrinscriptionService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public creerOrUpdatePreinscYakro(preinscriptionRequestDto: PreinscriptionRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<PreinscriptionResponseDto>;
-    public creerOrUpdatePreinscYakro(preinscriptionRequestDto: PreinscriptionRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PreinscriptionResponseDto>>;
-    public creerOrUpdatePreinscYakro(preinscriptionRequestDto: PreinscriptionRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PreinscriptionResponseDto>>;
-    public creerOrUpdatePreinscYakro(preinscriptionRequestDto: PreinscriptionRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public creerOrUpdatePreinscYakro(preinscriptionRequestDto: PreinscriptionRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PreinscriptionResponseDto>;
+    public creerOrUpdatePreinscYakro(preinscriptionRequestDto: PreinscriptionRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PreinscriptionResponseDto>>;
+    public creerOrUpdatePreinscYakro(preinscriptionRequestDto: PreinscriptionRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PreinscriptionResponseDto>>;
+    public creerOrUpdatePreinscYakro(preinscriptionRequestDto: PreinscriptionRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (preinscriptionRequestDto === null || preinscriptionRequestDto === undefined) {
             throw new Error('Required parameter preinscriptionRequestDto was null or undefined when calling creerOrUpdatePreinscYakro.');
         }
@@ -56,7 +56,7 @@ export class PrinscriptionService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);

@@ -121,8 +121,8 @@ console.log('Filtrage des préinscriptions entre:', start.format('DD-MM-YYYY hh:
             const mappedPreinscrits: Preinscription[] = preinscritsDto.map(
               (dto) => ({
                 id: dto.id ? String(dto.id) : '',
-                datinscrip: dto.datinscrip
-                  ? new Date(dto.datinscrip)
+                datinscrip: dto.dateInscription
+                  ? new Date(dto.dateInscription)
                   : new Date(),
                 utilisateurCreateur: dto.utilisateurCreateur || '',
                 nomprenoms: dto.nomprenoms || '',

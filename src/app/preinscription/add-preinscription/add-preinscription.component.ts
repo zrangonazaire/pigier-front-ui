@@ -115,12 +115,12 @@ export class AddPreinscriptionComponent {
       contcel2: [''],
       copiebac: [''],
       copderndipl: [''],
-      decision: [''],
+      decision: ['A'],
       numtabl: [''],
       numatri: [''],
-      totbac: [''],
+      totbac: [0],
       matpc: [''],
-      Inscrit_Sous_Titre: [false],
+      inscrit_Sous_Titre: [false],
       utilisateurCreateur: [''],
     });
   }
@@ -192,7 +192,7 @@ export class AddPreinscriptionComponent {
         suffix = 'AY';
         break;
       case 'YAMOUSSOUKRO':
-        suffix = 'Y';
+        suffix = 'YA';
         break;
       default:
         suffix = 'AP';
@@ -256,11 +256,38 @@ export class AddPreinscriptionComponent {
   }
   submit() {
     if (this.preinscriptionForm.valid) {
+
       this.preinscriptionForm.patchValue({
         utilisateurCreateur: this.currentUser,
         id: this.generateId(this.preinscriptionForm.value.etab_source),
+        anneanneescolaire:'2025/2026'
+        
       });
-      const data: PreinscriptionRequestDto = this.preinscriptionForm.value;
+      const data: PreinscriptionRequestDto = this.preinscriptionForm.value as PreinscriptionRequestDto;
+     data.utilisateurCreateur = this.currentUser;
+      data.anneescolaire = '2025/2026'; // Assurez-vous que cette valeur est correcte
+      data.id = this.generateId(this.preinscriptionForm.value.etab_source); // Générer un ID unique basé sur l'établissement source
+      console.log('Préinscription soumise avec les données suivantes:', data);
+      // data.anneescolaire = '2025/2026';
+      // data.annbac=this.preinscriptionForm.value.annbac
+      // data.annivoetud = this.preinscriptionForm.value.annivoetud;
+      // data.anngrad = this.preinscriptionForm.value.anngrad;
+      // data.anndiplequiv = this.preinscriptionForm.value.anndiplequiv;
+      // data.numtabl = this.preinscriptionForm.value.numtabl;
+      // data.numatri = this.preinscriptionForm.value.numatri;
+      // data.totbac = this.preinscriptionForm.value.totbac;
+      // data.matpc = this.preinscriptionForm.value.matpc;
+      // data.inscrit_Sous_Titre = this.preinscriptionForm.value.Inscrit_Sous_Titre;
+      // data.decision = this.preinscriptionForm.value.decision; // Assurez-vous que cette valeur est correcte
+      // data.idperm = this.preinscriptionForm.value.idperm; // Assurez-vous que cette valeur est correcte
+      // data.utilisateurCreateur = this.preinscriptionForm.value.utilisateurCreateur; // Assurez-vous que cette valeur est correcte
+      // data.baccalaureat = this.preinscriptionForm.value.baccalaureat; // Assurez-vous que cette valeur est correcte
+      // data.id = this.preinscriptionForm.value.id;
+      // data.etab_source = this.preinscriptionForm.value.etab_source;
+      // data.decision = this.preinscriptionForm.value.decision;// Assurez
+      // Assurez-vous que cette valeur est correcte
+
+      // Assurez-vous que cette valeur est correcte
       this.preinscritservice.creerOrUpdatePreinscYakro(data).subscribe({
         next: (response) => {
           alert('Préinscription enregistrée avec succès.');
