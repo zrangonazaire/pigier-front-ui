@@ -30,7 +30,6 @@ export class AddPreinscriptionComponent implements OnInit {
   status = signal<'loading' | 'error' | 'loaded'>('loading');
   router = inject(Router);
 
- 
   tokenService = inject(TokenService);
   preinscritservice = inject(PrinscriptionService);
   preinscriptionForm!: FormGroup;
@@ -144,9 +143,9 @@ export class AddPreinscriptionComponent implements OnInit {
   }
   ngOnInit() {
     this.initForm();
-           const decodedToken = jwtDecode<any>(this.currentUser);
-           
-            this.currentUser = decodedToken.fullUser.lastname || 'Utilisateur';
+    const decodedToken = jwtDecode<any>(this.currentUser);
+
+    this.currentUser = decodedToken.fullUser.lastname || 'Utilisateur';
   }
 
   initForm() {
@@ -229,7 +228,7 @@ export class AddPreinscriptionComponent implements OnInit {
       anneeScolaire: ['2025/2026'],
       etablissementSource: [''],
       inscritSousTitre: [false],
-      utilisateurCreateur: [ ''],
+      utilisateurCreateur: [''],
     });
   }
 
@@ -261,9 +260,7 @@ export class AddPreinscriptionComponent implements OnInit {
           this.loading.set(false);
         },
         error: (error) => {
-          alert(            'Erreur lors de l\'impression de la fiche médicale'
-       
-          );
+          alert("Erreur lors de l'impression de la fiche médicale");
           this.loading.set(false);
         },
       });
@@ -279,12 +276,12 @@ export class AddPreinscriptionComponent implements OnInit {
         this.loading.set(false);
       },
       error: (error) => {
-        alert('Erreur lors de l\'impression de l\'inscription');
+        alert("Erreur lors de l'impression de l'inscription");
         this.loading.set(false);
       },
     });
   }
- viewPreinscription(id: any): void {
+  viewPreinscription(id: any): void {
     this.loading.set(true);
     this.preinscritservice
       .impressionPreinscriptionYakro(id.toString())
@@ -296,47 +293,43 @@ export class AddPreinscriptionComponent implements OnInit {
           this.loading.set(false);
         },
         error: (error) => {
-          alert(
-            'Erreur lors de l\'impression de la préinscription'
-          );
+          alert("Erreur lors de l'impression de la préinscription");
           this.loading.set(false);
         },
       });
   }
- 
+
   submit() {
     if (this.preinscriptionForm.valid) {
-      const data:PreinscriptionRequestDto = this.preinscriptionForm.value;
+      const data: PreinscriptionRequestDto = this.preinscriptionForm.value;
       console.log('Formulaire soumis:', data);
       this.preinscriptionForm.patchValue({
         id: this.generateId(this.preinscriptionForm.value.etablissementSource),
         utilisateurCreateur: this.currentUser,
       });
-console.log('Formulaire modifié:', this.preinscriptionForm.value);
+      console.log('Formulaire modifié:', this.preinscriptionForm.value);
       console.log('Le formulaire généré :', this.preinscriptionForm.value);
-      this.preinscritservice
-        .creerOrUpdatePreinsc(
-          data
-        )
-        .subscribe(
-      {
+      this.preinscritservice.creerOrUpdatePreinsc(data).subscribe({
         next: (response) => {
-        this.loading.set(false);
+          this.loading.set(false);
           alert('Préinscription enregistrée avec succès.');
-        this.viewPreinscription(this.preinscriptionForm.value.id);
-        this.printMedical(this.preinscriptionForm.value.id);
-        this.printInscri(this.preinscriptionForm.value.id);
-        this.preinscriptionForm.reset();
-        this.router.navigate(['/tb-preinscr']);
+          console.log("Réponse de l'API:", response);
+          this.viewPreinscription(response.id);
+          this.printMedical(response.id);
+          this.printInscri(response.id);
+          this.preinscriptionForm.reset();
+          this.router.navigate(['/tb-preinscr']);
         },
         error: (error) => {
-        this.loading.set(false);
-        console.error('Erreur lors de la préinscription:', error);
-        const errorMessage = error.error?.message || error.message || 'Une erreur inconnue est survenue.';
-        alert(`Erreur lors de la préinscription: ${errorMessage}`);
+          this.loading.set(false);
+          console.error('Erreur lors de la préinscription:', error);
+          const errorMessage =
+            error.error?.message ||
+            error.message ||
+            'Une erreur inconnue est survenue.';
+          alert(`Erreur lors de la préinscription: ${errorMessage}`);
         },
-      }
-        );
+      });
       // Envoyer les données à l'API Spring Boot
     } else {
       this.preinscriptionForm.markAllAsTouched();
