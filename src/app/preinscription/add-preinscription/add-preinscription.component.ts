@@ -143,9 +143,16 @@ export class AddPreinscriptionComponent implements OnInit {
   }
   ngOnInit() {
     this.initForm();
-    const decodedToken = jwtDecode<any>(this.currentUser);
+    try {
+      this.currentUser = localStorage.getItem('access_token') || '';
+         const decodedToken = jwtDecode<any>(this.currentUser);
 
     this.currentUser = decodedToken.fullUser.lastname || 'Utilisateur';
+   console.log('Utilisateur connecté est le suivant :', this.currentUser);
+    } catch (error) {
+      console.error('Erreur lors du décodage du token:', error);
+    }
+
   }
 
   initForm() {
@@ -303,10 +310,10 @@ export class AddPreinscriptionComponent implements OnInit {
     if (this.preinscriptionForm.valid) {
       const data: PreinscriptionRequestDto = this.preinscriptionForm.value;
       console.log('Formulaire soumis:', data);
-      this.preinscriptionForm.patchValue({
-        id: this.generateId(this.preinscriptionForm.value.etablissementSource),
-        utilisateurCreateur: this.currentUser,
-      });
+    this.preinscriptionForm.patchValue({
+    id: this.generateId(this.preinscriptionForm.value.etablissementSource),
+    utilisateurCreateur:this.currentUser // Copie pour immuabilité
+  });
       console.log('Formulaire modifié:', this.preinscriptionForm.value);
       console.log('Le formulaire généré :', this.preinscriptionForm.value);
       this.preinscritservice.creerOrUpdatePreinsc(data).subscribe({
