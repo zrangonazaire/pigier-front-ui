@@ -312,7 +312,7 @@ export class AddPreinscriptionComponent implements OnInit {
         id: this.generateId(this.preinscriptionForm.value.etablissementSource),
         utilisateurCreateur: this.currentUser,
       });
-
+console.log('Formulaire modifié:', this.preinscriptionForm.value);
       console.log('Le formulaire généré :', this.preinscriptionForm.value);
       this.preinscritservice
         .creerOrUpdatePreinsc(
