@@ -43,6 +43,7 @@ interface Preinscription {
   etab_source: 'ABIDJAN PLATEAU' | 'ABIDJAN YOPOUGON' | 'YAMOUSSOUKRO';
   isInscrit?: boolean;
   utilisateurCreateur?: string;
+  anneeScolaire?: string;
 }
 
 interface StatCard {
@@ -125,19 +126,20 @@ console.log('Filtrage des préinscriptions entre:', start.format('DD-MM-YYYY hh:
                   ? new Date(dto.dateInscription)
                   : new Date(),
                 utilisateurCreateur: dto.utilisateurCreateur || '',
-                nomprenoms: dto.nomprenoms || '',
-                celetud: dto.contcel1 || '',
-                formsouh: dto.formsouh || '',
+                nomprenoms: dto.nomPrenoms || '',
+                celetud: dto.contactCellulaire1 || '',
+                formsouh: dto.formationSouhaitee || '',
                 decision:
                   (dto.decision as 'En attente' | 'Validée' | 'Rejetée') ||
                   'En attente',
                 etab_source:
-                  (dto.etab_source as
+                  (dto.etablissementSource as
                     | 'ABIDJAN PLATEAU'
                     | 'ABIDJAN YOPOUGON'
                     | 'YAMOUSSOUKRO') || 'ABIDJAN PLATEAU',
                 isInscrit:
                   dto.decision === 'Validée' ? Math.random() > 0.5 : false,
+                  anneeScolaire: dto.anneeScolaire || '',
               })
             );
 
@@ -190,6 +192,7 @@ console.log('Filtrage des préinscriptions entre:', start.format('DD-MM-YYYY hh:
     { key: 'formsouh', label: 'Formation' },
     { key: 'decision', label: 'Décision' },
     { key: 'etab_source', label: 'Établissement' },
+    { key: 'anneescol', label: 'Année Scol.' },
   ];
   sortColumn = signal<string>('id');
   sortDirection = signal<'asc' | 'desc'>('asc');

@@ -42,12 +42,12 @@ export class PrinscriptionService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public creerOrUpdatePreinscYakro(preinscriptionRequestDto: PreinscriptionRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PreinscriptionResponseDto>;
-    public creerOrUpdatePreinscYakro(preinscriptionRequestDto: PreinscriptionRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PreinscriptionResponseDto>>;
-    public creerOrUpdatePreinscYakro(preinscriptionRequestDto: PreinscriptionRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PreinscriptionResponseDto>>;
-    public creerOrUpdatePreinscYakro(preinscriptionRequestDto: PreinscriptionRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public creerOrUpdatePreinsc(preinscriptionRequestDto: PreinscriptionRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PreinscriptionResponseDto>;
+    public creerOrUpdatePreinsc(preinscriptionRequestDto: PreinscriptionRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PreinscriptionResponseDto>>;
+    public creerOrUpdatePreinsc(preinscriptionRequestDto: PreinscriptionRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PreinscriptionResponseDto>>;
+    public creerOrUpdatePreinsc(preinscriptionRequestDto: PreinscriptionRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (preinscriptionRequestDto === null || preinscriptionRequestDto === undefined) {
-            throw new Error('Required parameter preinscriptionRequestDto was null or undefined when calling creerOrUpdatePreinscYakro.');
+            throw new Error('Required parameter preinscriptionRequestDto was null or undefined when calling creerOrUpdatePreinsc.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -229,6 +229,12 @@ export class PrinscriptionService extends BaseService {
             throw new Error('Required parameter fin was null or undefined when calling findAllPreinscEntreDeuxDate.');
         }
 
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>debut, 'debut');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>fin, 'fin');
+
         let localVarHeaders = this.defaultHeaders;
 
         // authentication (bearerAuth) required
@@ -257,10 +263,11 @@ export class PrinscriptionService extends BaseService {
             }
         }
 
-        let localVarPath = `/preinscription/findAllPreinscEntreDeuxDate/${this.configuration.encodeParam({name: "debut", value: debut, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "fin", value: fin, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/preinscription/findAllPreinscEntreDeuxDate`;
         return this.httpClient.request<Array<PreinscriptionResponseDto>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

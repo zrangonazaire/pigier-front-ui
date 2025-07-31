@@ -1,13 +1,92 @@
-.form-card {
-  max-width: 900px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+/* preinscription-form.component.scss */
+.stepper {
+  position: relative;
+  padding: 0;
+  margin: 0 auto 2rem;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #dee2e6;
+    z-index: 1;
+  }
+
+  .step {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    flex: 1;
+    
+    &.active .step-circle {
+      background-color: #0d6efd;
+      color: white;
+      transform: scale(1.1);
+      box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.2);
+    }
+    
+    &.completed .step-circle {
+      background-color: #198754;
+      color: white;
+    }
+  }
+
+  .step-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #e9ecef;
+    color: #495057;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .step-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #6c757d;
+  }
 }
 
-.full-width {
-  width: 100%;
-  margin-bottom: 1rem;
+.step-content {
+  display: none;
+  
+  &.active {
+    display: block;
+    animation: fadeIn 0.4s ease;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.card-header {
+  border-radius: 0 !important;
+}
+
+.invalid-feedback.d-block {
+  display: block !important;
+}
+
+.form-label {
+  font-weight: 500;
+  margin-bottom: 0.3rem;
 }

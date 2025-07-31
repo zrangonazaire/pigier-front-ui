@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -14,6 +14,7 @@ import { TokenService } from '../../services/token.service';
 import { MenuComponent } from '../../components/menu/menu.component';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-add-preinscription',
@@ -22,165 +23,106 @@ import { Router } from '@angular/router';
   styleUrls: ['./add-preinscription.component.scss'],
   imports: [CommonModule, MenuComponent, FormsModule, ReactiveFormsModule],
 })
-export class AddPreinscriptionComponent {
-    error = signal<string | null>(null);
-    loading = signal<boolean>(false);
-    status = signal<'loading' | 'error' | 'loaded'>('loading');
-    router= inject(Router);
+export class AddPreinscriptionComponent implements OnInit {
+  currentUser = '';
+  error = signal<string | null>(null);
+  loading = signal<boolean>(false);
+  status = signal<'loading' | 'error' | 'loaded'>('loading');
+  router = inject(Router);
+
+ 
   tokenService = inject(TokenService);
   preinscritservice = inject(PrinscriptionService);
-  fb = inject(FormBuilder);
+  preinscriptionForm!: FormGroup;
+  currentStep = 1;
+  steps = [
+    'Informations Personnelles',
+    'Contacts Étudiant',
+    'Formation',
+    'Responsable',
+    'Santé',
+    'Validation',
+  ];
 
-  step = 1;
-  hasBac: string = '';
-  isSelfResponsible: boolean = false;
-
-  preinscriptionForm: FormGroup;
-  currentUser: string = '';
-
-  constructor(private formBuilder: FormBuilder) {
-    const decodedToken = this.tokenService.decodeToken() as {
-      fullUser?: { lastname?: string };
-    };
-    console.log(decodedToken);
-    this.currentUser = decodedToken.fullUser?.lastname ?? '';
-    this.preinscriptionForm = this.formBuilder.group({
-      // Étape 1 : Infos personnelles
-      id: [''],
-      nomprenoms: ['', Validators.required],
-      datnais: ['', Validators.required],
-      lieunais: ['', Validators.required],
-      sexe: ['', Validators.required],
-      nationalite: ['', Validators.required],
-      natident: ['', Validators.required], // ou typeidentite si tu as renommé
-      numidentite: ['', Validators.required],
-      teletud: [''],
-      celetud: ['', Validators.required],
-      emailetud: ['', Validators.required],
-      viletud: ['', Validators.required],
-      cometud: ['', Validators.required],
-
-      // Étape 2 : Bac & Études
-      baccalaureat: [''],
-      annbac: [''],
-      diplequiv: [''],
-      anndiplequiv: [''],
-      nivoetud: [''],
-      annivoetud: [''],
-      grade: [''],
-      anngrad: [''],
-      specgrad: [''],
-      etsfreq: [''],
-      formsouh: ['', Validators.required],
-      anneescolaire: [''],
-      etab_source: ['', Validators.required],
-
-      // Étape 3 : Responsable
-      isSelfResponsible: [false],
-      nompere: [''],
-      nomere: [''],
-      titrespo: [''],
-      respo: [''],
-      nomrespo: [''],
-      profrespo: [''],
-      emprespo: [''],
-      vilrespo: [''],
-      comrespo: [''],
-      bprespo: [''],
-      celrespo: [''],
-      telburespo: [''],
-      teldomrespo: [''],
-      emailrespo: [''],
-      idperm: [''],
-      // Étape 4 : Santé
-      clindec: [''],
-      clinnom: [''],
-      clintel: [''],
-      clinmed: [''],
-      clinmedcont: [''],
-      maladies: [''],
-      soins: [''],
-      medic: [''],
-      premsoins: [''],
-      intervchir: [''],
-
-      // Étape 5 : Contacts d'urgence et pièces
-      contnompren1: [''],
-      contadr1: [''],
-      contel1: [''],
-      contcel1: [''],
-      contnompren2: [''],
-      contadr2: [''],
-      contel2: [''],
-      contcel2: [''],
-      copiebac: [''],
-      copderndipl: [''],
-      decision: ['A'],
-      numtabl: [''],
-      numatri: [''],
-      totbac: [0],
-      matpc: [''],
-      inscrit_Sous_Titre: [false],
-      utilisateurCreateur: [''],
-    });
-  }
-
-  nextStep() {
-    if (this.step < 6) this.step++;
-  }
-
-  prevStep() {
-    if (this.step > 1) this.step--;
-  }
-
-  onHasBacChange(value: string) {
-    this.hasBac = value;
-    if (value === 'non') {
-      this.preinscriptionForm.patchValue({
-        baccalaureat: '',
-        annbac: '',
-        Etab_source: '',
-      });
-    }
-  }
-  // Ajoute cette propriété dans la classe :
-  responsableType: string = 'self';
-
-  // Ajoute cette méthode :
-  onResponsableTypeChange(type: string) {
-    this.responsableType = type;
-    if (type === 'self') {
-      // Recopie les infos de l'étudiant
-      this.preinscriptionForm.patchValue({
-        nomrespo: this.preinscriptionForm.value.nomprenoms,
-        vilrespo: this.preinscriptionForm.value.viletud,
-        comrespo: this.preinscriptionForm.value.cometud,
-        celrespo: this.preinscriptionForm.value.celetud,
-        emailrespo: this.preinscriptionForm.value.emailetud,
-        decision: "A",
-      });
-    } else if (type === 'pere') {
-      this.preinscriptionForm.patchValue({
-        nomrespo: this.preinscriptionForm.value.nompere,
-      });
-    } else if (type === 'mere') {
-      this.preinscriptionForm.patchValue({
-        nomrespo: this.preinscriptionForm.value.nomere,
-      });
-    }
-  }
-  onSelfResponsibleChange(event: any) {
-    this.isSelfResponsible = event.target.checked;
-    if (this.isSelfResponsible) {
-      this.preinscriptionForm.patchValue({
-        nomrespo: this.preinscriptionForm.value.nomprenoms,
-        vilrespo: this.preinscriptionForm.value.viletud,
-        comrespo: this.preinscriptionForm.value.cometud,
-        celrespo: this.preinscriptionForm.value.celetud,
-        emailrespo: this.preinscriptionForm.value.emailetud,
-      });
-    }
-  }
+  formations = [
+    'BTS Assistant(e) de Direction 2ème Année',
+    'BTS Finance Comptabilité et Gestion des Entreprises 2ème Année',
+    'BTS Gestion Commerciale 2ème Année',
+    "BTS Informatique Développeur d'Application 2ème Année",
+    'BTS Ressources Humaines et Communication 2ème Année',
+    'BTS Tourisme-Hôtellerie 1ère Année',
+    'BTS Tourisme-Hôtellerie 2ème Année',
+    'Licence Pro Assistant(e) de Direction 1ère Année',
+    'Licence Pro Assistant(e) de Direction 3ème Année',
+    'Licence Pro Audit Comptable et Contrôle de Gestion 1ère Année',
+    'Licence Pro Audit Comptable et Contrôle de Gestion 3ème Année',
+    'Licence pro Communication et Développement des marques 1ère Année',
+    'Licence Pro Communication et Développement des Marques 3ème Année',
+    'Licence Pro Comptabilité Finance 1ère Année',
+    'Licence Pro Comptabilité Finance 3ème Année',
+    'Licence Pro Gestion Administrative du Personnel 3ème Année',
+    'Licence Pro Gestion des Entreprises 3ème Année',
+    'Licence Pro Gestion des Ressources Humaines 3ème Année',
+    'Licence Pro Marketing et Communication Publicitaire 1ère Année',
+    'Licence Pro Marketing et Communication Publicitaire 3ème Année',
+    'Licence Pro Réseaux et Génie Logiciel 1ère Année',
+    'Licence Pro Réseaux et Génie Logiciel 3ème Année',
+    'Master Pro Administration des Entreprises 1ère Année',
+    'Master Pro Administration des Entreprises 2ème Année',
+    'Master Pro Audit et Contrôle de Gestion 1ère Année',
+    'Master Pro Audit et Contrôle de Gestion 2ème Année',
+    'Master Pro Finance Comptabilité 1ère Année',
+    'Master Pro Finance Comptabilité 2ème Année',
+    'Master Pro Fiscalité et Droit des Affaires 1ère Année',
+    'Master Pro Fiscalité et Droit des Affaires 2ème Année',
+    'Master Pro Génie Informatique et Réseaux 1ère Année',
+    'Master Pro Génie Informatique et Réseaux 2ème Année',
+    'Master Pro Marketing 1ère Année',
+    'Master Pro Marketing 2ème Année',
+  ];
+  nationalites = [
+    'Ivoirienne',
+    'Algérienne',
+    'Américaine',
+    'Belge',
+    'Béninoise',
+    'Burkinabè',
+    'Camerounaise',
+    'Canadienne',
+    'Centrafricaine',
+    'Congolaise',
+    'Française',
+    'Gabonaise',
+    'Gambienne',
+    'Ghanéenne',
+    'Guinéenne',
+    'Guinéenne Équatoriale',
+    'Libérienne',
+    'Malienne',
+    'Marocaine',
+    'Mauritanienne',
+    'Nigériane',
+    'Nigérienne',
+    'Rwandaise',
+    'Sénégalaise',
+    'Sierra-Léonaise',
+    'Suisse',
+    'Tchadienne',
+    'Togolaise',
+    'Tunisienne',
+    'Autre',
+  ];
+  typeIdent = [
+    'Carte Nationale d’Identité',
+    'Passeport',
+    'Attestation d’identité',
+    'Carte consulaire',
+    'Permis de conduire',
+    'Extrait de naissance',
+    'Autres',
+  ];
+  etabSource = ['ABIDJAN PLATEAU', 'ABIDJAN YOPOUGON', 'YAMOUSSOUKRO'];
+  constructor(private fb: FormBuilder) {}
   private generateId(etabSource: string): string {
     const randomDigits = Math.floor(100000 + Math.random() * 900000); // 6 chiffres
     console.log('Etab Source généré est le suivant:', etabSource);
@@ -193,14 +135,120 @@ export class AddPreinscriptionComponent {
         suffix = 'AY';
         break;
       case 'YAMOUSSOUKRO':
-        suffix = 'YA';
+        suffix = 'YA'; // Note: le fichier build minifié génère 'Y'. Assurez-vous que 'YA' est correct.
         break;
       default:
         suffix = 'AP';
     }
     return `${randomDigits}${suffix}`;
   }
-  // Fonctions d'impression
+  ngOnInit() {
+    this.initForm();
+           const decodedToken = jwtDecode<any>(this.currentUser);
+           
+            this.currentUser = decodedToken.fullUser.lastname || 'Utilisateur';
+  }
+
+  initForm() {
+    this.preinscriptionForm = this.fb.group({
+      id: [''],
+      // Informations personnelles
+      nomPrenoms: ['', Validators.required],
+      dateNaissance: ['', Validators.required],
+      lieuNaissance: [''],
+      sexe: ['', Validators.required],
+      nationalite: [''],
+      nationaliteIdentite: ['', Validators.required],
+      numeroIdentite: ['', Validators.required],
+
+      // Contacts étudiant
+      telephoneEtudiant: [''],
+      cellulaireEtudiant: ['', Validators.required],
+      emailEtudiant: [''],
+      villeEtudiant: [''],
+      communeEtudiant: [''],
+
+      // Formation
+      baccalaureat: [''],
+      anneeBac: [''],
+      diplomeEquivalence: [''],
+      anneeDiplomeEquivalence: [''],
+      niveauEtudes: [''],
+      anneeNiveauEtudes: [''],
+      grade: [''],
+      anneeGrade: [''],
+      specialiteGrade: [''],
+      etablissementFrequente: [''],
+      formationSouhaitee: ['', Validators.required],
+      idPermanent: [''],
+
+      // Responsable
+      nomPere: [''],
+      nomMere: [''],
+      titreResponsable: [''],
+      responsable: [''],
+      nomResponsable: [''],
+      professionResponsable: [''],
+      employeurResponsable: [''],
+      villeResponsable: [''],
+      communeResponsable: [''],
+      boitePostaleResponsable: [''],
+      cellulaireResponsable: [''],
+      telephoneBureauResponsable: [''],
+      telephoneDomicileResponsable: [''],
+      emailResponsable: [''],
+
+      // Santé et contacts d'urgence
+      contactNomPrenom1: [''],
+      contactAdresse1: [''],
+      contactTelephone1: [''],
+      contactCellulaire1: [''],
+      contactNomPrenom2: [''],
+      contactAdresse2: [''],
+      contactTelephone2: [''],
+      contactCellulaire2: [''],
+      cliniqueDeclaree: [false],
+      nomClinique: [''],
+      telephoneClinique: [''],
+      medecinClinique: [''],
+      contactMedecin: [''],
+      maladies: [''],
+      soins: [''],
+      medicaments: [''],
+      premiersSoins: [''],
+      interventionsChirurgicales: [''],
+
+      // Documents et validation
+      copieBac: [''],
+      copieDernierDiplome: [''],
+      decision: ['A'],
+      numeroTable: [''],
+      numeroMatricule: [''],
+      totalBac: [null],
+      matierePrincipale: [''],
+      anneeScolaire: ['2025/2026'],
+      etablissementSource: [''],
+      inscritSousTitre: [false],
+      utilisateurCreateur: [ ''],
+    });
+  }
+
+  showError(controlName: string): any {
+    const control = this.preinscriptionForm.get(controlName);
+    return control?.invalid && (control?.dirty || control?.touched);
+  }
+
+  nextStep() {
+    if (this.currentStep < this.steps.length) {
+      this.currentStep++;
+    }
+  }
+
+  prevStep() {
+    if (this.currentStep > 1) {
+      this.currentStep--;
+    }
+  }
   printMedical(id: any): void {
     this.loading.set(true);
     this.preinscritservice
@@ -255,56 +303,44 @@ export class AddPreinscriptionComponent {
         },
       });
   }
+ 
   submit() {
     if (this.preinscriptionForm.valid) {
-
+      const data:PreinscriptionRequestDto = this.preinscriptionForm.value;
+      console.log('Formulaire soumis:', data);
       this.preinscriptionForm.patchValue({
+        id: this.generateId(this.preinscriptionForm.value.etablissementSource),
         utilisateurCreateur: this.currentUser,
-        id: this.generateId(this.preinscriptionForm.value.etab_source),
-        anneanneescolaire:'2025/2026'
-        
       });
-      const data: PreinscriptionRequestDto = this.preinscriptionForm.value as PreinscriptionRequestDto;
-     data.utilisateurCreateur = this.currentUser;
-      data.anneescolaire = '2025/2026'; // Assurez-vous que cette valeur est correcte
-      data.id = this.generateId(this.preinscriptionForm.value.etab_source); // Générer un ID unique basé sur l'établissement source
-      console.log('Préinscription soumise avec les données suivantes:', data);
-      // data.anneescolaire = '2025/2026';
-      // data.annbac=this.preinscriptionForm.value.annbac
-      // data.annivoetud = this.preinscriptionForm.value.annivoetud;
-      // data.anngrad = this.preinscriptionForm.value.anngrad;
-      // data.anndiplequiv = this.preinscriptionForm.value.anndiplequiv;
-      // data.numtabl = this.preinscriptionForm.value.numtabl;
-      // data.numatri = this.preinscriptionForm.value.numatri;
-      // data.totbac = this.preinscriptionForm.value.totbac;
-      // data.matpc = this.preinscriptionForm.value.matpc;
-      // data.inscrit_Sous_Titre = this.preinscriptionForm.value.Inscrit_Sous_Titre;
-      // data.decision = this.preinscriptionForm.value.decision; // Assurez-vous que cette valeur est correcte
-      // data.idperm = this.preinscriptionForm.value.idperm; // Assurez-vous que cette valeur est correcte
-      // data.utilisateurCreateur = this.preinscriptionForm.value.utilisateurCreateur; // Assurez-vous que cette valeur est correcte
-      // data.baccalaureat = this.preinscriptionForm.value.baccalaureat; // Assurez-vous que cette valeur est correcte
-      // data.id = this.preinscriptionForm.value.id;
-      // data.etab_source = this.preinscriptionForm.value.etab_source;
-      // data.decision = this.preinscriptionForm.value.decision;// Assurez
-      // Assurez-vous que cette valeur est correcte
 
-      // Assurez-vous que cette valeur est correcte
-      this.preinscritservice.creerOrUpdatePreinscYakro(data).subscribe({
+      console.log('Le formulaire généré :', this.preinscriptionForm.value);
+      this.preinscritservice
+        .creerOrUpdatePreinsc(
+          data
+        )
+        .subscribe(
+      {
         next: (response) => {
+        this.loading.set(false);
           alert('Préinscription enregistrée avec succès.');
+        this.viewPreinscription(this.preinscriptionForm.value.id);
+        this.printMedical(this.preinscriptionForm.value.id);
+        this.printInscri(this.preinscriptionForm.value.id);
+        this.preinscriptionForm.reset();
+        this.router.navigate(['/tb-preinscr']);
         },
         error: (error) => {
-          alert('Erreur lors de la préinscription.');
+        this.loading.set(false);
+        console.error('Erreur lors de la préinscription:', error);
+        const errorMessage = error.error?.message || error.message || 'Une erreur inconnue est survenue.';
+        alert(`Erreur lors de la préinscription: ${errorMessage}`);
         },
-      });
-      this.viewPreinscription(data.id);
-      this.printMedical(data.id);
-      this.printInscri(data.id);
-      // Réinitialiser le formulaire après soumission
-      this.preinscriptionForm.reset();
-      this.router.navigate(['/tb-preinscr']);
+      }
+        );
+      // Envoyer les données à l'API Spring Boot
     } else {
-      alert('Veuillez remplir tous les champs obligatoires.');
+      this.preinscriptionForm.markAllAsTouched();
+      alert('Veuillez remplir tous les champs obligatoires');
     }
   }
 }

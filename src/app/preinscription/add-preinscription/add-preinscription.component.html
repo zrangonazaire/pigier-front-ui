@@ -1,592 +1,513 @@
 <app-menu></app-menu>
-<div class="form-card">
-  <form [formGroup]="preinscriptionForm" (ngSubmit)="submit()">
-    <div class="wizard-steps mb-4 text-center">
-      <span [class.active]="step === 1">1. 👤 Infos personnelles</span>
-      <span [class.active]="step === 2">2. 🎓 Bac & Diplômes</span>
-      <span [class.active]="step === 3">3. 👪 Responsable</span>
-      <span [class.active]="step === 4">4. 🩺 Santé</span>
-      <span [class.active]="step === 5">5. 📞 Contacts</span>
-      <span [class.active]="step === 6">6. 🎯 Formation & Établissement souhaité</span>
+<!-- preinscription-form.component.html -->
+<div class="container my-5">
+  <div class="card shadow-lg">
+    <div class="card-header bg-primary text-white p-4">
+      <h2 class="mb-0">Formulaire de Préinscription</h2>
+      <p class="mb-0">Tous les champs marqués d'un (*) sont obligatoires</p>
     </div>
 
-    <!-- Étape 1 : Infos personnelles -->
-    <div *ngIf="step === 1">
-      <h3 class="mb-4 text-primary">Informations personnelles</h3>
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label for="nomprenoms" class="form-label">Nom et prénoms*</label>
-          <input id="nomprenoms" formControlName="nomprenoms" class="form-control" placeholder="Nom et prénoms" />
-          <div *ngIf="preinscriptionForm.get('nomprenoms')?.invalid && preinscriptionForm.get('nomprenoms')?.touched"
-            class="text-danger small">
-            Ce champ est obligatoire.
-          </div>
-        </div>
-        <div class="col-md-6">
-          <label for="datnais" class="form-label">Date de naissance*</label>
-          <input id="datnais" formControlName="datnais" type="date" class="form-control" />
-          <div *ngIf="preinscriptionForm.get('datnais')?.invalid && preinscriptionForm.get('datnais')?.touched"
-            class="text-danger small">
-            Ce champ est obligatoire.
-          </div>
-        </div>
-        <div class="col-md-6">
-          <label for="lieunais" class="form-label">Lieu de naissance*</label>
-          <input id="lieunais" formControlName="lieunais" class="form-control" placeholder="Lieu de naissance" />
-          <div *ngIf="preinscriptionForm.get('lieunais')?.invalid && preinscriptionForm.get('lieunais')?.touched"
-            class="text-danger small">
-            Ce champ est obligatoire.
-          </div>
-        </div>
-        <div class="col-md-6">
-          <label for="sexe" class="form-label">Sexe*</label>
-          <select id="sexe" formControlName="sexe" class="form-select">
-            <option value="">Sélectionner</option>
-            <option value="M">Masculin</option>
-            <option value="F">Féminin</option>
-          </select>
-          <div *ngIf="preinscriptionForm.get('sexe')?.invalid && preinscriptionForm.get('sexe')?.touched"
-            class="text-danger small">
-            Ce champ est obligatoire.
-          </div>
-        </div>
-        <div class="col-md-6">
-          <label for="nationalite" class="form-label">Nationalité*</label>
-          <select id="nationalite" formControlName="nationalite" class="form-select">
-            <option value="">Sélectionner</option>
-            <option value="Ivoirienne">Ivoirienne</option>
-            <option value="Algérienne">Algérienne</option>
-            <option value="Américaine">Américaine</option>
-            <option value="Belge">Belge</option>
-            <option value="Béninoise">Béninoise</option>
-            <option value="Burkinabè">Burkinabè</option>
-            <option value="Cameroonienne">Camerounaise</option>
-            <option value="Canadienne">Canadienne</option>
-            <option value="Centrafricaine">Centrafricaine</option>
-            <option value="Congolaise">Congolaise</option>
-            <option value="Française">Française</option>
-            <option value="Gabonaise">Gabonaise</option>
-            <option value="Gambienne">Gambienne</option>
-            <option value="Ghanéenne">Ghanéenne</option>
-            <option value="Guinéenne">Guinéenne</option>
-            <option value="Guinéenne Equatoriale">Guinéenne Équatoriale</option>
-            <option value="Libérienne">Libérienne</option>
-            <option value="Malienne">Malienne</option>
-            <option value="Marocaine">Marocaine</option>
-            <option value="Mauritanienne">Mauritanienne</option>
-            <option value="Nigériane">Nigériane</option>
-            <option value="Nigérienne">Nigérienne</option>
-            <option value="Rwandaise">Rwandaise</option>
-            <option value="Sénégalaise">Sénégalaise</option>
-            <option value="Sierra-Léonaise">Sierra-Léonaise</option>
-            <option value="Suisse">Suisse</option>
-            <option value="Tchadienne">Tchadienne</option>
-            <option value="Togolaise">Togolaise</option>
-            <option value="Tunisienne">Tunisienne</option>
-            <option value="Autre">Autre</option>
-          </select>
-          <div>
-            <ng-container
-              *ngIf="preinscriptionForm.get('nationalite')?.invalid && preinscriptionForm.get('nationalite')?.touched">
-              <div class="text-danger small">
-                Ce champ est obligatoire.
+    <div class="card-body">
+      <!-- Stepper Bootstrap -->
+      <ul class="stepper d-flex justify-content-between mb-5">
+        <li *ngFor="let step of steps; let i = index" class="step"
+          [ngClass]="{'active': currentStep === i + 1, 'completed': currentStep > i + 1}">
+          <div class="step-circle">{{i + 1}}</div>
+          <div class="step-label">{{step}}</div>
+        </li>
+      </ul>
+
+      <form [formGroup]="preinscriptionForm">
+        <!-- Étape 1: Informations personnelles -->
+        <div class="step-content" [class.active]="currentStep === 1">
+          <h4 class="mb-4 text-primary">Informations Personnelles</h4>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="nomPrenoms" class="form-label">Nom & Prénoms *</label>
+              <input type="text" class="form-control" id="nomPrenoms" formControlName="nomPrenoms">
+              <div *ngIf="showError('nomPrenoms')" class="invalid-feedback d-block">
+                Saisie obligatoire
               </div>
-            </ng-container>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <label for="typeidentite" class="form-label">Type d'identité* </label>
-          <select id="natident" formControlName="natident" class="form-select">
-            <option value="">Sélectionner</option>
-            <option value="Carte Nationale d’Identité">Carte Nationale d’Identité</option>
-            <option value="Passeport">Passeport</option>
-            <option value="Attestation d’identité">Attestation d’identité</option>
-            <option value="Carte consulaire">Carte consulaire</option>
-            <option value="Permis de conduire">Permis de conduire</option>
-            <option value="Extrait de naissance">Extrait de naissance</option>
-            <option value="Autres">Autres</option>
-          </select>
-          <div>
-            <ng-container
-              *ngIf="preinscriptionForm.get('natident')?.invalid && preinscriptionForm.get('natident')?.touched">
-              <div class="text-danger small">
-                Ce champ est obligatoire.
-              </div>
-            </ng-container>
-          </div>
-        </div>
-
-        <div class="col-md-6">
-          <label for="numidentite" class="form-label">Numéro d'identité*</label>
-          <input id="numidentite" formControlName="numidentite" class="form-control" placeholder="Numéro d'identité" />
-          <div>
-            <ng-container
-              *ngIf="preinscriptionForm.get('numidentite')?.invalid && preinscriptionForm.get('numidentite')?.touched">
-              <div class="text-danger small">
-                Ce champ est obligatoire.
-              </div>
-            </ng-container>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <label for="teletud" class="form-label">Téléphone étudiant (fixe)</label>
-          <input id="teletud" formControlName="teletud" class="form-control" placeholder="Téléphone fixe" />
-        </div>
-        <div class="col-md-6">
-          <label for="celetud" class="form-label">Céllulaire étudiant (mobile)*</label>
-          <input id="celetud" formControlName="celetud" class="form-control" placeholder="Téléphone mobile" />
-        </div>
-        <div class="col-md-6">
-          <label for="emailetud" class="form-label">Email étudiant</label>
-          <input id="emailetud" formControlName="emailetud" class="form-control" placeholder="Email" />
-        </div>
-        <div class="col-md-6">
-          <label for="viletud" class="form-label">Ville étudiant</label>
-          <input id="viletud" formControlName="viletud" class="form-control" placeholder="Ville" />
-        </div>
-        <div class="col-md-6">
-          <label for="cometud" class="form-label">Commune étudiant</label>
-          <input id="cometud" formControlName="cometud" class="form-control" placeholder="Commune" />
-        </div>
-      </div>
-      <div class="d-flex justify-content-end mt-4">
-        <button type="button" class="btn btn-primary px-4" (click)="nextStep()" [disabled]="!preinscriptionForm.get('nomprenoms')?.valid
-  || !preinscriptionForm.get('datnais')?.valid
-  || !preinscriptionForm.get('lieunais')?.valid
-  || !preinscriptionForm.get('sexe')?.valid
-  || !preinscriptionForm.get('nationalite')?.valid
-  || !preinscriptionForm.get('natident')?.valid
-  || !preinscriptionForm.get('numidentite')?.valid
-  || !preinscriptionForm.get('teletud')?.valid
-  || !preinscriptionForm.get('celetud')?.valid
-  || !preinscriptionForm.get('emailetud')?.valid
-  || !preinscriptionForm.get('viletud')?.valid
-  || !preinscriptionForm.get('cometud')?.valid">
-          Suivant
-        </button>
-      </div>
-    </div>
-
-    <!-- Étape 2 : Bac & Études -->
-    <!-- Étape 2 : Bac & Diplômes -->
-    <div *ngIf="step === 2">
-      <h3 class="mb-4 text-primary">Baccalauréat & Diplômes</h3>
-      <div class="row g-3">
-        <div class="col-md-12">
-          <label class="form-label">Avez-vous le bac ?</label>
-          <div>
-            <label class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="hasBac" value="oui" (change)="onHasBacChange('oui')" />
-              Oui
-            </label>
-            <label class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="hasBac" value="non" (change)="onHasBacChange('non')" />
-              Non
-            </label>
-          </div>
-        </div>
-        @if (hasBac === 'oui') {
-        <div class="col-md-4">
-          <label for="baccalaureat" class="form-label">Série du Bac</label>
-          <input id="baccalaureat" formControlName="baccalaureat" class="form-control" placeholder="Série du Bac" />
-        </div>
-        <div class="col-md-4">
-          <label for="annbac" class="form-label">Année du Bac</label>
-          <input id="annbac" formControlName="annbac" class="form-control" placeholder="Année du Bac" />
-        </div>
-        <div class="col-md-4">
-          <label for="etsfreq" class="form-label">Établissement fréquenté</label>
-          <input id="etsfreq" formControlName="etsfreq" class="form-control" placeholder="Établissement fréquenté" />
-        </div>
-        <!-- <div *ngIf="hasBac === 'oui'" class="col-md-6">
-          <label for="copiebac" class="form-label">Copie du bac (fichier ou lien)</label>
-          <input id="copiebac" formControlName="copiebac" class="form-control" placeholder="Copie du bac" />
-        </div> -->
-        <div class="col-md-4">
-          <label for="numtabl" class="form-label">Numéro table</label>
-          <input id="numtabl" formControlName="numtabl" class="form-control" placeholder="Numéro table" />
-        </div>
-        <div class="col-md-4">
-          <label for="numatri" class="form-label">Numéro matricule</label>
-          <input id="numatri" formControlName="numatri" class="form-control" placeholder="Numéro matricule" />
-        </div>
-        <div class="col-md-4">
-          <label for="numatri" class="form-label">Identifiant permanent</label>
-          <input id="numatri" formControlName="idperm" class="form-control" placeholder="Numéro matricule" />
-        </div>
-        <div class="col-md-4">
-          <label for="totbac" class="form-label">Total bac</label>
-          <input id="totbac" formControlName="totbac" class="form-control" type="number" placeholder="Total bac" />
-        </div>
-        <div class="col-md-4">
-          <label for="matpc" class="form-label">Matricule PC</label>
-          <input id="matpc" formControlName="matpc" class="form-control" placeholder="Matricule PC" />
-        </div>
-        }
-        @if (hasBac === 'non') {
-        <div class="col-md-4">
-          <label for="diplequiv" class="form-label">Diplôme équivalent</label>
-          <input id="diplequiv" formControlName="diplequiv" class="form-control" placeholder="Diplôme équivalent" />
-        </div>
-        <div class="col-md-4">
-          <label for="anndiplequiv" class="form-label">Année diplôme équivalent</label>
-          <input id="anndiplequiv" formControlName="anndiplequiv" class="form-control"
-            placeholder="Année diplôme équivalent" />
-        </div>
-        <div class="col-md-4">
-          <label for="nivoetud" class="form-label">Niveau d'études</label>
-          <input id="nivoetud" formControlName="nivoetud" class="form-control" placeholder="Niveau d'études" />
-        </div>
-        <div class="col-md-4">
-          <label for="annivoetud" class="form-label">Année niveau d'études</label>
-          <input id="annivoetud" formControlName="annivoetud" class="form-control"
-            placeholder="Année niveau d'études" />
-        </div>
-        <div class="col-md-4">
-          <label for="grade" class="form-label">Grade</label>
-          <input id="grade" formControlName="grade" class="form-control" placeholder="Grade" />
-        </div>
-        <div class="col-md-4">
-          <label for="anngrad" class="form-label">Année grade</label>
-          <input id="anngrad" formControlName="anngrad" class="form-control" placeholder="Année grade" />
-        </div>
-        <div class="col-md-4">
-          <label for="specgrad" class="form-label">Spécialité grade</label>
-          <input id="specgrad" formControlName="specgrad" class="form-control" placeholder="Spécialité grade" />
-        </div>
-        <div class="col-md-4">
-          <label for="etsfreq" class="form-label">Établissement fréquenté</label>
-          <input id="etsfreq" formControlName="etsfreq" class="form-control" placeholder="Établissement fréquenté" />
-        </div>
-        <div class="col-md-4" visibility="hidden">
-          <label for="anneescolaire" class="form-label">Année scolaire</label>
-          <input id="anneescolaire" formControlName="anneescolaire" class="form-control" placeholder="Année scolaire" />
-        </div>
-
-        <div class="col-md-6">
-          <label for="copderndipl" class="form-label">Copie dernier diplôme (fichier ou lien)</label>
-          <input id="copderndipl" formControlName="copderndipl" class="form-control"
-            placeholder="Copie dernier diplôme" />
-        </div>
-        <!-- <div class="col-md-4" visibility="hidden">
-          <label for="decision" class="form-label">Décision</label>
-          <input id="decision" formControlName="decision" class="form-control" placeholder="Décision" />
-        </div> -->
-        }
-
-
-      </div>
-      <div class="d-flex justify-content-between mt-4">
-        <button type="button" class="btn btn-secondary px-4" (click)="prevStep()">Précédent</button>
-        <button type="button" class="btn btn-primary px-4" (click)="nextStep()"
-          [disabled]="hasBac !== 'oui' && hasBac !== 'non'">Suivant</button>
-      </div>
-    </div>
-    <!-- ...avant... -->
-    <!-- Étape 3 : Responsable -->
-    <div *ngIf="step === 3">
-      <h3 class="mb-4 text-primary">Responsable</h3>
-      <div class="mb-3">
-        <label class="form-label">Qui est le responsable ?</label>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="responsableType" id="selfResp" value="self"
-            (change)="onResponsableTypeChange('self')" [checked]="responsableType === 'self'">
-          <label class="form-check-label" for="selfResp">Moi-même</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="responsableType" id="pereResp" value="pere"
-            (change)="onResponsableTypeChange('pere')" [checked]="responsableType === 'pere'">
-          <label class="form-check-label" for="pereResp">Mon père</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="responsableType" id="mereResp" value="mere"
-            (change)="onResponsableTypeChange('mere')" [checked]="responsableType === 'mere'">
-          <label class="form-check-label" for="mereResp">Ma mère</label>
-        </div>
-      </div>
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label for="nompere" class="form-label">Nom du père</label>
-          <input id="nompere" formControlName="nompere" class="form-control" placeholder="Nom du père" />
-        </div>
-        <div class="col-md-6">
-          <label for="nomere" class="form-label">Nom de la mère</label>
-          <input id="nomere" formControlName="nomere" class="form-control" placeholder="Nom de la mère" />
-        </div>
-        <div class="col-md-4">
-          <label for="titrespo" class="form-label">Titre du responsable</label>
-          <input id="titrespo" formControlName="titrespo" class="form-control" placeholder="Titre du responsable" />
-        </div>
-        <div class="col-md-4">
-          <label for="respo" class="form-label">Responsabilité</label>
-          <input id="respo" formControlName="respo" class="form-control" placeholder="Responsabilité" />
-        </div>
-        <div class="col-md-4">
-          <label for="nomrespo" class="form-label">Nom du responsable</label>
-          <input id="nomrespo" formControlName="nomrespo" class="form-control" placeholder="Nom du responsable" />
-        </div>
-        <div class="col-md-6">
-          <label for="profrespo" class="form-label">Profession du responsable</label>
-          <input id="profrespo" formControlName="profrespo" class="form-control"
-            placeholder="Profession du responsable" />
-        </div>
-        <div class="col-md-6">
-          <label for="emprespo" class="form-label">Entreprise du responsable</label>
-          <input id="emprespo" formControlName="emprespo" class="form-control"
-            placeholder="Entreprise du responsable" />
-        </div>
-        <div class="col-md-4">
-          <label for="vilrespo" class="form-label">Ville du responsable</label>
-          <input id="vilrespo" formControlName="vilrespo" class="form-control" placeholder="Ville du responsable" />
-        </div>
-        <div class="col-md-4">
-          <label for="comrespo" class="form-label">Commune du responsable</label>
-          <input id="comrespo" formControlName="comrespo" class="form-control" placeholder="Commune du responsable" />
-        </div>
-        <div class="col-md-4">
-          <label for="bprespo" class="form-label">Boîte postale responsable</label>
-          <input id="bprespo" formControlName="bprespo" class="form-control" placeholder="Boîte postale" />
-        </div>
-        <div class="col-md-4">
-          <label for="celrespo" class="form-label">Téléphone portable responsable</label>
-          <input id="celrespo" formControlName="celrespo" class="form-control" placeholder="Téléphone portable" />
-        </div>
-        <div class="col-md-4">
-          <label for="telburespo" class="form-label">Téléphone bureau responsable</label>
-          <input id="telburespo" formControlName="telburespo" class="form-control" placeholder="Téléphone bureau" />
-        </div>
-        <div class="col-md-4">
-          <label for="teldomrespo" class="form-label">Téléphone domicile responsable</label>
-          <input id="teldomrespo" formControlName="teldomrespo" class="form-control" placeholder="Téléphone domicile" />
-        </div>
-        <div class="col-md-6">
-          <label for="emailrespo" class="form-label">Email responsable</label>
-          <input id="emailrespo" formControlName="emailrespo" class="form-control" placeholder="Email responsable" />
-        </div>
-      </div>
-      <div class="d-flex justify-content-between mt-4">
-        <button type="button" class="btn btn-secondary px-4" (click)="prevStep()">Précédent</button>
-        <button type="button" class="btn btn-primary px-4" (click)="nextStep()">Suivant</button>
-      </div>
-    </div>
-    <!-- ...après... -->
-    <!-- Étape 4 : Santé -->
-    <div *ngIf="step === 4">
-      <h3 class="mb-4 text-primary">Informations médicales</h3>
-      <div class="row g-3">
-        <div class="col-md-4">
-          <label for="clindec" class="form-label">Clinique déclarée</label>
-          <input id="clindec" formControlName="clindec" class="form-control" placeholder="Clinique déclarée" />
-        </div>
-        <div class="col-md-4">
-          <label for="clinnom" class="form-label">Nom clinique</label>
-          <input id="clinnom" formControlName="clinnom" class="form-control" placeholder="Nom clinique" />
-        </div>
-        <div class="col-md-4">
-          <label for="clintel" class="form-label">Téléphone clinique</label>
-          <input id="clintel" formControlName="clintel" class="form-control" placeholder="Téléphone clinique" />
-        </div>
-        <div class="col-md-4">
-          <label for="clinmed" class="form-label">Nom médecin</label>
-          <input id="clinmed" formControlName="clinmed" class="form-control" placeholder="Nom médecin" />
-        </div>
-        <div class="col-md-4">
-          <label for="clinmedcont" class="form-label">Contact médecin</label>
-          <input id="clinmedcont" formControlName="clinmedcont" class="form-control" placeholder="Contact médecin" />
-        </div>
-        <div class="col-md-12">
-          <label for="maladies" class="form-label">Maladies</label>
-          <textarea id="maladies" formControlName="maladies" class="form-control" placeholder="Maladies"></textarea>
-        </div>
-        <div class="col-md-12">
-          <label for="soins" class="form-label">Soins</label>
-          <textarea id="soins" formControlName="soins" class="form-control" placeholder="Soins"></textarea>
-        </div>
-        <div class="col-md-12">
-          <label for="medic" class="form-label">Médicaments</label>
-          <textarea id="medic" formControlName="medic" class="form-control" placeholder="Médicaments"></textarea>
-        </div>
-        <div class="col-md-12">
-          <label for="premsoins" class="form-label">Premiers soins</label>
-          <textarea id="premsoins" formControlName="premsoins" class="form-control"
-            placeholder="Premiers soins"></textarea>
-        </div>
-        <div class="col-md-12">
-          <label for="intervchir" class="form-label">Interventions chirurgicales</label>
-          <textarea id="intervchir" formControlName="intervchir" class="form-control"
-            placeholder="Interventions chirurgicales"></textarea>
-        </div>
-      </div>
-      <div class="d-flex justify-content-between mt-4">
-        <button type="button" class="btn btn-secondary px-4" (click)="prevStep()">Précédent</button>
-        <button type="button" class="btn btn-primary px-4" (click)="nextStep()">Suivant</button>
-      </div>
-    </div>
-
-    <!-- Étape 5 : Contacts d'urgence et pièces -->
-    <div *ngIf="step === 5">
-      <h3 class="mb-4 text-primary">Contacts d'urgence & Pièces</h3>
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label for="contnompren1" class="form-label">Contact 1 - Nom et prénoms</label>
-          <input id="contnompren1" formControlName="contnompren1" class="form-control" placeholder="Nom et prénoms" />
-        </div>
-        <div class="col-md-6">
-          <label for="contadr1" class="form-label">Contact 1 - Adresse</label>
-          <input id="contadr1" formControlName="contadr1" class="form-control" placeholder="Adresse" />
-        </div>
-        <div class="col-md-6">
-          <label for="contel1" class="form-label">Contact 1 - Téléphone fixe</label>
-          <input id="contel1" formControlName="contel1" class="form-control" placeholder="Téléphone fixe" />
-        </div>
-        <div class="col-md-6">
-          <label for="contcel1" class="form-label">Contact 1 - Téléphone portable</label>
-          <input id="contcel1" formControlName="contcel1" class="form-control" placeholder="Téléphone portable" />
-        </div>
-        <div class="col-md-6">
-          <label for="contnompren2" class="form-label">Contact 2 - Nom et prénoms</label>
-          <input id="contnompren2" formControlName="contnompren2" class="form-control" placeholder="Nom et prénoms" />
-        </div>
-        <div class="col-md-6">
-          <label for="contadr2" class="form-label">Contact 2 - Adresse</label>
-          <input id="contadr2" formControlName="contadr2" class="form-control" placeholder="Adresse" />
-        </div>
-        <div class="col-md-6">
-          <label for="contel2" class="form-label">Contact 2 - Téléphone fixe</label>
-          <input id="contel2" formControlName="contel2" class="form-control" placeholder="Téléphone fixe" />
-        </div>
-        <div class="col-md-6">
-          <label for="contcel2" class="form-label">Contact 2 - Téléphone portable</label>
-          <input id="contcel2" formControlName="contcel2" class="form-control" placeholder="Téléphone portable" />
-        </div>
-
-        <div class="col-md-4">
-          <label for="utilisateurCreateur" class="form-label">Utilisateur créateur</label>
-          <input id="utilisateurCreateur" formControlName="utilisateurCreateur" class="form-control"
-            placeholder="Utilisateur créateur" />
-        </div>
-      </div>
-
-      <div class="d-flex justify-content-between mt-4">
-        <button type="button" class="btn btn-secondary px-4" (click)="prevStep()">Précédent</button>
-        <button type="button" class="btn btn-primary px-4" (click)="nextStep()">Suivant</button>
-      </div>
-    </div>
-    <!-- Étape 6 : Formation & Établissement -->
-
-    <div *ngIf="step === 6">
-      <h3 class="mb-4 text-primary">Formation & Établissement souhaités</h3>
-      <div class="row g-3">
-        <div class="col-12">
-          <label for="formsouh" class="form-label">Formation*</label>
-          <select id="formsouh" formControlName="formsouh" class="form-select">
-            <option value="">Sélectionner</option>
-            <option value="BTS Assistant(e) de Direction 2ème Année">BTS Assistant(e) de Direction 2ème Année</option>
-            <option value="BTS Finance Comptabilité et Gestion des Entreprises 2ème Année">BTS Finance Comptabilité et
-              Gestion des Entreprises 2ème Année</option>
-            <option value="BTS Gestion Commerciale 2ème Année">BTS Gestion Commerciale 2ème Année</option>
-            <option value="BTS Informatique Développeur d'Application 2ème Année">BTS Informatique Développeur
-              d'Application 2ème Année</option>
-            <option value="BTS Ressources Humaines et Communication 2ème Année">BTS Ressources Humaines et Communication
-              2ème Année</option>
-            <option value="BTS Tourisme-Hôtellerie 1ère Année">BTS Tourisme-Hôtellerie 1ère Année</option>
-            <option value="BTS Tourisme-Hôtellerie 2ème Année">BTS Tourisme-Hôtellerie 2ème Année</option>
-            <option value="Licence Pro Assistant(e) de Direction 1ère Année">Licence Pro. Assistant(e) de Direction 1ère
-              Année</option>
-            <option value="Licence Pro Assistant(e) de Direction 3ème Année">Licence Pro Assistant(e) de Direction 3ème
-              Année</option>
-            <option value="Licence Pro Audit Comptable et Contrôle de Gestion 1ère Année">Licence Pro Audit Comptable et
-              Contrôle de Gestion 1ère Année</option>
-            <option value="Licence Pro Audit Comptable et Contrôle de Gestion 3ème Année">Licence Pro Audit Comptable et
-              Contrôle de Gestion 3ème Année</option>
-            <option value="Licence pro Communication et Développement des marques 1ère Année">Licence pro Communication
-              et Développement des marques 1ère Année</option>
-            <option value="Licence Pro Communication et Développement des Marques 3ème Année">Licence Pro Communication
-              et Développement des Marques 3ème Année</option>
-            <option value="Licence Pro Comptabilité Finance 1ère Année">Licence Pro Comptabilité Finance 1ère Année
-            </option>
-            <option value="Licence Pro Comptabilité Finance 3ème Année">Licence Pro Comptabilité Finance 3ème Année
-            </option>
-            <option value="Licence Pro Gestion Administrative du Personnel 3ème Année">Licence Pro Gestion
-              Administrative du Personnel 3ème Année</option>
-            <option value="Licence Pro Gestion des Entreprises 3ème Année">Licence Pro Gestion des Entreprises 3ème
-              Année</option>
-            <option value="Licence Pro Gestion des Ressources Humaines 3ème Année">Licence Pro Gestion des Ressources
-              Humaines 3ème Année</option>
-            <option value="Licence Pro Marketing et Communication Publicitaire 1ère Année">Licence Pro Marketing et
-              Communication Publicitaire 1ère Année</option>
-            <option value="Licence Pro Marketing et Communication Publicitaire 3ème Année">Licence Pro Marketing et
-              Communication Publicitaire 3ème Année</option>
-            <option value="Licence Pro Réseaux et Génie Logiciel 1ère Année">Licence Pro Réseaux et Génie Logiciel 1ère
-              Année</option>
-            <option value="Licence Pro Réseaux et Génie Logiciel 3ème Année">Licence Pro Réseaux et Génie Logiciel 3ème
-              Année</option>
-            <option value="Master Pro Administration des Entreprises 1ère Année">Master Pro Administration des
-              Entreprises 1ère Année</option>
-            <option value="Master Pro Administration des Entreprises 2ème Année">Master Pro Administration des
-              Entreprises 2ème Année</option>
-            <option value="Master Pro Audit et Contrôle de Gestion 1ère Année">Master Pro Audit et Contrôle de Gestion
-              1ère Année</option>
-            <option value="Master Pro Audit et Contrôle de Gestion 2ème Année">Master Pro Audit et Contrôle de Gestion
-              2ème Année</option>
-            <option value="Master Pro Finance Comptabilité 1ère Année">Master Pro Finance Comptabilité 1ère Année
-            </option>
-            <option value="Master Pro Finance Comptabilité 2ème Année">Master Pro Finance Comptabilité 2ème Année
-            </option>
-            <option value="Master Pro Fiscalité et Droit des Affaires 1ère Année">Master Pro Fiscalité et Droit des
-              Affaires 1ère Année</option>
-            <option value="Master Pro Fiscalité et Droit des Affaires 2ème Année">Master Pro Fiscalité et Droit des
-              Affaires 2ème Année</option>
-            <option value="Master Pro Génie Informatique et Réseaux 1ère Année">Master Pro Génie Informatique et Réseaux
-              1ère Année</option>
-            <option value="Master Pro Génie Informatique et Réseaux 2ème Année">Master Pro Génie Informatique et Réseaux
-              2ème Année</option>
-            <option value="Master Pro Marketing 1ère Année">Master Pro Marketing 1ère Année</option>
-            <option value="Master Pro Marketing 2ème Année">Master Pro Marketing 2ème Année</option>
-          </select>
-          <div>
-            <ng-container
-              *ngIf="preinscriptionForm.get('formsouh')?.invalid && preinscriptionForm.get('formsouh')?.touched">
-              <div class="text-danger small">
-                Ce champ est obligatoire.
-              </div>
-            </ng-container>
-          </div>
-        </div>
-        <div class="col-12 mt-3">
-          <label class="form-label mb-2" for="etab_source">Établissement*</label>
-          <div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" id="etabPlateau" formControlName="etab_source"
-                value="ABIDJAN PLATEAU">
-              <label class="form-check-label" for="etabPlateau">ABIDJAN PLATEAU</label>
             </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" id="etabYopougon" formControlName="etab_source"
-                value="ABIDJAN YOPOUGON">
-              <label class="form-check-label" for="etabYopougon">ABIDJAN YOPOUGON</label>
+
+            <div class="col-md-6">
+              <label for="dateNaissance" class="form-label">Date de naissance *</label>
+              <input type="date" class="form-control" id="dateNaissance" formControlName="dateNaissance">
+              <div *ngIf="showError('dateNaissance')" class="invalid-feedback d-block">
+                Saisie obligatoire
+              </div>
             </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" id="etabYamoussoukro" formControlName="etab_source"
-                value="YAMOUSSOUKRO">
-              <label class="form-check-label" for="etabYamoussoukro">YAMOUSSOUKRO</label>
+
+            <div class="col-md-6">
+              <label for="lieuNaissance" class="form-label">Lieu de naissance</label>
+              <input type="text" class="form-control" id="lieuNaissance" formControlName="lieuNaissance">
+            </div>
+
+            <div class="col-md-6">
+              <label for="sexe" class="form-label">Sexe *</label>
+              <select class="form-select" id="sexe" formControlName="sexe">
+                <option value="">Sélectionner</option>
+                <option value="M">Masculin</option>
+                <option value="F">Féminin</option>
+              </select>
+              <div *ngIf="showError('sexe')" class="invalid-feedback d-block">
+                Saisie obligatoire
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label for="nationalite" class="form-label">Nationalité</label>
+              <select class="form-select" id="nationalite" formControlName="nationalite">
+                <option value="">Sélectionner</option>
+                <option *ngFor="let nationalite of nationalites" [value]="nationalite">{{nationalite}}</option>
+              </select>
+              <div *ngIf="showError('nationalite')" class="invalid-feedback d-block">
+                Veuillez sélectionner une nationalité
+              </div>
+            </div>
+            <!-- <div class="col-md-6">
+              <label for="nationalite" class="form-label">Nationalité</label>
+              <input type="text" class="form-control" id="nationalite" formControlName="nationalite">
+            </div> -->
+            <div class="col-md-6">
+              <label for="nationaliteIdentite" class="form-label">Type de Pièces</label>
+              <select class="form-select" id="nationaliteIdentite" formControlName="nationaliteIdentite">
+                <option value="">Sélectionner</option>
+                <option *ngFor="let type of typeIdent" [value]="type">{{type}}</option>
+              </select>
+              <div *ngIf="showError('nationaliteIdentite')" class="invalid-feedback d-block">
+                Veuillez sélectionner un type de pièce
+              </div>
+
+
+            </div>
+
+            <!-- <div class="col-md-6">
+              <label for="nationaliteIdentite" class="form-label">Nationalité sur pièce d'identité *</label>
+              <input type="text" class="form-control" id="nationaliteIdentite" formControlName="nationaliteIdentite">
+              <div *ngIf="showError('nationaliteIdentite')" class="invalid-feedback d-block">
+                Saisie obligatoire
+              </div>
+            </div> -->
+
+            <div class="col-md-6">
+              <label for="numeroIdentite" class="form-label">Numéro de pièce d'identité *</label>
+              <input type="text" class="form-control" id="numeroIdentite" formControlName="numeroIdentite">
+              <div *ngIf="showError('numeroIdentite')" class="invalid-feedback d-block">
+                Saisie obligatoire
+              </div>
             </div>
           </div>
-          <div>
-            <ng-container
-              *ngIf="preinscriptionForm.get('etab_source')?.invalid && preinscriptionForm.get('etab_source')?.touched">
-              <div class="text-danger small">
-                Ce champ est obligatoire.
-              </div>
-            </ng-container>
+
+          <div class="d-flex justify-content-end mt-4">
+            <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!preinscriptionForm.get('nomPrenoms')?.valid || !preinscriptionForm.get('dateNaissance')?.valid || !preinscriptionForm.get('sexe')?.valid || !preinscriptionForm.get('nationalite')?.valid || !preinscriptionForm.get('numeroIdentite')?.valid">
+              Suivant <i class="bi bi-arrow-right ms-2"></i>
+            </button>
           </div>
         </div>
-      </div>
-      <div class="d-flex justify-content-between mt-4">
-        <button type="button" class="btn btn-secondary px-4" (click)="prevStep()">Précédent</button>
-        <button type="submit" class="btn btn-success px-4" [disabled]="   !preinscriptionForm.get('etab_source')?.valid
-  || !preinscriptionForm.get('formsouh')?.valid">Valider</button>
-      </div>
+
+        <!-- Étape 2: Contacts Étudiant -->
+        <div class="step-content" [class.active]="currentStep === 2">
+          <h4 class="mb-4 text-primary">Contacts Étudiant</h4>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="telephoneEtudiant" class="form-label">Téléphone</label>
+              <input type="tel" class="form-control" id="telephoneEtudiant" formControlName="telephoneEtudiant">
+            </div>
+
+            <div class="col-md-6">
+              <label for="cellulaireEtudiant" class="form-label">Téléphone portable *</label>
+              <input type="tel" class="form-control" id="cellulaireEtudiant" formControlName="cellulaireEtudiant">
+              <div *ngIf="showError('cellulaireEtudiant')" class="invalid-feedback d-block">
+                Saisie obligatoire
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="emailEtudiant" class="form-label">Email</label>
+              <input type="email" class="form-control" id="emailEtudiant" formControlName="emailEtudiant">
+            </div>
+
+            <div class="col-md-6">
+              <label for="villeEtudiant" class="form-label">Ville</label>
+              <input type="text" class="form-control" id="villeEtudiant" formControlName="villeEtudiant">
+            </div>
+
+            <div class="col-md-6">
+              <label for="communeEtudiant" class="form-label">Commune</label>
+              <input type="text" class="form-control" id="communeEtudiant" formControlName="communeEtudiant">
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between mt-4">
+            <button type="button" class="btn btn-outline-primary" (click)="prevStep()">
+              <i class="bi bi-arrow-left me-2"></i> Précédent
+            </button>
+            <button type="button" class="btn btn-primary" (click)="nextStep()">
+              Suivant <i class="bi bi-arrow-right ms-2"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Étape 3: Formation et Diplômes -->
+        <div class="step-content" [class.active]="currentStep === 3">
+          <h4 class="mb-4 text-primary">Formation et Diplômes</h4>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="baccalaureat" class="form-label">Baccalauréat</label>
+              <input type="text" class="form-control" id="baccalaureat" formControlName="baccalaureat">
+            </div>
+
+            <div class="col-md-6">
+              <label for="anneeBac" class="form-label">Année d'obtention</label>
+              <input type="text" class="form-control" id="anneeBac" formControlName="anneeBac">
+            </div>
+
+            <div class="col-md-6">
+              <label for="diplomeEquivalence" class="form-label">Diplôme d'équivalence</label>
+              <input type="text" class="form-control" id="diplomeEquivalence" formControlName="diplomeEquivalence">
+            </div>
+
+            <div class="col-md-6">
+              <label for="anneeDiplomeEquivalence" class="form-label">Année d'obtention</label>
+              <input type="text" class="form-control" id="anneeDiplomeEquivalence"
+                formControlName="anneeDiplomeEquivalence">
+            </div>
+
+            <div class="col-md-6">
+              <label for="niveauEtudes" class="form-label">Niveau d'études</label>
+              <input type="text" class="form-control" id="niveauEtudes" formControlName="niveauEtudes">
+            </div>
+
+            <div class="col-md-6">
+              <label for="anneeNiveauEtudes" class="form-label">Année</label>
+              <input type="text" class="form-control" id="anneeNiveauEtudes" formControlName="anneeNiveauEtudes">
+            </div>
+
+            <div class="col-md-6">
+              <label for="grade" class="form-label">Grade</label>
+              <input type="text" class="form-control" id="grade" formControlName="grade">
+            </div>
+
+            <div class="col-md-6">
+              <label for="anneeGrade" class="form-label">Année d'obtention</label>
+              <input type="text" class="form-control" id="anneeGrade" formControlName="anneeGrade">
+            </div>
+
+            <div class="col-md-12">
+              <label for="specialiteGrade" class="form-label">Spécialité du grade</label>
+              <input type="text" class="form-control" id="specialiteGrade" formControlName="specialiteGrade">
+            </div>
+
+            <div class="col-md-12">
+              <label for="etablissementFrequente" class="form-label">Établissement fréquenté</label>
+              <input type="text" class="form-control" id="etablissementFrequente"
+                formControlName="etablissementFrequente">
+            </div>
+
+            <div class="col-md-12">
+              <label for="formationSouhaitee" class="form-label">Formation souhaitée *</label>
+              <select class="form-select" id="formationSouhaitee" formControlName="formationSouhaitee">
+                <option value="">Sélectionner</option>
+                <option *ngFor="let formation of formations" [value]="formation">{{formation}}</option>
+              </select>
+              <div *ngIf="showError('formationSouhaitee')" class="invalid-feedback d-block">
+                Veuillez sélectionner une formation
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="idPermanent" class="form-label">ID Permanent</label>
+              <input type="text" class="form-control" id="idPermanent" formControlName="idPermanent">
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between mt-4">
+            <button type="button" class="btn btn-outline-primary" (click)="prevStep()">
+              <i class="bi bi-arrow-left me-2"></i> Précédent
+            </button>
+            <button type="button" class="btn btn-primary" (click)="nextStep()">
+              Suivant <i class="bi bi-arrow-right ms-2"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Étape 4: Responsable -->
+        <div class="step-content" [class.active]="currentStep === 4">
+          <h4 class="mb-4 text-primary">Informations du Responsable</h4>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="nomPere" class="form-label">Nom du père</label>
+              <input type="text" class="form-control" id="nomPere" formControlName="nomPere">
+            </div>
+
+            <div class="col-md-6">
+              <label for="nomMere" class="form-label">Nom de la mère</label>
+              <input type="text" class="form-control" id="nomMere" formControlName="nomMere">
+            </div>
+
+            <div class="col-md-6">
+              <label for="titreResponsable" class="form-label">Titre du responsable</label>
+              <input type="text" class="form-control" id="titreResponsable" formControlName="titreResponsable">
+            </div>
+
+            <div class="col-md-6">
+              <label for="responsable" class="form-label">Responsable</label>
+              <input type="text" class="form-control" id="responsable" formControlName="responsable">
+            </div>
+
+            <div class="col-md-6">
+              <label for="nomResponsable" class="form-label">Nom complet du responsable</label>
+              <input type="text" class="form-control" id="nomResponsable" formControlName="nomResponsable">
+            </div>
+
+            <div class="col-md-6">
+              <label for="professionResponsable" class="form-label">Profession</label>
+              <input type="text" class="form-control" id="professionResponsable"
+                formControlName="professionResponsable">
+            </div>
+
+            <div class="col-md-6">
+              <label for="employeurResponsable" class="form-label">Employeur</label>
+              <input type="text" class="form-control" id="employeurResponsable" formControlName="employeurResponsable">
+            </div>
+
+            <div class="col-md-6">
+              <label for="villeResponsable" class="form-label">Ville</label>
+              <input type="text" class="form-control" id="villeResponsable" formControlName="villeResponsable">
+            </div>
+
+            <div class="col-md-6">
+              <label for="communeResponsable" class="form-label">Commune</label>
+              <input type="text" class="form-control" id="communeResponsable" formControlName="communeResponsable">
+            </div>
+
+            <div class="col-md-6">
+              <label for="boitePostaleResponsable" class="form-label">Boîte postale</label>
+              <input type="text" class="form-control" id="boitePostaleResponsable"
+                formControlName="boitePostaleResponsable">
+            </div>
+
+            <div class="col-md-6">
+              <label for="cellulaireResponsable" class="form-label">Téléphone portable</label>
+              <input type="tel" class="form-control" id="cellulaireResponsable" formControlName="cellulaireResponsable">
+            </div>
+
+            <div class="col-md-6">
+              <label for="telephoneBureauResponsable" class="form-label">Téléphone bureau</label>
+              <input type="tel" class="form-control" id="telephoneBureauResponsable"
+                formControlName="telephoneBureauResponsable">
+            </div>
+
+            <div class="col-md-6">
+              <label for="telephoneDomicileResponsable" class="form-label">Téléphone domicile</label>
+              <input type="tel" class="form-control" id="telephoneDomicileResponsable"
+                formControlName="telephoneDomicileResponsable">
+            </div>
+
+            <div class="col-md-6">
+              <label for="emailResponsable" class="form-label">Email</label>
+              <input type="email" class="form-control" id="emailResponsable" formControlName="emailResponsable">
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between mt-4">
+            <button type="button" class="btn btn-outline-primary" (click)="prevStep()">
+              <i class="bi bi-arrow-left me-2"></i> Précédent
+            </button>
+            <button type="button" class="btn btn-primary" (click)="nextStep()">
+              Suivant <i class="bi bi-arrow-right ms-2"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Étape 5: Contacts d'urgence et Santé -->
+        <div class="step-content" [class.active]="currentStep === 5">
+          <h4 class="mb-4 text-primary">Contacts d'Urgence et Santé</h4>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="contactNomPrenom1" class="form-label">Contact 1 - Nom & Prénom</label>
+              <input type="text" class="form-control" id="contactNomPrenom1" formControlName="contactNomPrenom1">
+            </div>
+
+            <div class="col-md-6">
+              <label for="contactAdresse1" class="form-label">Adresse</label>
+              <input type="text" class="form-control" id="contactAdresse1" formControlName="contactAdresse1">
+            </div>
+
+            <div class="col-md-6">
+              <label for="contactTelephone1" class="form-label">Téléphone</label>
+              <input type="tel" class="form-control" id="contactTelephone1" formControlName="contactTelephone1">
+            </div>
+
+            <div class="col-md-6">
+              <label for="contactCellulaire1" class="form-label">Portable</label>
+              <input type="tel" class="form-control" id="contactCellulaire1" formControlName="contactCellulaire1">
+            </div>
+
+            <div class="col-md-6">
+              <label for="contactNomPrenom2" class="form-label">Contact 2 - Nom & Prénom</label>
+              <input type="text" class="form-control" id="contactNomPrenom2" formControlName="contactNomPrenom2">
+            </div>
+
+            <div class="col-md-6">
+              <label for="contactAdresse2" class="form-label">Adresse</label>
+              <input type="text" class="form-control" id="contactAdresse2" formControlName="contactAdresse2">
+            </div>
+
+            <div class="col-md-6">
+              <label for="contactTelephone2" class="form-label">Téléphone</label>
+              <input type="tel" class="form-control" id="contactTelephone2" formControlName="contactTelephone2">
+            </div>
+
+            <div class="col-md-6">
+              <label for="contactCellulaire2" class="form-label">Portable</label>
+              <input type="tel" class="form-control" id="contactCellulaire2" formControlName="contactCellulaire2">
+            </div>
+
+            <div class="col-md-12 mt-4">
+              <h5>Informations Médicales</h5>
+            </div>
+
+            <div class="col-md-12">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="cliniqueDeclaree"
+                  formControlName="cliniqueDeclaree">
+                <label class="form-check-label" for="cliniqueDeclaree">
+                  Clinique déclarée
+                </label>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="nomClinique" class="form-label">Nom de la clinique</label>
+              <input type="text" class="form-control" id="nomClinique" formControlName="nomClinique">
+            </div>
+
+            <div class="col-md-6">
+              <label for="telephoneClinique" class="form-label">Téléphone</label>
+              <input type="tel" class="form-control" id="telephoneClinique" formControlName="telephoneClinique">
+            </div>
+
+            <div class="col-md-6">
+              <label for="medecinClinique" class="form-label">Médecin traitant</label>
+              <input type="text" class="form-control" id="medecinClinique" formControlName="medecinClinique">
+            </div>
+
+            <div class="col-md-6">
+              <label for="contactMedecin" class="form-label">Contact du médecin</label>
+              <input type="tel" class="form-control" id="contactMedecin" formControlName="contactMedecin">
+            </div>
+
+            <div class="col-md-12">
+              <label for="maladies" class="form-label">Maladies déclarées</label>
+              <textarea class="form-control" id="maladies" formControlName="maladies" rows="2"></textarea>
+            </div>
+
+            <div class="col-md-12">
+              <label for="soins" class="form-label">Soins particuliers</label>
+              <textarea class="form-control" id="soins" formControlName="soins" rows="2"></textarea>
+            </div>
+
+            <div class="col-md-12">
+              <label for="medicaments" class="form-label">Médicaments réguliers</label>
+              <textarea class="form-control" id="medicaments" formControlName="medicaments" rows="2"></textarea>
+            </div>
+
+            <div class="col-md-12">
+              <label for="premiersSoins" class="form-label">Premiers soins à connaître</label>
+              <textarea class="form-control" id="premiersSoins" formControlName="premiersSoins" rows="2"></textarea>
+            </div>
+
+            <div class="col-md-12">
+              <label for="interventionsChirurgicales" class="form-label">Interventions chirurgicales</label>
+              <textarea class="form-control" id="interventionsChirurgicales"
+                formControlName="interventionsChirurgicales" rows="2"></textarea>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between mt-4">
+            <button type="button" class="btn btn-outline-primary" (click)="prevStep()">
+              <i class="bi bi-arrow-left me-2"></i> Précédent
+            </button>
+            <button type="button" class="btn btn-primary" (click)="nextStep()">
+              Suivant <i class="bi bi-arrow-right ms-2"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Étape 6: Documents et Validation -->
+        <div class="step-content" [class.active]="currentStep === 6">
+          <h4 class="mb-4 text-primary">Documents et Validation</h4>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="copieBac" class="form-label">Copie du Bac</label>
+              <input type="text" class="form-control" id="copieBac" formControlName="copieBac">
+            </div>
+
+            <div class="col-md-6">
+              <label for="copieDernierDiplome" class="form-label">Copie du dernier diplôme</label>
+              <input type="text" class="form-control" id="copieDernierDiplome" formControlName="copieDernierDiplome">
+            </div>
+
+            <!-- <div class="col-md-6">
+              <label for="decision" class="form-label">Décision</label>
+              <input type="text" class="form-control" id="decision" formControlName="decision">
+            </div> -->
+
+            <div class="col-md-6">
+              <label for="numeroTable" class="form-label">Numéro de table</label>
+              <input type="text" class="form-control" id="numeroTable" formControlName="numeroTable">
+            </div>
+
+            <div class="col-md-6">
+              <label for="numeroMatricule" class="form-label">Numéro matricule</label>
+              <input type="text" class="form-control" id="numeroMatricule" formControlName="numeroMatricule">
+            </div>
+
+            <div class="col-md-6">
+              <label for="totalBac" class="form-label">Total au Bac</label>
+              <input type="number" class="form-control" id="totalBac" formControlName="totalBac">
+            </div>
+
+            <div class="col-md-6">
+              <label for="matierePrincipale" class="form-label">Matière principale</label>
+              <input type="text" class="form-control" id="matierePrincipale" formControlName="matierePrincipale">
+            </div>
+
+            <!-- <div class="col-md-6">
+              <label for="anneeScolaire" class="form-label">Année scolaire</label>
+              <input type="text" class="form-control" id="anneeScolaire" formControlName="anneeScolaire">
+            </div> -->
+
+
+            <label class="form-label mb-2" for="etab_source">Établissement*</label>
+            <div>
+              <div *ngFor="let etab of etabSource" class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" [id]="etab" formControlName="etablissementSource"
+                  [value]="etab">
+                <label class="form-check-label" [for]="etab">
+                  {{ etab }}
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between mt-4">
+            <button type="button" class="btn btn-outline-primary" (click)="prevStep()">
+              <i class="bi bi-arrow-left me-2"></i> Précédent
+            </button>
+            <button type="button" class="btn btn-success" (click)="submit()" [disabled]="!preinscriptionForm.get('etablissementSource')?.value">
+              <i class="bi bi-check-circle me-2"></i> Soumettre la préinscription
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
 </div>

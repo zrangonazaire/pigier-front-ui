@@ -48,8 +48,7 @@ export class MenuComponent implements OnInit {
         const decodedToken = jwtDecode<any>(this.currentUser);
         this.currentRole = decodedToken.fullUser.roles;
         this.currentUser = decodedToken.fullUser.lastname || 'Utilisateur';
-        console.log('Utilisateur connecté:', this.currentUser);
-        
+       
         for (let index = 0; index < this.currentRole.length; index++) {
           const element = this.currentRole[index].nomRole;
           console.log("Rôle de l'utilisateur:", element);
