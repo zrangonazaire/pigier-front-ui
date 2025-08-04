@@ -16,14 +16,14 @@ import { JwtInterceptor } from './core/interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
- 
+
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(withInterceptorsFromDi()),
     { provide: 'HTTP_INTERCEPTORS', useClass: JwtInterceptor, multi: true },
     importProvidersFrom(
       ApiModule.forRoot(
-        () => new Configuration({ basePath: 'http://192.168.0.134:8084/api/v1' })
+        () => new Configuration({ basePath: 'http://192.168.0.125:8084/api/v1' })
       )
     ),
   ],
