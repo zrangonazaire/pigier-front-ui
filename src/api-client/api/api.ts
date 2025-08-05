@@ -1,3 +1,5 @@
+export * from './anneeScolaireController.service';
+import { AnneeScolaireControllerService } from './anneeScolaireController.service';
 export * from './authentication.service';
 import { AuthenticationService } from './authentication.service';
 export * from './eleves.service';
@@ -16,4 +18,4 @@ export * from './roles.service';
 import { RolesService } from './roles.service';
 export * from './utilisateurController.service';
 import { UtilisateurControllerService } from './utilisateurController.service';
-export const APIS = [AuthenticationService, ElevesService, EncaissementService, EtablissementService, FORMATIONService, PermissionsService, PrinscriptionService, RolesService, UtilisateurControllerService];
+export const APIS = [AnneeScolaireControllerService, AuthenticationService, ElevesService, EncaissementService, EtablissementService, FORMATIONService, PermissionsService, PrinscriptionService, RolesService, UtilisateurControllerService];

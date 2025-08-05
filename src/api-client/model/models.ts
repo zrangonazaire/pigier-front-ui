@@ -1,3 +1,4 @@
+export * from './anneeScolaireDto';
 export * from './authenticationRequest';
 export * from './authenticationResponse';
 export * from './etabSourceRequestDto';
