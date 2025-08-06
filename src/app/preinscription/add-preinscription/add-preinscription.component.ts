@@ -230,7 +230,7 @@ export class AddPreinscriptionComponent implements OnInit {
       decision: ['A'],
       numeroTable: [''],
       numeroMatricule: [''],
-      totalBac: [null],
+      totalBac: [0],
       matierePrincipale: [''],
       anneeScolaire: ['2025/2026'],
       etablissementSource: [''],
@@ -308,12 +308,13 @@ export class AddPreinscriptionComponent implements OnInit {
 
   submit() {
     if (this.preinscriptionForm.valid) {
-      const data: PreinscriptionRequestDto = this.preinscriptionForm.value;
-      console.log('Formulaire soumis:', data);
+
     this.preinscriptionForm.patchValue({
     id: this.generateId(this.preinscriptionForm.value.etablissementSource),
     utilisateurCreateur:this.currentUser // Copie pour immuabilité
   });
+      const data: PreinscriptionRequestDto = this.preinscriptionForm.value;
+      console.log('Formulaire soumis:', data);
       console.log('Formulaire modifié:', this.preinscriptionForm.value);
       console.log('Le formulaire généré :', this.preinscriptionForm.value);
       this.preinscritservice.creerOrUpdatePreinsc(data).subscribe({
