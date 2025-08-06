@@ -50,8 +50,7 @@ export class MenuComponent implements OnInit {
         this.currentUser = decodedToken.fullUser.lastname || 'Utilisateur';
        
         for (let index = 0; index < this.currentRole.length; index++) {
-          const element = this.currentRole[index].nomRole;
-          console.log("Rôle de l'utilisateur:", element);
+          const element = this.currentRole[index].nomRole;       
           if (element === 'ROLE_ADMIN') {
             this.roleAdmin = true;
           } else if (element === 'ROLE_COMMERCIALE') {
