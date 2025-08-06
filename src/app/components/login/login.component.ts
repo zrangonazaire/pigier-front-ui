@@ -1,14 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   AuthenticationRequest,
-  
   AuthenticationResponse,
-  
   AuthenticationService,
 } from '../../../api-client';
 import { Router, RouterLink } from '@angular/router';
@@ -36,8 +31,17 @@ export interface DecodedToken {
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-  private subscription:Subscription[] = [];
-  private tokenService=inject(TokenService);
+  currentUser = '';
+  roleCommer = false;
+  roleAdmin = false;
+  roleComptable = false;
+  roleNote = false;
+  roleDirCom = false;
+
+  currentUserRole: string = 'Poste Utilisateur';
+  currentRole: any[] = [];
+  private subscription: Subscription[] = [];
+  private tokenService = inject(TokenService);
   private authService = inject(AuthenticationService);
   private router = inject(Router);
   tokken = signal<string | null>(null);
@@ -49,28 +53,26 @@ export class LoginComponent {
 
   isLoading = signal(false);
   errorMessage = signal('');
- 
+
   onLogin(): void {
     this.isLoading.set(true);
     this.errorMessage.set('');
     this.subscription.push(
       this.authService.login(this.authLogin).subscribe({
-      next: (response:any) => {           
-       this.tokenService.saveToken(response.token!);
-      localStorage.setItem('access_token', response.token!);
-        this.router.navigate(['/tb-preinscr']);
-      },
-      error: (error) => {
-        this.errorMessage.set('Email ou mot de passe incorrect');
-        this.isLoading.set(false);
-        console.error('Login error', error);
-      },
-      complete: () => {
-        this.isLoading.set(false);
-      },
-    })
+        next: (response: any) => {
+          this.tokenService.saveToken(response.token!);
+          localStorage.setItem('access_token', response.token!);
+          this.router.navigate(['/tb-preinscr']);
+        },
+        error: (error) => {
+          this.errorMessage.set('Email ou mot de passe incorrect');
+          this.isLoading.set(false);
+          console.error('Login error', error);
+        },
+        complete: () => {
+          this.isLoading.set(false);
+        },
+      })
     );
-
   }
-  
 }

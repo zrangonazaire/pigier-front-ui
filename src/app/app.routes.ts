@@ -2,11 +2,13 @@ import { Routes } from '@angular/router';
 
 import { LoginComponent } from './components/login/login.component';
 import { DashboardPreinscriptionComponent } from './components/dashboard-preinscription/dashboard-preinscription.component';
+import { TbPedaComponent } from './components/tb-peda/tb-peda.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'tb-preinscr', component: DashboardPreinscriptionComponent },
   { path: 'login', component: LoginComponent },
+   { path: 'tb-peda', component: TbPedaComponent },
   {
     path: 'preinscription',
     loadChildren: () =>

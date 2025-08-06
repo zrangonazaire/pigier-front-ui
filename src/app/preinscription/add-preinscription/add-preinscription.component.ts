@@ -35,12 +35,12 @@ export class AddPreinscriptionComponent implements OnInit {
   preinscriptionForm!: FormGroup;
   currentStep = 1;
   steps = [
-    'Informations Personnelles',
-    'Contacts Étudiant',
-    'Formation',
-    'Responsable',
-    'Santé',
-    'Validation',
+    'IDENTITE ETUDIANT',
+    'NIVEAU ACADEMIQUE',
+    'CYCLE DE FORMATION',
+    'RESPONSABLE DU PAIEMENT',
+    "MESURE A PRENDRE EN CAS D'URGENCE",
+    'VALIDATION',
   ];
 
   formations = [
@@ -120,6 +120,32 @@ export class AddPreinscriptionComponent implements OnInit {
     'Extrait de naissance',
     'Autres',
   ];
+  tuteur=[
+    "PERE",
+    "MERE",
+    "TUTEUR",
+    "SOIS-MEME"
+  ]
+  miseAjourRespo(pres: any){
+    alert(pres.target.value);
+    switch (pres) {
+      case "PERE":
+        alert(pres)
+        break;
+      case "MERE":
+         alert(pres)
+        break;
+      case "TUTEUR":
+         alert(pres)
+        break;
+     case "SOIS-MEME":
+         alert(pres)
+        break;
+      default:
+        break;
+    }
+
+  }
   etabSource = ['ABIDJAN PLATEAU', 'ABIDJAN YOPOUGON', 'YAMOUSSOUKRO'];
   constructor(private fb: FormBuilder) {}
   private generateId(etabSource: string): string {

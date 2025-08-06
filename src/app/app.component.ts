@@ -1,5 +1,5 @@
 // src/app/app.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common'; // Import CommonModule for NgClass
@@ -15,11 +15,12 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
   imports: [CommonModule, RouterOutlet,ToastModule,ConfirmDialogModule ] // Ajoutez RouterOutlet ici si standalone
 })
 export class AppComponent implements OnInit {
+  router = inject(Router); 
   title = 'Kranja App';
 
   isLoginPage: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor() {}
 
   ngOnInit(): void {
     this.router.events.pipe(
