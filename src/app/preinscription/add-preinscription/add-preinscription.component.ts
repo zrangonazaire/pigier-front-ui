@@ -127,19 +127,19 @@ export class AddPreinscriptionComponent implements OnInit {
     "SOIS-MEME"
   ]
   miseAjourRespo(pres: any){
-    alert(pres.target.value);
+  
     switch (pres) {
       case "PERE":
-        alert(pres)
+        
         break;
       case "MERE":
-         alert(pres)
+        
         break;
       case "TUTEUR":
-         alert(pres)
+        
         break;
      case "SOIS-MEME":
-         alert(pres)
+        
         break;
       default:
         break;
