@@ -115,20 +115,34 @@
                   {{ item.etab_source }}
                 </span>
               </td>
-                            <td data-label="Année Scolaire">
-                <span >
+              <td data-label="Année Scolaire">
+                <span>
                   {{ item.anneeScolaire }}
                 </span>
               </td>
               <td class="action-buttons" data-label="Actions">
                 <button class="action-btn" title="Dossier médical" (click)="openMedicalForm(item)">
-                  <i class="fas fa-file-medical"></i>
+                  @if (isLoadingMedical()[item.id]) {
+                    <span class="elegant-spinner"></span>
+                  } @else {
+                    <i class="fas fa-file-medical"></i>
+                  }
                 </button>
                 <button class="action-btn" title="Fiche Préinscription" (click)="viewPreinscription(item)">
-                  <i class="fas fa-user-edit"></i>
+                  @if (isLoadingPreinscription()[item.id]) {
+                    <span class="elegant-spinner"></span>
+                  } @else {
+                    <i class="fas fa-file-alt"></i>
+                  }
+                 
                 </button>
                 <button class="action-btn" title="Fiche d'Inscrire" (click)="processInscription(item)">
-                  <i class="fas fa-user-graduate"></i>
+                  @if (isLoadingInscription()[item.id]) {
+                    <span class="elegant-spinner"></span>
+                  } @else {
+                    <i class="fas fa-print"></i>
+                  }
+                  
                 </button>
               </td>
             </tr>
@@ -168,27 +182,27 @@
       </div>
     </div>
   </div>
-<div *ngIf="showModal()" class="modal-backdrop show"></div>
-<div *ngIf="showModal()" class="modal fade show d-block" tabindex="-1" style="background:rgba(0,0,0,0.3)">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ modalTitle() }}</h5>
-        <button type="button" class="btn-close" (click)="closeModal()"></button>
-      </div>
-      <div class="modal-body">
-        <p>{{ modalMessage() }}</p>
-      </div>
-      <div class="modal-footer" *ngIf="modalType() === 'confirm'">
-        <button type="button" class="btn btn-secondary" (click)="closeModal()">Annuler</button>
-        <button type="button" class="btn btn-primary" (click)="confirmAction()">Confirmer</button>
-      </div>
-      <div class="modal-footer" *ngIf="modalType() === 'alert'">
-        <button type="button" class="btn btn-primary" (click)="closeModal()">Fermer</button>
+  <div *ngIf="showModal()" class="modal-backdrop show"></div>
+  <div *ngIf="showModal()" class="modal fade show d-block" tabindex="-1" style="background:rgba(0,0,0,0.3)">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ modalTitle() }}</h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <p>{{ modalMessage() }}</p>
+        </div>
+        <div class="modal-footer" *ngIf="modalType() === 'confirm'">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">Annuler</button>
+          <button type="button" class="btn btn-primary" (click)="confirmAction()">Confirmer</button>
+        </div>
+        <div class="modal-footer" *ngIf="modalType() === 'alert'">
+          <button type="button" class="btn btn-primary" (click)="closeModal()">Fermer</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
   <!-- Footer responsive -->
   <div class="dashboard-footer">
     <p>© {{ currentYear }} Université - Système de Gestion v3.0</p>

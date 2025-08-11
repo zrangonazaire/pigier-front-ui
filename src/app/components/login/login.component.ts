@@ -62,6 +62,7 @@ export class LoginComponent {
         next: (response: any) => {
           this.tokenService.saveToken(response.token!);
           localStorage.setItem('access_token', response.token!);
+          console.log('User logged in successfully', response.token!);
           this.router.navigate(['/tb-preinscr']);
         },
         error: (error) => {

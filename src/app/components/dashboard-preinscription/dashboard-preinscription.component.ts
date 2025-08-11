@@ -9,9 +9,7 @@ import {
   signal,
   ViewEncapsulation,
 } from '@angular/core';
-import {
-  PrinscriptionService,
-} from '../../../api-client';
+import { PrinscriptionService } from '../../../api-client';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MenuComponent } from '../menu/menu.component';
@@ -22,10 +20,7 @@ import { startOfDay, endOfDay } from 'date-fns';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import {
-  DateAdapter,
-  MatNativeDateModule,
-} from '@angular/material/core';
+import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import moment from 'moment';
@@ -82,8 +77,7 @@ export const MY_DATE_FORMATS = {
     MatInputModule,
     MatNativeDateModule,
     ReactiveFormsModule,
-    MatIconModule,
-    CommonModule
+    MatIconModule
   ],
   providers: [
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
@@ -102,7 +96,10 @@ export class DashboardPreinscriptionComponent
   formatDisplayDate(date: moment.Moment): string {
     return date ? date.format('DD-MM-YYYY') : '';
   }
-
+  isLoadingMedical = signal<{[key: string]: boolean}>({});
+  isLoadingInscription =signal<{[key: string]: boolean}>({});
+  isLoadingPreinscription = signal<{[key: string]: boolean}>({});
+  errorMessage = signal('');
   filterByDateRange() {
     if (this.startDate && this.endDate) {
       const start = moment(this.startDate, 'DD-MM-YYYY hh:mm');
@@ -110,8 +107,11 @@ export class DashboardPreinscriptionComponent
       this.error.set(null);
       this.status.set('loading');
       this.loading.set(true);
-console.log('Filtrage des préinscriptions entre:', start.format('DD-MM-YYYY hh:mm'),
-        end.format('DD-MM-YYYY hh:mm'));
+      console.log(
+        'Filtrage des préinscriptions entre:',
+        start.format('DD-MM-YYYY hh:mm'),
+        end.format('DD-MM-YYYY hh:mm')
+      );
       this.preinscritservice
         .findAllPreinscEntreDeuxDate(
           start.format('DD-MM-YYYY hh:mm'),
@@ -139,7 +139,7 @@ console.log('Filtrage des préinscriptions entre:', start.format('DD-MM-YYYY hh:
                     | 'YAMOUSSOUKRO') || 'ABIDJAN PLATEAU',
                 isInscrit:
                   dto.decision === 'Validée' ? Math.random() > 0.5 : false,
-                  anneeScolaire: dto.anneeScolaire || '',
+                anneeScolaire: dto.anneeScolaire || '',
               })
             );
 
@@ -244,12 +244,12 @@ console.log('Filtrage des préinscriptions entre:', start.format('DD-MM-YYYY hh:
     this.loadPreinscriptions();
   }
 
-ngOnInit(): void {
-  const today = new Date();
-  this.startDate = startOfDay(today); // 00:00:00
-  this.endDate = endOfDay(today);    // 23:59:59
-  this.filterByDateRange();
-}
+  ngOnInit(): void {
+    const today = new Date();
+    this.startDate = startOfDay(today); // 00:00:00
+    this.endDate = endOfDay(today); // 23:59:59
+    this.filterByDateRange();
+  }
   ngAfterViewInit(): void {
     this.createChart();
   }
@@ -431,7 +431,6 @@ ngOnInit(): void {
 
   // Actions
   openMedicalForm(item: Preinscription): void {
-   
     this.showConfirm(
       'Fiche Médicale',
       `Voulez-vous ouvrir la fiche médicale de ${item.nomprenoms}?`,
@@ -440,7 +439,10 @@ ngOnInit(): void {
   }
 
   viewPreinscription(item: Preinscription): void {
-    this.loading.set(true);
+    this.isLoadingPreinscription.update(states => ({
+      ...states,
+      [item.id]: true
+    }));
     this.preinscritservice
       .impressionPreinscriptionYakro(item.id.toString())
       .subscribe({
@@ -448,14 +450,23 @@ ngOnInit(): void {
           const blob = new Blob([response], { type: 'application/pdf' });
           const url = window.URL.createObjectURL(blob);
           window.open(url);
-          this.loading.set(false);
+        
         },
         error: (error) => {
           this.showAlert(
             'Erreur',
             "Échec de l'impression de la préinscription"
           );
-          this.loading.set(false);
+          this.isLoadingPreinscription.update(states => ({
+            ...states,
+            [item.id]: false
+          }));
+        },
+        complete: () => {
+          this.isLoadingPreinscription.update(states => ({
+            ...states,
+            [item.id]: false
+          }));
         },
       });
   }
@@ -470,7 +481,10 @@ ngOnInit(): void {
 
   // Fonctions d'impression
   printMedical(id: any): void {
-    this.loading.set(true);
+    this.isLoadingMedical.update(states => ({
+      ...states,
+      [id]: true
+    }));
     this.preinscritservice
       .impressionFicheMedicaleyakro(id.toString())
       .subscribe({
@@ -478,30 +492,52 @@ ngOnInit(): void {
           const blob = new Blob([response], { type: 'application/pdf' });
           const url = window.URL.createObjectURL(blob);
           window.open(url);
-          this.loading.set(false);
+       
         },
         error: (error) => {
           this.showAlert(
             'Erreur',
             "Échec de l'impression de la fiche médicale"
           );
-          this.loading.set(false);
+            this.isLoadingMedical.update(states => ({
+      ...states,
+      [id]: false
+    }));
+        },
+        complete: () => {
+            this.isLoadingMedical.update(states => ({
+      ...states,
+      [id]: false
+    }));
         },
       });
   }
 
   printInscri(id: any): void {
-    this.loading.set(true);
+    this.isLoadingInscription.update(states => ({
+      ...states,
+      [id]: true
+    }));
     this.preinscritservice.impressionInscriptionYakro(id.toString()).subscribe({
       next: (response) => {
         const blob = new Blob([response], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
         window.open(url);
-        this.loading.set(false);
+        
       },
       error: (error) => {
         this.showAlert('Erreur', "Échec de l'impression de l'inscription");
-        this.loading.set(false);
+        this.isLoadingInscription.update(states => ({
+          ...states,
+          [id]: false
+        }));
+      },
+      complete: () => {
+        this.isLoadingInscription.update(states => ({
+          ...states,
+          [id]: false
+        }));
+       
       },
     });
   }
@@ -587,16 +623,11 @@ ngOnInit(): void {
         (p) => p.decision === 'A'
       ).length;
 
-      this.chart.data.datasets[0].data = [
-        inscrits,
-        validees,
-        enAttente
-        
-      ];
+      this.chart.data.datasets[0].data = [inscrits, validees, enAttente];
       this.chart.update();
     }
   }
   nouvellePreinscription(): void {
-    this.router.navigate(['/preinscription/add-preins']);  
+    this.router.navigate(['/preinscription/add-preins']);
   }
 }
