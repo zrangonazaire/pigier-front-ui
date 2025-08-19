@@ -1,24 +1,30 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { MenuComponent } from '../menu/menu.component';
 import { Chart, registerables } from 'chart.js';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AnneeScolaireControllerService, AnneeScolaireDto, ElevesService } from '../../../api-client';
 
 @Component({
   selector: 'app-tb-peda',
-  imports: [MenuComponent,CommonModule,ReactiveFormsModule],
+  imports: [MenuComponent,CommonModule,ReactiveFormsModule,FormsModule],
   templateUrl: './tb-peda.component.html',
   styleUrl: './tb-peda.component.scss'
 })
-export class TbPedaComponent {
+export class TbPedaComponent implements OnInit {
 @ViewChild('levelChart') levelChartRef: any;
   @ViewChild('typeChart') typeChartRef: any;
   @ViewChild('pathChart') pathChartRef: any;
 
-  totalStudents = 1850;
-  activeClasses = 42;
+  totalStudents = 0;
+  activeClasses = 0;
   activePaths = 12;
   selectedLevel = 'all';
+  anneeScolaires=signal<AnneeScolaireDto[]>([]);
+  anneeScolaireService=inject(AnneeScolaireControllerService);
+  eleveService=inject(ElevesService);
+  bonneAnnee: string = '';
+
 
   levels = [
     { id: 'L1', name: 'Licence 1' },
@@ -122,12 +128,62 @@ export class TbPedaComponent {
   levelChart: any;
   typeChart: any;
   pathChart: any;
-
+selectAnnee=''
   constructor() { }
-
   ngOnInit(): void {
-    Chart.register(...registerables);
+     Chart.register(...registerables); 
+     this.anneeScolaireService.getListeAnneesScolaires().subscribe({
+      next: (response: any) =>{
+        this.selectAnnee=response[0].annee_Sco!;
+        this.anneeScolaires.set(response);
+      },
+      error: (error: any) => {
+        console.error('Error fetching academic years:', error);
+      },complete: () => {
+        console.log('Liste des années scolaires:', this.anneeScolaires());
+        this.totalEleves(this.anneeScolaires()[0].annee_Sco!);
+        this.totalActiveClasses(this.anneeScolaires()[0].annee_Sco!);
+      }
+    });
+   
   }
+totalEleves(annee:any): void {
+  this.bonneAnnee=annee.replace('/', '-'); 
+  this.eleveService.effectifEleveParAnneeScolaire(this.bonneAnnee).subscribe({
+      next: (response: any) => {
+        this.totalStudents = response;
+        console.log('Total students for year', annee, ':', this.totalStudents);
+      },
+      error: (error: any) => {
+        console.error('Error fetching total students:', error);
+      }
+    });
+}
+totalActiveClasses(annee:any): void {
+  this.bonneAnnee=annee.replace('/', '-');
+  this.eleveService.totalClassActive(this.bonneAnnee).subscribe({
+    next: (response: any) => {
+      this.activeClasses = response;
+      console.log('Total active classes:', this.activeClasses);
+    },
+    error: (error: any) => {
+      console.error('Error fetching active classes:', error);
+    }
+  });
+    }
+/*   ngOnInit(): void {
+    alert('Bienvenue dans l\'espace pédagogique');
+     this.anneeScolaireService.getListeAnneesScolaires().subscribe({
+      next: (response: any) =>{
+        this.anneeScolaires.set(response);
+        console.log('Liste des années scolaires:', this.anneeScolaires());
+      },
+      error: (error: any) => {
+        console.error('Error fetching academic years:', error);
+      }
+    });
+    Chart.register(...registerables);   
+  } */
 
   ngAfterViewInit(): void {
     this.createLevelChart();

@@ -13,10 +13,18 @@ import {
   withInterceptors
 } from '@angular/common/http';
 import { JwtInterceptor } from './core/interceptor';
+import { provideToastr } from 'ngx-toastr';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-
+    provideToastr({
+      positionClass: 'toast-top-center',
+      timeOut: 3000,
+      closeButton: true,
+      progressBar: true,
+      tapToDismiss: true,
+      
+    }),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(withInterceptorsFromDi()),
@@ -27,4 +35,5 @@ export const appConfig: ApplicationConfig = {
       )
     ),
   ],
+
 };

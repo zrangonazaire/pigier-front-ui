@@ -27,3 +27,136 @@
 canvas {
   max-height: 400px;
 }
+//combo
+ /* Conteneur principal du combo */
+  .combo-container {
+    position: relative;
+    margin: 25px 0;
+    max-width: 500px;
+  }
+
+  /* Label stylisé */
+  .combo-label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1.1rem;
+    padding-left: 5px;
+  }
+
+  /* Conteneur personnalisé du select */
+  .custom-select {
+    position: relative;
+    width: 100%;
+  }
+
+  /* Style du select */
+  .custom-select select {
+    width: 100%;
+    padding: 16px 20px;
+    font-size: 1rem;
+    border: 2px solid #e1e5eb;
+    border-radius: 12px;
+    background: #ffffff;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #34495e;
+    font-weight: 500;
+    padding-right: 60px;
+    box-shadow: 0 4px 6px rgba(50, 50, 93, 0.05), 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Effet au survol */
+  .custom-select select:hover {
+    border-color: #c5d9f1;
+    box-shadow: 0 6px 12px rgba(50, 50, 93, 0.08), 0 3px 6px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Effet lors de la sélection */
+  .custom-select select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+  }
+
+  /* Flèche personnalisée */
+  .custom-select::after {
+    content: "⌄";
+    position: absolute;
+    right: 22px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #3498db;
+    font-size: 1.5rem;
+    pointer-events: none;
+    font-weight: bold;
+    transition: transform 0.3s ease;
+  }
+
+  /* Animation de la flèche au survol */
+  .custom-select:hover::after {
+    color: #2980b9;
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  /* Affichage de la valeur sélectionnée */
+  .selected-value {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-top: 20px;
+    font-size: 1.05rem;
+    color: #2c3e50;
+    font-weight: 500;
+    border-left: 4px solid #3498db;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  }
+
+  /* Texte en surbrillance */
+  .selected-value span {
+    color: #3498db;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  /* Animation d'apparition */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .selected-value {
+    animation: fadeIn 0.4s ease-out;
+  }
+
+  /* Option dans la liste déroulante */
+  .custom-select option {
+    padding: 12px 15px;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+  }
+
+  /* Style au survol des options */
+  .custom-select option:hover {
+    background-color: #e1f0fa !important;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .combo-container {
+      max-width: 100%;
+    }
+    
+    .custom-select select {
+      padding: 14px 18px;
+      font-size: 0.95rem;
+    }
+    
+    .selected-value {
+      padding: 15px;
+      font-size: 1rem;
+    }
+  }

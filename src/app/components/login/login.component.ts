@@ -3,13 +3,13 @@ import { Component, inject, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   AuthenticationRequest,
-  AuthenticationResponse,
   AuthenticationService,
 } from '../../../api-client';
 import { Router, RouterLink } from '@angular/router';
 import { TokenService } from '../../services/token.service';
 import { jwtDecode } from 'jwt-decode';
 import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 export interface AuthResponse {
   accessToken: string;
@@ -31,6 +31,7 @@ export interface DecodedToken {
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
+  toastService = inject(ToastrService);
   currentUser = '';
   roleCommer = false;
   roleAdmin = false;
@@ -62,8 +63,45 @@ export class LoginComponent {
         next: (response: any) => {
           this.tokenService.saveToken(response.token!);
           localStorage.setItem('access_token', response.token!);
-          console.log('User logged in successfully', response.token!);
-          this.router.navigate(['/tb-preinscr']);
+          this.currentUser = localStorage.getItem('access_token') || '';
+          if (this.currentUser) {
+            this.roleAdmin = false;
+            this.roleCommer = false;
+            this.roleComptable = false;
+            this.roleNote = false;
+            this.roleDirCom = false;
+
+            try {
+              const decodedToken = jwtDecode<any>(this.currentUser);
+              this.currentRole = decodedToken.fullUser.roles;
+              this.currentUser =
+                decodedToken.fullUser.lastname || 'Utilisateur';
+
+              for (let index = 0; index < this.currentRole.length; index++) {
+                const element = this.currentRole[index].nomRole;
+                if (element === 'ROLE_ADMIN') {
+                  this.router.navigate(['/tb-preinscr']);
+                } else if (element === 'ROLE_COMMERCIALE') {
+                  this.router.navigate(['/tb-preinscr']);
+                } else if (element === 'ROLE_COMPTABLE') {
+                  this.router.navigate(['/tb-compta']);
+                } else if (element === 'ROLE_NOTE') {
+                  this.router.navigate(['/tb-peda']);
+                } else if (element === 'ROLE_DIR_COM') {
+                  this.router.navigate(['/tb-preinscr']);
+                }
+              }
+              this.toastService.success(
+                'Connexion réussie ! Bienvenue ' + this.currentUser,
+                'Succès'
+              );
+            } catch (error) {
+              this.currentUser = 'Utilisateur';
+            }
+          } else {
+            this.currentUser = 'Utilisateur';
+          }
+          console.log('User logged role', this.currentRole);
         },
         error: (error) => {
           this.errorMessage.set('Email ou mot de passe incorrect');
