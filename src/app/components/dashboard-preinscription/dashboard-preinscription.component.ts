@@ -307,15 +307,13 @@ export class DashboardPreinscriptionComponent
 
   // Filtrage
   filterBySite(): void {
+    // Quand le site change, on ré-applique tous les filtres.
     this.applySearch();
-    this.applySorting();
-    this.currentPage.set(1);
   }
 
   filterByStatus(): void {
+    // Quand le statut change, on ré-applique tous les filtres.
     this.applySearch();
-    this.applySorting();
-    this.currentPage.set(1);
   }
 
   applySearch(): void {
@@ -323,21 +321,20 @@ export class DashboardPreinscriptionComponent
     const site = this.selectedSite();
     const status = this.selectedStatus();
 
-    // On commence toujours par la liste complète pour éviter de filtrer sur une liste déjà filtrée.
+    // On commence TOUJOURS par la liste complète pour que les filtres ne s'accumulent pas.
     let results = this.allPreinscrits();
 
-    // 1. Appliquer le filtre de site
+    // 1. Filtrer par site
     if (site !== 'all') {
       results = results.filter(item => item.etab_source === site);
     }
 
-    // 2. Appliquer le filtre de statut
+    // 2. Filtrer par statut
     if (status !== 'all') {
       results = results.filter(item => item.decision === status);
     }
 
-    // 3. Appliquer le filtre de recherche (si un terme est saisi)
-    // Si le terme est vide, la liste reste filtrée par site/statut, ce qui est le comportement attendu.
+    // 3. Filtrer par terme de recherche (si le champ n'est pas vide)
     if (term) {
       results = results.filter(
         (item) =>
@@ -348,8 +345,9 @@ export class DashboardPreinscriptionComponent
       );
     }
 
-    // Mettre à jour la liste filtrée
     this.filteredPreinscriptions.set(results);
+    this.applySorting();
+    this.currentPage.set(1);
   }
 
   // Tri
