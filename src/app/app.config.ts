@@ -23,7 +23,7 @@ export const appConfig: ApplicationConfig = {
       closeButton: true,
       progressBar: true,
       tapToDismiss: true,
-      
+
     }),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
