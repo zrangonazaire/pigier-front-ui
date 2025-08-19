@@ -307,30 +307,12 @@ export class DashboardPreinscriptionComponent
 
   // Filtrage
   filterBySite(): void {
-    if (this.selectedSite() === 'all') {
-      this.filteredPreinscriptions.set([...this.allPreinscrits()]);
-    } else {
-      this.filteredPreinscriptions.set(
-        this.allPreinscrits().filter(
-          (item) => item.etab_source === this.selectedSite()
-        )
-      );
-    }
     this.applySearch();
     this.applySorting();
     this.currentPage.set(1);
   }
 
   filterByStatus(): void {
-    if (this.selectedStatus() === 'all') {
-      this.filteredPreinscriptions.set([...this.allPreinscrits()]);
-    } else {
-      this.filteredPreinscriptions.set(
-        this.allPreinscrits().filter(
-          (item) => item.decision === this.selectedStatus()
-        )
-      );
-    }
     this.applySearch();
     this.applySorting();
     this.currentPage.set(1);
@@ -338,19 +320,36 @@ export class DashboardPreinscriptionComponent
 
   applySearch(): void {
     const term = this.searchTerm().toLowerCase();
-    if (!term) {
-      return;
+    const site = this.selectedSite();
+    const status = this.selectedStatus();
+
+    // On commence toujours par la liste complète pour éviter de filtrer sur une liste déjà filtrée.
+    let results = this.allPreinscrits();
+
+    // 1. Appliquer le filtre de site
+    if (site !== 'all') {
+      results = results.filter(item => item.etab_source === site);
     }
 
-    this.filteredPreinscriptions.set(
-      this.filteredPreinscriptions().filter(
+    // 2. Appliquer le filtre de statut
+    if (status !== 'all') {
+      results = results.filter(item => item.decision === status);
+    }
+
+    // 3. Appliquer le filtre de recherche (si un terme est saisi)
+    // Si le terme est vide, la liste reste filtrée par site/statut, ce qui est le comportement attendu.
+    if (term) {
+      results = results.filter(
         (item) =>
           item.nomprenoms.toLowerCase().includes(term) ||
           item.id.toString().includes(term) ||
           item.celetud.toLowerCase().includes(term) ||
           item.formsouh.toLowerCase().includes(term)
-      )
-    );
+      );
+    }
+
+    // Mettre à jour la liste filtrée
+    this.filteredPreinscriptions.set(results);
   }
 
   // Tri
