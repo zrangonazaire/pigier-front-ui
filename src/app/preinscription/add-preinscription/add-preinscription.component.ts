@@ -15,6 +15,7 @@ import { MenuComponent } from '../../components/menu/menu.component';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-preinscription',
@@ -24,6 +25,7 @@ import { jwtDecode } from 'jwt-decode';
   imports: [CommonModule, MenuComponent, FormsModule, ReactiveFormsModule],
 })
 export class AddPreinscriptionComponent implements OnInit {
+  toastrService = inject(ToastrService);
   currentUser = '';
   error = signal<string | null>(null);
   loading = signal<boolean>(false);
@@ -120,31 +122,20 @@ export class AddPreinscriptionComponent implements OnInit {
     'Extrait de naissance',
     'Autres',
   ];
-  tuteur=[
-    "PERE",
-    "MERE",
-    "TUTEUR",
-    "SOIS-MEME"
-  ]
-  miseAjourRespo(pres: any){
-  
+  tuteur = ['PERE', 'MERE', 'TUTEUR', 'SOIS-MEME'];
+  miseAjourRespo(pres: any) {
     switch (pres) {
-      case "PERE":
-        
+      case 'PERE':
         break;
-      case "MERE":
-        
+      case 'MERE':
         break;
-      case "TUTEUR":
-        
+      case 'TUTEUR':
         break;
-     case "SOIS-MEME":
-        
+      case 'SOIS-MEME':
         break;
       default:
         break;
     }
-
   }
   etabSource = ['ABIDJAN PLATEAU', 'ABIDJAN YOPOUGON', 'YAMOUSSOUKRO'];
   constructor(private fb: FormBuilder) {}
@@ -171,14 +162,12 @@ export class AddPreinscriptionComponent implements OnInit {
     this.initForm();
     try {
       this.currentUser = localStorage.getItem('access_token') || '';
-         const decodedToken = jwtDecode<any>(this.currentUser);
+      const decodedToken = jwtDecode<any>(this.currentUser);
 
-    this.currentUser = decodedToken.fullUser.lastname || 'Utilisateur';
-   console.log('Utilisateur connecté est le suivant :', this.currentUser);
+      this.currentUser = decodedToken.fullUser.lastname || 'Utilisateur';
     } catch (error) {
       console.error('Erreur lors du décodage du token:', error);
     }
-
   }
 
   initForm() {
@@ -334,20 +323,14 @@ export class AddPreinscriptionComponent implements OnInit {
 
   submit() {
     if (this.preinscriptionForm.valid) {
-
-    this.preinscriptionForm.patchValue({
-    id: this.generateId(this.preinscriptionForm.value.etablissementSource),
-    utilisateurCreateur:this.currentUser // Copie pour immuabilité
-  });
+      this.preinscriptionForm.patchValue({
+        id: this.generateId(this.preinscriptionForm.value.etablissementSource),
+        utilisateurCreateur: this.currentUser, // Copie pour immuabilité
+      });
       const data: PreinscriptionRequestDto = this.preinscriptionForm.value;
-      console.log('Formulaire soumis:', data);
-      console.log('Formulaire modifié:', this.preinscriptionForm.value);
-      console.log('Le formulaire généré :', this.preinscriptionForm.value);
       this.preinscritservice.creerOrUpdatePreinsc(data).subscribe({
         next: (response) => {
-          this.loading.set(false);
-          alert('Préinscription enregistrée avec succès.');
-          console.log("Réponse de l'API:", response);
+
           this.viewPreinscription(response.id);
           this.printMedical(response.id);
           this.printInscri(response.id);
@@ -361,8 +344,12 @@ export class AddPreinscriptionComponent implements OnInit {
             error.error?.message ||
             error.message ||
             'Une erreur inconnue est survenue.';
-          alert(`Erreur lors de la préinscription: ${errorMessage}`);
+          this.toastrService.error(errorMessage);
         },
+        complete: () => {
+          this.loading.set(false);
+          this.toastrService.success('Préinscription réussie !', 'Succès');
+        }
       });
       // Envoyer les données à l'API Spring Boot
     } else {
