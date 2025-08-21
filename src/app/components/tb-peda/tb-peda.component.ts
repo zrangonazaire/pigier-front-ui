@@ -42,29 +42,29 @@ export class TbPedaComponent implements OnInit {
   ];
 
   pathDetails = [
-    { 
-      name: 'LPRGL1', 
-      licence1: 120, licence2: 110, licence3: 95, 
-      master1: 80, master2: 75, 
-      total: 480 
+    {
+      name: 'LPRGL1',
+      licence1: 120, licence2: 110, licence3: 95,
+      master1: 80, master2: 75,
+      total: 480
     },
-    { 
-      name: 'LPRGL2', 
-      licence1: 95, licence2: 90, licence3: 85, 
-      master1: 70, master2: 65, 
-      total: 405 
+    {
+      name: 'LPRGL2',
+      licence1: 95, licence2: 90, licence3: 85,
+      master1: 70, master2: 65,
+      total: 405
     },
-    { 
-      name: 'LPRGL3', 
-      licence1: 110, licence2: 105, licence3: 100, 
-      master1: 85, master2: 80, 
-      total: 480 
+    {
+      name: 'LPRGL3',
+      licence1: 110, licence2: 105, licence3: 100,
+      master1: 85, master2: 80,
+      total: 480
     },
-    { 
-      name: 'LPRGL4', 
-      licence1: 85, licence2: 80, licence3: 75, 
-      master1: 60, master2: 55, 
-      total: 355 
+    {
+      name: 'LPRGL4',
+      licence1: 85, licence2: 80, licence3: 75,
+      master1: 60, master2: 55,
+      total: 355
     }
   ];
 
@@ -131,7 +131,7 @@ export class TbPedaComponent implements OnInit {
 selectAnnee=''
   constructor() { }
   ngOnInit(): void {
-     Chart.register(...registerables); 
+     Chart.register(...registerables);
      this.anneeScolaireService.getListeAnneesScolaires().subscribe({
       next: (response: any) =>{
         this.selectAnnee=response[0].annee_Sco!;
@@ -145,31 +145,31 @@ selectAnnee=''
         this.totalActiveClasses(this.anneeScolaires()[0].annee_Sco!);
       }
     });
-   
+
   }
 totalEleves(annee:any): void {
-  this.bonneAnnee=annee.replace('/', '-'); 
-  this.eleveService.effectifEleveParAnneeScolaire(this.bonneAnnee).subscribe({
-      next: (response: any) => {
-        this.totalStudents = response;
-        console.log('Total students for year', annee, ':', this.totalStudents);
-      },
-      error: (error: any) => {
-        console.error('Error fetching total students:', error);
-      }
-    });
+  this.bonneAnnee=annee.replace('/', '-');
+  // this.eleveService.effectifEleveParAnneeScolaire(this.bonneAnnee).subscribe({
+  //     next: (response: any) => {
+  //       this.totalStudents = response;
+  //       console.log('Total students for year', annee, ':', this.totalStudents);
+  //     },
+  //     error: (error: any) => {
+  //       console.error('Error fetching total students:', error);
+  //     }
+  //   });
 }
 totalActiveClasses(annee:any): void {
   this.bonneAnnee=annee.replace('/', '-');
-  this.eleveService.totalClassActive(this.bonneAnnee).subscribe({
-    next: (response: any) => {
-      this.activeClasses = response;
-      console.log('Total active classes:', this.activeClasses);
-    },
-    error: (error: any) => {
-      console.error('Error fetching active classes:', error);
-    }
-  });
+  // this.eleveService.totalClassActive(this.bonneAnnee).subscribe({
+  //   next: (response: any) => {
+  //     this.activeClasses = response;
+  //     console.log('Total active classes:', this.activeClasses);
+  //   },
+  //   error: (error: any) => {
+  //     console.error('Error fetching active classes:', error);
+  //   }
+  // });
     }
 /*   ngOnInit(): void {
     alert('Bienvenue dans l\'espace pédagogique');
@@ -182,7 +182,7 @@ totalActiveClasses(annee:any): void {
         console.error('Error fetching academic years:', error);
       }
     });
-    Chart.register(...registerables);   
+    Chart.register(...registerables);
   } */
 
   ngAfterViewInit(): void {
@@ -270,11 +270,11 @@ totalActiveClasses(annee:any): void {
         'M1': [80, 70, 85, 60],
         'M2': [75, 65, 80, 55]
       };
-      
+
       this.pathData.datasets[0].data = levelData[this.selectedLevel];
       this.pathData.datasets[0].label = `Effectifs en ${this.levels.find(l => l.id === this.selectedLevel)?.name}`;
     }
-    
+
     this.pathChart.destroy();
     this.createPathChart();
   }
