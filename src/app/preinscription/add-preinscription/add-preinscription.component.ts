@@ -46,13 +46,13 @@ export class AddPreinscriptionComponent implements OnInit {
   ];
 
   formations = [
-    'BTS Assistant(e) de Direction 2ème Année',
-    'BTS Finance Comptabilité et Gestion des Entreprises 2ème Année',
-    'BTS Gestion Commerciale 2ème Année',
-    "BTS Informatique Développeur d'Application 2ème Année",
-    'BTS Ressources Humaines et Communication 2ème Année',
+  //  'BTS Assistant(e) de Direction 2ème Année',
+    // 'BTS Finance Comptabilité et Gestion des Entreprises 2ème Année',
+    // 'BTS Gestion Commerciale 2ème Année',
+    // "BTS Informatique Développeur d'Application 2ème Année",
+    // 'BTS Ressources Humaines et Communication 2ème Année',
     'BTS Tourisme-Hôtellerie 1ère Année',
-    'BTS Tourisme-Hôtellerie 2ème Année',
+  //  'BTS Tourisme-Hôtellerie 2ème Année',
     'Licence Pro Assistant(e) de Direction 1ère Année',
     'Licence Pro Assistant(e) de Direction 3ème Année',
     'Licence Pro Audit Comptable et Contrôle de Gestion 1ère Année',
