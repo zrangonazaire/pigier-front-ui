@@ -12,6 +12,7 @@ api/fORMATION.service.ts
 api/permissions.service.ts
 api/prinscription.service.ts
 api/rECAPINSCR.service.ts
+api/reportingAPI.service.ts
 api/roles.service.ts
 api/utilisateurController.service.ts
 configuration.ts
@@ -21,6 +22,7 @@ index.ts
 model/anneeScolaireDto.ts
 model/authenticationRequest.ts
 model/authenticationResponse.ts
+model/encaissementDTO.ts
 model/etabSourceRequestDto.ts
 model/etabSourceResponseDto.ts
 model/formationRequestDto.ts
