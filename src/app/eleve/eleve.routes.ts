@@ -1,10 +1,11 @@
 import { Route } from '@angular/router';
 import { EtatlisteeleveComponent } from './etatlisteeleve/etatlisteeleve.component';
-import { ReportGeneratorComponent } from './recapetudiant/recapetudiant.component';
+import { EtudiantHyperPlanningComponent } from './etudiant-hyper-planning/etudiant-hyper-planning.component';
 
 
 export const ELEVE_ROUTES: Route[] = [
   { path: 'etatliste-eleve', component: EtatlisteeleveComponent },
-  { path: 'recap-etudiant', component: ReportGeneratorComponent },
+  { path: 'liste-hyper-planning', component: EtudiantHyperPlanningComponent },
+
 ];
 

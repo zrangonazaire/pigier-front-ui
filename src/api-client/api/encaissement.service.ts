@@ -11,13 +11,11 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpParameterCodec, HttpContext
+         HttpResponse, HttpEvent, HttpParameterCodec, HttpContext 
         }       from '@angular/common/http';
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
-// @ts-ignore
-import { EncaissementDTO } from '../model/encaissementDTO';
 // @ts-ignore
 import { EncaissementDTO } from '../model/encaissementDTO';
 
@@ -38,9 +36,9 @@ export class EncaissementService extends BaseService {
     }
 
     /**
-     * @param etablissementSourceParam
-     * @param paramDateDebut
-     * @param paramDateFin
+     * @param etablissementSourceParam 
+     * @param paramDateDebut 
+     * @param paramDateFin 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -114,9 +112,9 @@ export class EncaissementService extends BaseService {
     }
 
     /**
-     * @param etablissementSourceParam
-     * @param paramDateDebut
-     * @param paramDateFin
+     * @param etablissementSourceParam 
+     * @param paramDateDebut 
+     * @param paramDateFin 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -190,9 +188,9 @@ export class EncaissementService extends BaseService {
     }
 
     /**
-     * @param etablissementSourceParam
-     * @param paramDateDebut
-     * @param paramDateFin
+     * @param etablissementSourceParam 
+     * @param paramDateDebut 
+     * @param paramDateFin 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -266,11 +264,11 @@ export class EncaissementService extends BaseService {
     }
 
     /**
-     * @param modeRegParam
-     * @param etablissementSourceParam
-     * @param paramDateDebut
-     * @param paramDateFin
-     * @param paramIDcaisse
+     * @param modeRegParam 
+     * @param etablissementSourceParam 
+     * @param paramDateDebut 
+     * @param paramDateFin 
+     * @param paramIDcaisse 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -358,11 +356,11 @@ export class EncaissementService extends BaseService {
     }
 
     /**
-     * @param modeRegParam
-     * @param etablissementSourceParam
-     * @param paramDateDebut
-     * @param paramDateFin
-     * @param paramIDcaisse
+     * @param modeRegParam 
+     * @param etablissementSourceParam 
+     * @param paramDateDebut 
+     * @param paramDateFin 
+     * @param paramIDcaisse 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -450,9 +448,9 @@ export class EncaissementService extends BaseService {
     }
 
     /**
-     * @param etablissementSourceParam
-     * @param paramDateDebut
-     * @param paramDateFin
+     * @param etablissementSourceParam 
+     * @param paramDateDebut 
+     * @param paramDateFin 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -526,9 +524,9 @@ export class EncaissementService extends BaseService {
     }
 
     /**
-     * @param etablissementSourceParam
-     * @param paramDateDebut
-     * @param paramDateFin
+     * @param etablissementSourceParam 
+     * @param paramDateDebut 
+     * @param paramDateFin 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
