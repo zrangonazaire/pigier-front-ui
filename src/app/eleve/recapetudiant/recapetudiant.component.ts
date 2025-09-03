@@ -1,11 +1,14 @@
 // src/app/components/report-generator/report-generator.component.ts
 import { Component } from '@angular/core';
-import { ReportingAPIService } from '../../api-client';
+import { ReportingAPIService } from '../../../api-client';
 import { saveAs } from 'file-saver';
 import { HttpErrorResponse } from '@angular/common/http';
-
+import { FormsModule } from '@angular/forms'; // ← Ajoutez cette ligne
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-report-generator',
+  standalone: true,
+  imports: [CommonModule, FormsModule], // ← Ajoutez FormsModule ici
   templateUrl: './recapetudiant.html',
   styleUrls: ['./recapetudiant.scss']
 })
