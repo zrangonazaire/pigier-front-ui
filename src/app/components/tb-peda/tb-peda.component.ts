@@ -136,6 +136,7 @@ selectAnnee=''
       next: (response: any) =>{
         this.selectAnnee=response[0].annee_Sco!;
         this.anneeScolaires.set(response);
+        console.log('Liste des années scolaires:', this.anneeScolaires());
       },
       error: (error: any) => {
         console.error('Error fetching academic years:', error);
