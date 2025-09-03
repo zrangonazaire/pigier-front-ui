@@ -1,0 +1,138 @@
+<!-- src/app/components/report-generator/report-generator.component.html -->
+<div class="container mt-4">
+  <div class="report-card">
+    <div class="report-header">
+      <h2 class="report-title">
+        <i class="fas fa-file-alt me-2"></i>
+        État Liste des Élèves
+      </h2>
+    </div>
+
+    <div class="report-body">
+      <!-- Campus Section -->
+      <div class="form-section">
+        <h4 class="section-title">
+          <i class="fas fa-building me-2"></i>
+          Campus :
+        </h4>
+        <div class="row">
+          <div class="col-md-6">
+            <label class="form-label">Campus *</label>
+            <select class="form-select campus-select"
+                    [(ngModel)]="reportData.campus"
+                    name="campus"
+                    required>
+              <option value="">Sélectionner un campus</option>
+              <option *ngFor="let campus of campusOptions" [value]="campus">
+                {{ campus }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Année Scolaire Section -->
+      <div class="form-section">
+        <h4 class="section-title">
+          <i class="fas fa-calendar-alt me-2"></i>
+          Année Scolaire
+        </h4>
+        <div class="row">
+          <div class="col-md-3">
+            <label class="form-label">Année Début *</label>
+            <select class="form-select"
+                    [(ngModel)]="reportData.anneedebut"
+                    name="anneedebut"
+                    required>
+              <option value="">Début</option>
+              <option *ngFor="let annee of anneeOptions" [value]="annee">
+                {{ annee }}
+              </option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Année Fin *</label>
+            <select class="form-select"
+                    [(ngModel)]="reportData.anneefin"
+                    name="anneefin"
+                    required>
+              <option value="">Fin</option>
+              <option *ngFor="let annee of anneeOptions" [value]="annee">
+                {{ annee }}
+              </option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Année Scolaire</label>
+            <div class="annee-display">
+              {{ anneeScolaire }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Classe Section -->
+      <div class="form-section">
+        <h4 class="section-title">
+          <i class="fas fa-graduation-cap me-2"></i>
+          Classe
+        </h4>
+        <div class="row">
+          <div class="col-md-6">
+            <label class="form-label">Niveau *</label>
+            <select class="form-select"
+                    [(ngModel)]="reportData.niveau"
+                    name="niveau"
+                    required>
+              <option value="">Sélectionner un niveau</option>
+              <option *ngFor="let niveau of niveauOptions" [value]="niveau">
+                {{ niveau }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        {{ errorMessage }}
+      </div>
+
+      <!-- Actions Section -->
+      <div class="action-section">
+        <h4 class="section-title">
+          <i class="fas fa-print me-2"></i>
+          Impression
+        </h4>
+
+        <div class="action-buttons">
+          <button class="btn btn-pdf"
+                  (click)="generatePDF()"
+                  [disabled]="!isFormValid() || isLoading">
+            <i class="fas fa-file-pdf me-2"></i>
+            {{ isLoading ? 'Génération...' : 'Impression PDF' }}
+          </button>
+
+          <button class="btn btn-excel"
+                  (click)="generateExcel()"
+                  [disabled]="!isFormValid()">
+            <i class="fas fa-file-excel me-2"></i>
+            Impression EXCEL
+          </button>
+
+          <button class="btn btn-refresh" (click)="refresh()">
+            <i class="fas fa-sync-alt me-2"></i>
+            Actualiser
+          </button>
+        </div>
+      </div>
+
+      <!-- No Data Message -->
+      <div class="no-data-message" *ngIf="!isFormValid()">
+        <i class="fas fa-search me-2"></i>
+        Aucun élève trouvé. Veuillez saisir des critères de recherche.
+      </div>
+    </div>
+  </div>
+</div>
