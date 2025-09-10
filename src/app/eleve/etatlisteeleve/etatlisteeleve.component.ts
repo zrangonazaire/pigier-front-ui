@@ -96,10 +96,12 @@ this.eleveService.etatListeEtudiant(this.PARAMCLASSE, this.PARAMEANNE.replace(/\
 
 
 printeleveExcel(){
+if(this.PARAMETAB =='YAMOUSSOUKRO'){
+  alert('L\'exportation Excel n\'est pas disponible pour le campus de Yamoussoukro.');
+  return;
 
 
-
-
+}
   this.eleveService.etatListeEtudiantExcel(this.PARAMCLASSE, this.PARAMEANNE.replace(/\s/g, '').substring(0, 4), this.PARAMEANNE.replace(/\s/g, '').slice(-4), this.PARAMETAB).subscribe({
     next: (response) => {
       const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
