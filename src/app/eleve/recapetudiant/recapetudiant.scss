@@ -1,0 +1,211 @@
+/* src/app/components/report-generator/report-generator.component.scss */
+:host {
+  display: block;
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+.container-fluid {
+  padding: 0 15px;
+}
+
+.card {
+  border: none;
+  border-radius: 8px;
+}
+
+.custom-header {
+  background: linear-gradient(135deg, #1a237e 0%, #283593 100%) !important;
+  border-bottom: 2px solid #10174d;
+  color: white;
+}
+
+.custom-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.btn-light {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #1a237e;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-light:hover:not(:disabled) {
+  background: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  color: #1a237e;
+}
+
+.btn-light:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.form-group {
+  padding: 15px;
+  background: white;
+  border-radius: 6px;
+  border-left: 4px solid #3949ab;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.font-weight-bold {
+  font-weight: 600 !important;
+  color: #1a237e;
+}
+
+.form-check-input {
+  border: 2px solid #7986cb;
+}
+
+.form-check-input:checked {
+  background-color: #3949ab;
+  border-color: #3949ab;
+}
+
+.form-check-label {
+  font-weight: 500;
+  color: #1a237e;
+}
+
+.form-select {
+  border: 2px solid #c5cae9;
+  border-radius: 5px;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+}
+
+.form-select:focus {
+  border-color: #3949ab;
+  box-shadow: 0 0 0 3px rgba(57, 73, 171, 0.1);
+}
+
+.annee-display {
+  font-weight: 600;
+  background: linear-gradient(135deg, #3949ab 0%, #283593 100%);
+  color: white;
+  border: none;
+}
+
+.text-muted {
+  font-size: 0.85rem;
+  color: #5c6bc0 !important;
+}
+
+.alert-danger {
+  background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 15px;
+}
+
+.bg-light {
+  background: #e8eaf6 !important;
+  border: 1px dashed #c5cae9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .custom-header {
+    padding: 15px;
+  }
+
+  .custom-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .d-flex {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn-light {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .form-group {
+    padding: 12px;
+  }
+
+  .col-md-2, .col-md-10 {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+
+  .row.align-items-center {
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .container-fluid {
+    padding: 0 10px;
+  }
+
+  .custom-header {
+    padding: 12px;
+  }
+
+  .custom-header h2 {
+    font-size: 1.1rem;
+  }
+
+  .form-check-inline {
+    margin-right: 15px;
+    margin-bottom: 8px;
+  }
+}
+
+/* Animation pour le chargement */
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.btn-light:disabled {
+  animation: pulse 1.5s infinite;
+}
+
+/* Ajustements pour l'alignement */
+.row.align-items-center {
+  margin: 0 -5px;
+}
+
+.col-md-2, .col-md-10 {
+  padding: 0 5px;
+}
+
+/* Style pour les radios */
+.form-check {
+  margin-bottom: 5px;
+}
+
+.form-check-input {
+  margin-top: 0.2rem;
+}
+
+/* Couleurs spécifiques pour correspondre à la capture */
+:root {
+  --primary-dark: #1a237e;
+  --primary: #283593;
+  --primary-light: #3949ab;
+  --accent: #7986cb;
+  --light-bg: #e8eaf6;
+}
+
+/* Icônes dans le header */
+.custom-header .fa-users {
+  color: #ffeb3b; /* Jaune pour contraster avec le bleu foncé */
+}
