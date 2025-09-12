@@ -29,10 +29,7 @@ export class ReportGeneratorComponent {
   ];
 
   niveauOptions = [
-    'LP1', 'LP2', 'LP3',
-    'Primaire', 'Collège', 'Lycée',
-    'BTS1', 'BTS2', 'Licence',
-    'LPRG.1', 'LPRG.2', 'LPRG.3'
+    'LP1', 'LP2', 'LP3','M1','M2'
   ];
 
   anneeOptions = ['2023', '2024', '2025', '2026'];
