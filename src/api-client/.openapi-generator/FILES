@@ -5,6 +5,7 @@ api.module.ts
 api/anneeScolaireController.service.ts
 api/api.ts
 api/authentication.service.ts
+api/eleveControllerEtat.service.ts
 api/eleves.service.ts
 api/encaissement.service.ts
 api/etablissement.service.ts
