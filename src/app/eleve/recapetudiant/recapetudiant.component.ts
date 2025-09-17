@@ -55,7 +55,7 @@ export class ReportGeneratorComponent {
       'body',
       false,
       {
-        httpHeaderAccept: '*/*',
+        httpHeaderAccept: 'application/pdf',
         context: undefined,
         transferCache: undefined
       }
