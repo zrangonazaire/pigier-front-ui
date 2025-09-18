@@ -26,15 +26,13 @@ export class ReportGeneratorComponentExcel implements OnInit {
 
   campusOptions = [
     'ABIDJAN PLATEAU',
-    'ABOBO',
-    'YOPOUGON',
-    'BINGERVILLE',
-    'TREICHVILLE'
+    'ABIDJAN YOPOUGON',
+    'YAMOUSSOUKRO',
+
   ];
 
   niveauOptions = [
     'LP1', 'LP2', 'LP3',
-    'BTS1', 'BTS2',
     'M1', 'M2'
   ];
 
