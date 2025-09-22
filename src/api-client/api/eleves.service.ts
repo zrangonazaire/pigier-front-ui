@@ -43,10 +43,10 @@ export class ElevesService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public etatListeEtudiant(paramClasse: string, paramAnneDebut: string, paramAnneFin: string, paramEtab: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<string>;
-    public etatListeEtudiant(paramClasse: string, paramAnneDebut: string, paramAnneFin: string, paramEtab: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
-    public etatListeEtudiant(paramClasse: string, paramAnneDebut: string, paramAnneFin: string, paramEtab: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
-    public etatListeEtudiant(paramClasse: string, paramAnneDebut: string, paramAnneFin: string, paramEtab: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public etatListeEtudiant(paramClasse: string, paramAnneDebut: string, paramAnneFin: string, paramEtab: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<string>;
+    public etatListeEtudiant(paramClasse: string, paramAnneDebut: string, paramAnneFin: string, paramEtab: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
+    public etatListeEtudiant(paramClasse: string, paramAnneDebut: string, paramAnneFin: string, paramEtab: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
+    public etatListeEtudiant(paramClasse: string, paramAnneDebut: string, paramAnneFin: string, paramEtab: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (paramClasse === null || paramClasse === undefined) {
             throw new Error('Required parameter paramClasse was null or undefined when calling etatListeEtudiant.');
         }
@@ -76,7 +76,7 @@ export class ElevesService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
+            'application/pdf'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);

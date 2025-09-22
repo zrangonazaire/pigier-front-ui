@@ -43,10 +43,10 @@ export class ReportingAPIService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public generateReport(niveau: string, campus: string, anneedebut: string, anneefin: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<object>;
-    public generateReport(niveau: string, campus: string, anneedebut: string, anneefin: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
-    public generateReport(niveau: string, campus: string, anneedebut: string, anneefin: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
-    public generateReport(niveau: string, campus: string, anneedebut: string, anneefin: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public generateReport(niveau: string, campus: string, anneedebut: string, anneefin: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public generateReport(niveau: string, campus: string, anneedebut: string, anneefin: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public generateReport(niveau: string, campus: string, anneedebut: string, anneefin: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
+    public generateReport(niveau: string, campus: string, anneedebut: string, anneefin: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/pdf', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (niveau === null || niveau === undefined) {
             throw new Error('Required parameter niveau was null or undefined when calling generateReport.');
         }
@@ -76,7 +76,7 @@ export class ReportingAPIService extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
+            'application/pdf'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);

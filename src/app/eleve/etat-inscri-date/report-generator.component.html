@@ -1,0 +1,155 @@
+<app-menu></app-menu>
+
+<div class="container-fluid mt-3">
+  <div class="card shadow">
+    <div class="card-header custom-header py-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">
+          <i class="fas fa-users mr-2"></i>Récapitulatif du point des Etudiants Inscrits
+        </h2>
+        <div class="d-flex">
+          <!-- Bouton d'impression PDF -->
+         <!--  <button class="btn btn-light btn-sm me-2"
+                  (click)="generatePDF()"
+                  [disabled]="!isFormValid() || isLoading">
+            <i class="fas fa-file-pdf mr-1" [class.fa-spin]="isLoading"></i>
+            {{ isLoading ? 'Génération...' : 'Impression PDF' }}
+          </button>
+ -->
+          <!-- Bouton d'impression Excel -->
+          <button class="btn btn-light btn-sm me-2"
+                  (click)="generateExcel()"
+                  [disabled]="!isFormValid() || isLoading">
+            <i class="fas fa-file-excel mr-1" [class.fa-spin]="isLoading"></i>
+            {{ isLoading ? 'Génération...' : 'Impression EXCEL' }}
+          </button>
+
+          <!-- Bouton actualiser -->
+          <button class="btn btn-light btn-sm" (click)="refresh()">
+            <i class="fas fa-sync-alt mr-1"></i> Actualiser
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <!-- Campus Section -->
+      <div class="form-group mb-3">
+        <div class="row align-items-center">
+          <div class="col-md-2">
+            <label class="font-weight-bold mb-0">Campus :</label>
+          </div>
+          <div class="col-md-10">
+            <div class="d-flex flex-wrap gap-3">
+              <div class="form-check form-check-inline" *ngFor="let campus of campusOptions">
+                <input class="form-check-input" type="radio"
+                       name="campus" [id]="'campus-' + campus"
+                       [value]="campus" [(ngModel)]="reportData.campus">
+                <label class="form-check-label" [for]="'campus-' + campus">
+                  {{ campus }}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Année Scolaire Section -->
+      <div class="form-group mb-3">
+        <div class="row align-items-center">
+          <div class="col-md-2">
+            <label class="font-weight-bold mb-0">Année Scolaire :</label>
+          </div>
+          <div class="col-md-10">
+            <div class="row">
+              <div class="col-md-3">
+                <select class="form-select" [(ngModel)]="reportData.anneedebut" name="anneedebut">
+                  <option value="">Année début</option>
+                  <option *ngFor="let annee of anneeOptions" [value]="annee">{{ annee }}</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <select class="form-select" [(ngModel)]="reportData.anneefin" name="anneefin">
+                  <option value="">Année fin</option>
+                  <option *ngFor="let annee of anneeOptions" [value]="annee">{{ annee }}</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <div class="annee-display p-2 rounded text-center">
+                  {{ anneeScolaire || 'Ex: 2023/2024' }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Niveau Section -->
+      <div class="form-group mb-3">
+        <div class="row align-items-center">
+          <div class="col-md-2">
+            <label class="font-weight-bold mb-0">Niveau :</label>
+          </div>
+          <div class="col-md-10">
+            <div class="row">
+              <div class="col-md-6">
+                <select class="form-select" [(ngModel)]="reportData.niveau" name="niveau">
+                  <option value="">Sélectionner un niveau</option>
+                  <option *ngFor="let niveau of niveauOptions" [value]="niveau">{{ niveau }}</option>
+                </select>
+                <small class="text-muted">Ex: LP1, BTS1, M1</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Période de dates Section -->
+      <div class="form-group mb-3">
+        <div class="row align-items-center">
+          <div class="col-md-2">
+            <label class="font-weight-bold mb-0">Période :</label>
+          </div>
+          <div class="col-md-10">
+            <div class="row">
+              <div class="col-md-5">
+                <label class="form-label">Date de début</label>
+                <input type="date" class="form-control" [(ngModel)]="reportData.startDate" name="startDate">
+              </div>
+              <div class="col-md-5">
+                <label class="form-label">Date de fin</label>
+                <input type="date" class="form-control" [(ngModel)]="reportData.endDate" name="endDate">
+              </div>
+              <div class="col-md-2 d-flex align-items-end">
+                <button class="btn btn-outline-secondary" (click)="setDefaultDates()">
+                  <i class="fas fa-history"></i> Défaut
+                </button>
+              </div>
+            </div>
+            <small class="text-muted">Sélectionnez la période des inscriptions à inclure dans le rapport</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        {{ errorMessage }}
+      </div>
+
+      <!-- Loading Indicator -->
+      <div *ngIf="isLoading" class="text-center py-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+        <p class="mt-2 text-muted">Génération du fichier en cours...</p>
+      </div>
+
+      <!-- No Data Message -->
+      <div *ngIf="!isFormValid() && !isLoading" class="text-center py-4 bg-light rounded">
+        <i class="fas fa-search fa-2x text-muted mb-3"></i>
+        <p class="text-muted mb-0">Veuillez sélectionner un campus, une année scolaire, un niveau et une période pour générer le rapport.</p>
+      </div>
+    </div>
+  </div>
+</div>
