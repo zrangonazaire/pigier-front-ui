@@ -32,7 +32,7 @@ export class ReportGeneratorComponent {
     'LP1', 'LP2', 'LP3','M1','M2'
   ];
 
-  anneeOptions = ['2023', '2024', '2025', '2026'];
+  anneeOptions = ['2023', '2024', '2025', '2026','2027','2028'];
   isLoading = false;
   errorMessage = '';
 
