@@ -255,13 +255,15 @@ export class ElevesService extends BaseService {
      * @param promotions 
      * @param etablissements 
      * @param anneeScolaire 
+     * @param startStr 
+     * @param endStr 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPromotionsEleves(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EleveRecordDTO>>;
-    public getPromotionsEleves(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EleveRecordDTO>>>;
-    public getPromotionsEleves(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EleveRecordDTO>>>;
-    public getPromotionsEleves(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getPromotionsEleves(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EleveRecordDTO>>;
+    public getPromotionsEleves(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EleveRecordDTO>>>;
+    public getPromotionsEleves(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EleveRecordDTO>>>;
+    public getPromotionsEleves(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (promotions === null || promotions === undefined) {
             throw new Error('Required parameter promotions was null or undefined when calling getPromotionsEleves.');
         }
@@ -270,6 +272,12 @@ export class ElevesService extends BaseService {
         }
         if (anneeScolaire === null || anneeScolaire === undefined) {
             throw new Error('Required parameter anneeScolaire was null or undefined when calling getPromotionsEleves.');
+        }
+        if (startStr === null || startStr === undefined) {
+            throw new Error('Required parameter startStr was null or undefined when calling getPromotionsEleves.');
+        }
+        if (endStr === null || endStr === undefined) {
+            throw new Error('Required parameter endStr was null or undefined when calling getPromotionsEleves.');
         }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -287,6 +295,10 @@ export class ElevesService extends BaseService {
         }
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>anneeScolaire, 'anneeScolaire');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>startStr, 'startStr');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>endStr, 'endStr');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -335,13 +347,15 @@ export class ElevesService extends BaseService {
      * @param promotions 
      * @param etablissements 
      * @param anneeScolaire 
+     * @param startStr 
+     * @param endStr 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPromotionsElevesExcel(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<string>;
-    public getPromotionsElevesExcel(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
-    public getPromotionsElevesExcel(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
-    public getPromotionsElevesExcel(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getPromotionsElevesExcel(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<string>;
+    public getPromotionsElevesExcel(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
+    public getPromotionsElevesExcel(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
+    public getPromotionsElevesExcel(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (promotions === null || promotions === undefined) {
             throw new Error('Required parameter promotions was null or undefined when calling getPromotionsElevesExcel.');
         }
@@ -350,6 +364,12 @@ export class ElevesService extends BaseService {
         }
         if (anneeScolaire === null || anneeScolaire === undefined) {
             throw new Error('Required parameter anneeScolaire was null or undefined when calling getPromotionsElevesExcel.');
+        }
+        if (startStr === null || startStr === undefined) {
+            throw new Error('Required parameter startStr was null or undefined when calling getPromotionsElevesExcel.');
+        }
+        if (endStr === null || endStr === undefined) {
+            throw new Error('Required parameter endStr was null or undefined when calling getPromotionsElevesExcel.');
         }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -367,6 +387,10 @@ export class ElevesService extends BaseService {
         }
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>anneeScolaire, 'anneeScolaire');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>startStr, 'startStr');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>endStr, 'endStr');
 
         let localVarHeaders = this.defaultHeaders;
 

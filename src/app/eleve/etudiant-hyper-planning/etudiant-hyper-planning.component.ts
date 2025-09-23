@@ -55,6 +55,9 @@ export class EtudiantHyperPlanningComponent implements OnInit {
   loadingExport: boolean = false;
   error: string | null = null;
 
+  dateDebut: string = '';
+  dateFin: string = '';
+
   constructor(
     private elevesService: ElevesService,
     private anneeScolaireService: AnneeScolaireControllerService,
@@ -159,12 +162,17 @@ export class EtudiantHyperPlanningComponent implements OnInit {
       .getPromotionsEleves(
         this.selectedClasses,
         this.selectedEtablissements,
-        annee
+        annee,
+        this.dateDebut,
+        this.dateFin
       )
       .subscribe({
         next: (data) => {
           this.eleves = data;
           this.loadingSearch = false;
+          // Ajout d'un log pour vérifier la structure
+          console.log('Données élèves reçues:', data);
+ 
         },
         error: (err) => {
           console.error('Erreur lors de la recherche des élèves:', err);

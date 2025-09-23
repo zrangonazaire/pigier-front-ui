@@ -40,6 +40,15 @@
               </div>
             </div>
           </div>
+          <!-- Ajout des champs calendrier -->
+          <div class="col-md-3">
+            <label for="dateDebut" class="form-label fw-semibold">Date début :</label>
+            <input type="date" id="dateDebut" class="form-control" [(ngModel)]="dateDebut">
+          </div>
+          <div class="col-md-3">
+            <label for="dateFin" class="form-label fw-semibold">Date fin :</label>
+            <input type="date" id="dateFin" class="form-control" [(ngModel)]="dateFin">
+          </div>
         </div>
       </fieldset>
 
@@ -95,20 +104,26 @@
           <table class="table table-striped table-hover table-bordered align-middle">
             <thead class="table-light">
               <tr>
+                <!-- <th scope="col">Date Inscription</th> -->
                 <th scope="col">Nom</th>
                 <th scope="col">Prénoms</th>
                 <th scope="col">Sexe</th>
                 <th scope="col">Date Naissance</th>
+                <th scope="col">Classe</th>
                 <th scope="col">E-mail</th>
 
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let eleve of eleves; let i = index">
+                <!-- <td>
+                  {{ eleve.dateIns ? formatDate(eleve.dateIns) : '-' }}
+                </td> -->
                 <td>{{ eleve.nom }}</td>
                 <td>{{ eleve.prenoms }}</td>
                 <td>{{ eleve.sexe }}</td>
                 <td>{{ formatDate(eleve.dateNaissance) }}</td>
+                <td>{{ eleve.codeDetcla }}</td>
                 <td>{{ eleve.emailPersonnel }}</td>
               </tr>
             </tbody>
