@@ -175,7 +175,7 @@ export class EtudiantHyperPlanningComponent implements OnInit {
           this.loadingSearch = false;
           // Ajout d'un log pour vérifier la structure
           console.log('Données élèves reçues:', data);
- 
+
         },
         error: (err) => {
           console.error('Erreur lors de la recherche des élèves:', err);
@@ -209,17 +209,19 @@ export class EtudiantHyperPlanningComponent implements OnInit {
 
     // Utilisation d'un appel HttpClient direct pour un contrôle total sur le responseType
     const url = `${this.elevesService.configuration.basePath}/eleves/getPromotionsElevesExcel`;
-    
+
     let params = new HttpParams();
     this.selectedClasses.forEach(p => params = params.append('promotions', p));
     this.selectedEtablissements.forEach(e => params = params.append('etablissements', e));
     params = params.append('anneeScolaire', anne);
-
+    params= params.append('startStr', this.dateDebut || '');
+    params= params.append('endStr', this.dateFin || '');
+console.log('Paramètres de la requête:', params.toString());
     // Ajout de l'en-tête d'authentification
     const token = localStorage.getItem('access_token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    this.http.get(url, { 
+    this.http.get(url, {
       params: params,
       headers: headers, // <-- Ajout des en-têtes ici
       responseType: 'blob' // Demander explicitement un blob
