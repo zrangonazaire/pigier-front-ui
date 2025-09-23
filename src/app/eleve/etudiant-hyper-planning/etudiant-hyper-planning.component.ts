@@ -58,6 +58,9 @@ export class EtudiantHyperPlanningComponent implements OnInit {
   dateDebut: string = '';
   dateFin: string = '';
 
+  page: number = 1;
+  pageSize: number = 10;
+
   constructor(
     private elevesService: ElevesService,
     private anneeScolaireService: AnneeScolaireControllerService,
@@ -245,5 +248,18 @@ export class EtudiantHyperPlanningComponent implements OnInit {
     } catch (e) {
       return dateString; // Return original if parsing fails
     }
+  }
+
+  min(a: number, b: number): number {
+    return Math.min(a, b);
+  }
+
+  get pagedEleves() {
+    const start = (this.page - 1) * this.pageSize;
+    return this.eleves.slice(start, start + this.pageSize);
+  }
+
+  get totalPages() {
+    return Math.ceil(this.eleves.length / this.pageSize);
   }
 }
