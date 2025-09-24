@@ -83,19 +83,22 @@
                     <label class="form-label">Rôles *</label>
                     <div class="border rounded p-3 bg-light">
                         <div class="d-flex flex-wrap gap-2">
-                            @for (role of allRoles(); track role.id) {
-                            <div >
-                            <input class="form-check-input" type="checkbox" [id]="'user-role-' + role.id"
-                                    (change)="onRoleChange($event, role.id!)">
-                            <label >
-                                     {{ role.nomRole }}
-                                </label>
-                            </div>
-                            }
+                            <ng-container *ngFor="let role of allRoles(); trackBy: trackById">
+                                <div>
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           [id]="'user-role-' + role.id"
+                                           [checked]="userForm.value.roleIds?.includes(role.id)"
+                                           (change)="onRoleChange($event, role.id!)">
+                                    <label class="form-check-label" [for]="'user-role-' + role.id">
+                                        {{ role.nomRole }}
+                                    </label>
+                                </div>
+                            </ng-container>
                         </div>
-                        @if (userForm.get('roleIds')?.invalid && userForm.get('roleIds')?.touched) {
-                        <div class="text-danger small mt-2">Au moins un rôle doit être sélectionné</div>
-                        }
+                        <div *ngIf="userForm.get('roleIds')?.invalid && userForm.get('roleIds')?.touched" class="text-danger small mt-2">
+                            Au moins un rôle doit être sélectionné
+                        </div>
                     </div>
                 </div>
 
@@ -116,13 +119,29 @@
     <!-- Liste des utilisateurs -->
     @if (!showFormMode) {
     <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="badge text-bg-primary fs-6">
+                Affichage {{ (page - 1) * pageSize + 1 }} -
+                {{ min(page * pageSize, listeUsers().length) }} sur {{ listeUsers().length }} utilisateurs
+            </span>
+            <div class="d-flex align-items-center gap-2">
+                <label for="pageSizeSelect" class="mb-0">Afficher</label>
+                <select id="pageSizeSelect" class="form-select form-select-sm w-auto"
+                    [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange()">
+                    <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
+                </select>
+                <span class="mb-0">par page</span>
+            </div>
+        </div>
+
         <div class="table-responsive">
             <table class="table table-hover align-middle">
                 <thead class="table-light">
                     <tr>
                         <th>Login</th>
                         <th>Nom complet</th>
-                        <th >Statut</th>
+                        <th>Statut</th>
                         <th>Email</th>
                         <th>Rôles</th>
                         <th>Créé le</th>
@@ -130,24 +149,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @for (user of listeUsers(); track user.id) {
-                    <tr>
-                        <td  class="text-start">{{ user.username }}</td>
-                        <td> {{ user.lastname }} </td>
+                    <tr *ngFor="let user of pagedUsers; trackBy: trackById">
+                        <td class="text-start">{{ user.username }}</td>
+                        <td>{{ user.lastname }}</td>
                         <td>{{ user.enable ? 'Actif' : 'Désactivé' }}</td>
-                        <td>Non défini</td>
+                        <td>{{ user.email || 'Non défini' }}</td>
                         <td>
-                            @if (user.roles?.length) {
-                            <div class="d-flex flex-wrap gap-1">
-                                @for (role of user.roles; track role.id) {
-                                <span class="badge bg-primary bg-opacity-10 text-primary">
-                                    {{ role.nomRole }}
-                                </span>
-                                }
-                            </div>
-                            } @else {
-                            <span class="text-muted">Aucun rôle</span>
-                            }
+                            <ng-container *ngIf="user.roles?.length; else noRole">
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span *ngFor="let role of user.roles" class="badge bg-primary bg-opacity-10 text-primary">
+                                        {{ role.nomRole }}
+                                    </span>
+                                </div>
+                            </ng-container>
+                            <ng-template #noRole>
+                                <span class="text-muted">Aucun rôle</span>
+                            </ng-template>
                         </td>
                         <td>
                             <span data-bs-toggle="tooltip" data-bs-placement="top"
@@ -157,7 +174,6 @@
                         </td>
                         <td class="text-end">
                             <div class="d-flex justify-content-end gap-2">
- 
                                 <button (click)="editUser(user)" class="btn btn-outline-primary btn-sm">
                                     <i class="bi bi-pencil-square me-1"></i>Modifier
                                 </button>
@@ -167,7 +183,6 @@
                             </div>
                         </td>
                     </tr>
-                    }
 
                     @if (loading) {
                     <tr>
@@ -191,25 +206,23 @@
             </table>
         </div>
 
-        @if (users.length > 0) {
-        <nav aria-label="Pagination">
+        <nav aria-label="Pagination" *ngIf="listeUsers().length > 0">
             <ul class="pagination justify-content-center mt-3">
-                <li class="page-item disabled">
-                    <a class="page-link" tabindex="-1" aria-disabled="true">
+                <li class="page-item" [class.disabled]="page === 1">
+                    <button class="page-link" (click)="changePage(page - 1)" [disabled]="page === 1">
                         <i class="bi bi-chevron-left"></i>
-                    </a>
+                    </button>
                 </li>
-                <li class="page-item active"><a class="page-link">1</a></li>
-                <li class="page-item"><a class="page-link">2</a></li>
-                <li class="page-item"><a class="page-link">3</a></li>
-                <li class="page-item">
-                    <a class="page-link">
+                <li class="page-item" *ngFor="let p of pages" [class.active]="page === p">
+                    <button class="page-link" (click)="changePage(p)">{{ p }}</button>
+                </li>
+                <li class="page-item" [class.disabled]="page === totalPages">
+                    <button class="page-link" (click)="changePage(page + 1)" [disabled]="page === totalPages">
                         <i class="bi bi-chevron-right"></i>
-                    </a>
+                    </button>
                 </li>
             </ul>
         </nav>
-        }
     </div>
     }
 </div>

@@ -32,6 +32,7 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserListComponent } from '../../users/user-list/user-list.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-role-list',
@@ -54,6 +55,7 @@ export class RoleListComponent implements OnInit {
   @Input() permissionData?: PermissionRequest;
   @Output() submitFormPerm = new EventEmitter<PermissionRequest>();
   @Output() cancelFormPerm = new EventEmitter<void>();
+  toastService = inject(ToastrService);
 
   permissionForm!: FormGroup;
   submitted = false;
@@ -64,6 +66,8 @@ export class RoleListComponent implements OnInit {
     'COMMERCIALE',
     'EXAMEN',
     'NOTE',
+    'ELEVE',
+
   ];
   accessRights = [
     { key: 'canRead', label: 'Lecture' },
@@ -93,22 +97,37 @@ export class RoleListComponent implements OnInit {
       return;
     }
 
-    this.submitFormPerm.emit(this.permissionForm.value);
+    this.submitPermissionForm();
+
+    this.showPermissionForm = false;
+    this.isEditMode = false;
+    this.permissionForm.reset();
   }
 
   onCancelPerm(): void {
     this.cancelFormPerm.emit();
+    this.showPermissionForm = false;
+    this.isEditMode = false;
+    this.permissionForm.reset();
   }
   submitPermissionForm() {
-    this.permissionService.createPermission(this.permRequest()).subscribe({
+    console.log('Données du formulaire de permission:', this.permissionForm.value);
+
+    this.permissionService.createPermission(this.permissionForm.value).subscribe({
       next: () => {
-        alert('Permission créée avec succès');
+
         this.loadPermissions();
         this.cancelPermissionForm();
       },
       error: (err) => {
+        this.loading = false;
         console.log('ERREUR DE CREATION DE PERMISSION', err);
+        this.toastService.error('Erreur lors de la création de la permission', 'Erreur');
       },
+      complete: () => {
+        this.loading = false;
+        this.toastService.success('Permission créée avec succès');
+      }
     });
   }
   permRequest: Signal<PermissionRequest> = signal({
@@ -147,7 +166,7 @@ export class RoleListComponent implements OnInit {
   fb = inject(FormBuilder);
   permissionService = inject(PermissionsService);
   private roleService = inject(RolesService);
- 
+
 
   ngOnInit(): void {
     this.initForm();
@@ -243,7 +262,7 @@ export class RoleListComponent implements OnInit {
     this.permissionService.getAllPermissions().subscribe({
       next: (permissions) => {
         this.allPermissions = permissions;
-        console.log('PERMISSIONS', permissions);
+        console.log('**** PERMISSIONS ****', permissions);
       },
       error: (err) => {
         console.log(' ERREUR DES PERMISSIONS', err);
@@ -272,4 +291,45 @@ export class RoleListComponent implements OnInit {
       },
     });
   }
+
+  // Pour l'action Modifier une permission
+  editPermission(permission: PermissionResponse) {
+    this.isEditMode = true;
+    this.showPermissionForm = true;
+    // Remplir le formulaire avec les données de la permission sélectionnée
+    this.permissionForm.patchValue({
+      nomPermission: permission.nomPermission,
+      descriptionPermission: permission.descriptionPermission,
+      module: permission.module,
+      canRead: permission.canRead,
+      canWrite: permission.canWrite,
+      canEdit: permission.canEdit,
+      canDelete: permission.canDelete
+    });
+    this.selectedPermissionId = permission.id;
+  }
+
+  // Pour l'action Supprimer une permission
+  confirmDeletePermission(permissionId: number) {
+    if (confirm('Voulez-vous vraiment supprimer cette permission ?')) {
+      this.deletePermission(permissionId);
+    }
+  }
+
+  // Exemple de méthode de suppression (à adapter selon votre service)
+  deletePermission(permissionId: number) {
+    this.loading = true;
+    this.permissionService.deletePermission(permissionId).subscribe({
+      next: () => {
+        this.allPermissions = this.allPermissions.filter(p => p.id !== permissionId);
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+        alert('Erreur lors de la suppression');
+      }
+    });
+  }
+
+  selectedPermissionId?: number;
 }

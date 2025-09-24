@@ -50,4 +50,5 @@ export const routes: Routes = [
         (m) => m.TB_COMPTABILITE_ROUTES
       ),
   },
+  {path:'notes', loadChildren: () => import('./note/note.route').then(m => m.NOTE_ROUTE)}
 ];

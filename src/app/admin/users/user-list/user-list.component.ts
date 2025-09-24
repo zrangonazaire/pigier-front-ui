@@ -17,6 +17,7 @@ import {
 } from '../../../../api-client';
 import { Role } from '../../../features/permission-management/permission.service';
 import { formatDate } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-user-list',
@@ -26,15 +27,19 @@ import { formatDate } from '@angular/common';
   providers: [DatePipe],
 })
 export class UserListComponent implements OnInit {
+  toastService = inject(ToastrService);
   showFormMode = false;
   users: UserRequest[] = [];
   allRoles = signal<RoleResponse[]>([]);
   loading = false;
   userRequest: UserRequest = {};
+  userResponse: UserResponse = {};
   listeUsers = signal<UserResponse[]>([]);
   userForm: FormGroup;
+  userId: number = 0;
   private utilisateurService = inject(UtilisateurControllerService);
   private roleService = inject(RolesService);
+  userRoles = signal<RoleResponse[]>([]);
   constructor(private fb: FormBuilder) {
     this.userForm = this.fb.group({
       nomPrenoms: ['', Validators.required],
@@ -48,6 +53,17 @@ export class UserListComponent implements OnInit {
 
     // Chargez les rôles depuis votre service
     // this.loadRoles();
+  }
+  listUserRoles(): void {
+    this.roleService.getRolesByUser(this.userId).subscribe({
+      next: (roles) => {
+        this.userRoles.set(roles);
+        console.log('LES ROLES DE L\'UTILISATEUR', this.userRoles);
+      },
+      error: (error) => {
+        console.log('Erreur de chargement des roles de l\'utilisateur', error);
+      },
+    });     
   }
   listRoles(): void {
     this.roleService.listDesRoles().subscribe({
@@ -89,18 +105,29 @@ export class UserListComponent implements OnInit {
   }
 
   editUser(user: UserRequest) {
+    console.log('Edit user called with:', user);
     this.userRequest = { ...user };
-    this.userForm.patchValue({
-      nomPrenoms: user.nomPrenoms,
-      username: user.username,
-      email: user.email,
-      telephone: user.telephone,
-      roleIds: user.roleIds ? Array.from(user.roleIds) : [],
+    this.utilisateurService.getByUsername(user.username!).subscribe({
+      next: (fullUser) => {
+        this.userId = fullUser.id!;
+        this.userResponse = fullUser;
+        // Patch le formulaire avec les vraies données reçues
+        this.userForm.patchValue({
+          nomPrenoms: fullUser.lastname,
+          username: fullUser.username,
+          email: fullUser.email,
+          telephone: fullUser.telephone,
+          roleIds: fullUser.roles ? fullUser.roles.map(r => r.id) : [],
+          // Ajoute d'autres champs si besoin
+        });
+        //console.log('Formulaire patché avec :', this.userForm.value);
+        this.listUserRoles();
+        this.showFormMode = true;
+      },
+      error: (error) => {
+        console.log('Erreur lors de la récupération des détails de l\'utilisateur', error);
+      }
     });
-    this.userForm.get('password')?.clearValidators();
-    this.userForm.get('passwordConfirm')?.clearValidators();
-    this.userForm.updateValueAndValidity();
-    this.showFormMode = true;
   }
 
   isRoleSelected(roleId: number): boolean {
@@ -139,10 +166,7 @@ export class UserListComponent implements OnInit {
         console.log('error de chargement', error);
       },
     });
-    // this.userService.getAll().subscribe((users) => {
-    //   this.loading = false;
-    //   this.users = users;
-    //   console.log(this.users);
+
   }
   submitForm() {
     if (this.userForm.valid) {
@@ -181,5 +205,44 @@ export class UserListComponent implements OnInit {
 
   cancelForm() {
     this.showFormMode = false;
+  }
+
+  page: number = 1;
+  pageSize: number = 10;
+  pageSizeOptions: number[] = [5, 10, 20, 50];
+
+  onPageSizeChange() {
+    this.page = 1;
+  }
+
+  changePage(newPage: number) {
+    if (newPage < 1) {
+      this.page = 1;
+    } else if (newPage > this.totalPages) {
+      this.page = this.totalPages;
+    } else {
+      this.page = newPage;
+    }
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.listeUsers().length / this.pageSize) || 1;
+  }
+
+  get pages(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  min(a: number, b: number): number {
+    return Math.min(a, b);
+  }
+
+  get pagedUsers() {
+    const start = (this.page - 1) * this.pageSize;
+    return this.listeUsers().slice(start, start + this.pageSize);
+  }
+
+  trackById(index: number, user: UserResponse) {
+    return user.id;
   }
 }
