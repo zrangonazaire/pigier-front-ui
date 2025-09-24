@@ -16,6 +16,7 @@ export interface UserResponse {
     enable?: boolean;
     firstname?: string;
     lastname?: string;
+    telephone?: string;
     email?: string;
     roles?: Array<URole>;
     createdDate?: string;

@@ -257,6 +257,7 @@
               <th width="25%">Module</th>
               <th width="30%">Description</th>
               <th width="20%" class="text-center">Droits d'accès</th>
+              <th class="text-end">Actions</th> <!-- Ajout colonne actions -->
             </tr>
           </thead>
           <tbody>
@@ -272,19 +273,35 @@
               </td>
               <td>{{ permission.descriptionPermission || '-' }}</td>
               <td class="text-center">
-                <div class="d-flex justify-content-center gap-3">
-                  <i class="bi bi-eye-fill"
-                    [ngClass]="{'text-success': permission.canRead, 'text-muted': !permission.canRead}"
-                    ngbTooltip="Lecture"></i>
-                  <i class="bi bi-pencil-fill"
-                    [ngClass]="{'text-warning': permission.canWrite, 'text-muted': !permission.canWrite}"
-                    ngbTooltip="Écriture"></i>
-                  <i class="bi bi-arrow-repeat"
-                    [ngClass]="{'text-primary': permission.canEdit, 'text-muted': !permission.canEdit}"
-                    ngbTooltip="Modification"></i>
-                  <i class="bi bi-trash-fill"
-                    [ngClass]="{'text-danger': permission.canDelete, 'text-muted': !permission.canDelete}"
-                    ngbTooltip="Suppression"></i>
+                <div class="d-flex justify-content-center gap-2">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" [checked]="permission.canRead" disabled>
+                    <label class="form-check-label text-success" title="Lecture">Lecture</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" [checked]="permission.canWrite" disabled>
+                    <label class="form-check-label text-warning" title="Écriture">Écriture</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" [checked]="permission.canEdit" disabled>
+                    <label class="form-check-label text-primary" title="Modification">Modification</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" [checked]="permission.canDelete" disabled>
+                    <label class="form-check-label text-danger" title="Suppression">Suppression</label>
+                  </div>
+                </div>
+              </td>
+              <td class="text-end">
+                <div class="d-flex justify-content-end gap-2">
+                  <button class="btn btn-outline-primary btn-sm"
+                          (click)="editPermission(permission)" title="Modifier">
+                    <i class="bi bi-pencil me-1"></i>Modifier
+                  </button>
+                  <button class="btn btn-outline-danger btn-sm"
+                          (click)="confirmDeletePermission(permission.id!)" title="Supprimer">
+                    <i class="bi bi-trash me-1"></i>Supprimer
+                  </button>
                 </div>
               </td>
             </tr>
