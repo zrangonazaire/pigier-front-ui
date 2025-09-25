@@ -16,6 +16,8 @@ export interface EleveRecordDTO {
     sexe?: string;
     emailPersonnel?: string;
     codeDetcla?: string;
+    telEleve?: string;
+    telParent?: string;
     dateIns?: string;
 }
 

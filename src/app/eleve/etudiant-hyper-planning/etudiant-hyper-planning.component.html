@@ -125,6 +125,8 @@
                 <th scope="col">Sexe</th>
                 <th scope="col">Date Naissance</th>
                 <th scope="col">Classe</th>
+                <th scope="col">Tél. Etudiant</th>
+                <th>Tél. Parent</th>
                 <th scope="col">E-mail</th>
               </tr>
             </thead>
@@ -135,6 +137,8 @@
                 <td>{{ eleve.sexe }}</td>
                 <td>{{ formatDate(eleve.dateNaissance) }}</td>
                 <td>{{ eleve.codeDetcla }}</td>
+                <td>{{eleve.telEleve}}</td>
+                <td>{{ eleve.telParent }}</td>
                 <td>{{ eleve.emailPersonnel }}</td>
               </tr>
             </tbody>
