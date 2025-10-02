@@ -17,6 +17,8 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
+import { EleveRecordAvecPayerDto } from '../model/eleveRecordAvecPayerDto';
+// @ts-ignore
 import { EleveRecordDTO } from '../model/eleveRecordDTO';
 
 // @ts-ignore
@@ -422,6 +424,104 @@ export class ElevesService extends BaseService {
 
         let localVarPath = `/eleves/getPromotionsElevesExcel`;
         return this.httpClient.request<string>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param promotions 
+     * @param etablissements 
+     * @param anneeScolaire 
+     * @param startStr 
+     * @param endStr 
+     * @param montantpayer 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getPromotionsElevesPayer(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, montantpayer: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EleveRecordAvecPayerDto>>;
+    public getPromotionsElevesPayer(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, montantpayer: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EleveRecordAvecPayerDto>>>;
+    public getPromotionsElevesPayer(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, montantpayer: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EleveRecordAvecPayerDto>>>;
+    public getPromotionsElevesPayer(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, montantpayer: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (promotions === null || promotions === undefined) {
+            throw new Error('Required parameter promotions was null or undefined when calling getPromotionsElevesPayer.');
+        }
+        if (etablissements === null || etablissements === undefined) {
+            throw new Error('Required parameter etablissements was null or undefined when calling getPromotionsElevesPayer.');
+        }
+        if (anneeScolaire === null || anneeScolaire === undefined) {
+            throw new Error('Required parameter anneeScolaire was null or undefined when calling getPromotionsElevesPayer.');
+        }
+        if (startStr === null || startStr === undefined) {
+            throw new Error('Required parameter startStr was null or undefined when calling getPromotionsElevesPayer.');
+        }
+        if (endStr === null || endStr === undefined) {
+            throw new Error('Required parameter endStr was null or undefined when calling getPromotionsElevesPayer.');
+        }
+        if (montantpayer === null || montantpayer === undefined) {
+            throw new Error('Required parameter montantpayer was null or undefined when calling getPromotionsElevesPayer.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (promotions) {
+            promotions.forEach((element) => {
+                localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+                  <any>element, 'promotions');
+            })
+        }
+        if (etablissements) {
+            etablissements.forEach((element) => {
+                localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+                  <any>element, 'etablissements');
+            })
+        }
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>anneeScolaire, 'anneeScolaire');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>startStr, 'startStr');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>endStr, 'endStr');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>montantpayer, 'montantpayer');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/eleves/getPromotionsElevesPayer`;
+        return this.httpClient.request<Array<EleveRecordAvecPayerDto>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,

@@ -4,11 +4,12 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ElevesService } from '../../../api-client/api/eleves.service';
 import { AnneeScolaireControllerService } from '../../../api-client/api/anneeScolaireController.service';
 import { AnneeScolaireDto } from '../../../api-client/model/anneeScolaireDto';
-import { EleveRecordDTO } from '../../../api-client/model/eleveRecordDTO';
+
 import { saveAs } from 'file-saver';
 import { MenuComponent } from '../../components/menu/menu.component';
 import { Observable } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { EleveRecordAvecPayerDto } from '../../../api-client';
 
 @Component({
   selector: 'app-etudiant-hyper-planning',
@@ -48,7 +49,7 @@ export class EtudiantHyperPlanningComponent implements OnInit {
   selectedEtablissements: string[] = [];
   selectedClasses: string[] = [];
 
-  eleves: EleveRecordDTO[] = [];
+  eleves: EleveRecordAvecPayerDto[] = [];
   loadingAnneesScolaires: boolean = false;
   loadingClasses: boolean = false;
   loadingSearch: boolean = false;
@@ -60,6 +61,7 @@ export class EtudiantHyperPlanningComponent implements OnInit {
 
   page: number = 1;
   pageSize: number = 10;
+  montantPaye: number=0;
 
   constructor(
     private elevesService: ElevesService,
@@ -162,12 +164,13 @@ export class EtudiantHyperPlanningComponent implements OnInit {
     this.loadingSearch = true;
     this.error = null;
     this.elevesService
-      .getPromotionsEleves(
+      .getPromotionsElevesPayer(
         this.selectedClasses,
         this.selectedEtablissements,
         annee,
         this.dateDebut,
-        this.dateFin
+        this.dateFin,
+        this.montantPaye
       )
       .subscribe({
         next: (data) => {

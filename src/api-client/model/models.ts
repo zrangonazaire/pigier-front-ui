@@ -1,6 +1,7 @@
 export * from './anneeScolaireDto';
 export * from './authenticationRequest';
 export * from './authenticationResponse';
+export * from './eleveRecordAvecPayerDto';
 export * from './eleveRecordDTO';
 export * from './encaissementDTO';
 export * from './etabSourceRequestDto';

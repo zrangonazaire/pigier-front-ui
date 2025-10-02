@@ -50,6 +50,18 @@
             <input type="date" id="dateFin" class="form-control" [(ngModel)]="dateFin">
           </div>
         </div>
+        <!-- ...dans le fieldset Filtres de recherche... -->
+<div class="row g-3 align-items-center">
+  <!-- ...année scolaire... -->
+  <!-- ...établissements... -->
+  <!-- ...date début... -->
+  <!-- ...date fin... -->
+  <!-- Champ montant payé -->
+  <div class="col-md-3">
+    <label for="montantPaye" class="form-label fw-semibold">Montant payé :</label>
+    <input type="number" id="montantPaye" class="form-control" [(ngModel)]="montantPaye" min="0" placeholder="Saisir le montant">
+  </div>
+</div>
       </fieldset>
 
       <fieldset class="border rounded-3 p-3 mb-4" [disabled]="!anneeScolaire || selectedEtablissements.length === 0">
@@ -128,6 +140,7 @@
                 <th scope="col">Tél. Etudiant</th>
                 <th>Tél. Parent</th>
                 <th scope="col">E-mail</th>
+                <th scope="col">Montant Payé</th>
               </tr>
             </thead>
             <tbody>
@@ -140,6 +153,7 @@
                 <td>{{eleve.telEleve}}</td>
                 <td>{{ eleve.telParent }}</td>
                 <td>{{ eleve.emailPersonnel }}</td>
+                <td>{{ eleve.montantPayer | number}} FCFA</td>
               </tr>
             </tbody>
           </table>

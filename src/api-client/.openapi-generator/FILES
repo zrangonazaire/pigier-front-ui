@@ -23,6 +23,7 @@ index.ts
 model/anneeScolaireDto.ts
 model/authenticationRequest.ts
 model/authenticationResponse.ts
+model/eleveRecordAvecPayerDto.ts
 model/eleveRecordDTO.ts
 model/encaissementDTO.ts
 model/etabSourceRequestDto.ts
