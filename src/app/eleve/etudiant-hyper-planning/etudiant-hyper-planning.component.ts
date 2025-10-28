@@ -9,7 +9,7 @@ import { saveAs } from 'file-saver';
 import { MenuComponent } from '../../components/menu/menu.component';
 import { Observable } from 'rxjs';
 import { FormsModule } from '@angular/forms';
-import { EleveRecordAvecPayerDto } from '../../../api-client';
+import { EleveRecordAvecPayerDto, EleveRecordDTO } from '../../../api-client';
 
 @Component({
   selector: 'app-etudiant-hyper-planning',
@@ -49,7 +49,7 @@ export class EtudiantHyperPlanningComponent implements OnInit {
   selectedEtablissements: string[] = [];
   selectedClasses: string[] = [];
 
-  eleves: EleveRecordAvecPayerDto[] = [];
+  eleves: EleveRecordDTO[] = [];
   loadingAnneesScolaires: boolean = false;
   loadingClasses: boolean = false;
   loadingSearch: boolean = false;
@@ -164,13 +164,12 @@ export class EtudiantHyperPlanningComponent implements OnInit {
     this.loadingSearch = true;
     this.error = null;
     this.elevesService
-      .getPromotionsElevesPayer(
+      .getPromotionsEleves(
         this.selectedClasses,
         this.selectedEtablissements,
         annee,
         this.dateDebut,
-        this.dateFin,
-        this.montantPaye
+        this.dateFin
       )
       .subscribe({
         next: (data) => {
