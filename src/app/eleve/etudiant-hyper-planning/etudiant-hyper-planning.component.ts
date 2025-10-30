@@ -218,7 +218,6 @@ export class EtudiantHyperPlanningComponent implements OnInit {
     params = params.append('anneeScolaire', anne);
     params= params.append('startStr', this.dateDebut || '');
     params= params.append('endStr', this.dateFin || '');
-console.log('Paramètres de la requête:', params.toString());
     // Ajout de l'en-tête d'authentification
     const token = localStorage.getItem('access_token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
