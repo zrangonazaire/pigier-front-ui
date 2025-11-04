@@ -3,13 +3,17 @@ import { EtatlisteeleveComponent } from './etatlisteeleve/etatlisteeleve.compone
 import { EtudiantHyperPlanningComponent } from './etudiant-hyper-planning/etudiant-hyper-planning.component';
 import { ReportGeneratorComponent } from './recapetudiant/recapetudiant.component';
 import {ReportGeneratorComponentExcel} from './etat-inscri-date/report-generator.component';
+import { StudentListComponent } from './etat-listenew-diane/student-list.component';
 
 
 export const ELEVE_ROUTES: Route[] = [
-  { path: 'etatliste-eleve', component: EtatlisteeleveComponent },
+ // { path: 'etatliste-eleve', component: EtatlisteeleveComponent },
   { path: 'liste-hyper-planning', component: EtudiantHyperPlanningComponent },
    { path: 'recap-etudiant', component: ReportGeneratorComponent },
-   { path: 'list-etudiant-date', component: ReportGeneratorComponentExcel }
+   { path: 'list-etudiant-date', component: ReportGeneratorComponentExcel },
+    { path: 'etat-etudiant-dianenew', component: StudentListComponent }
+
+
 
 
 

@@ -1,106 +1,88 @@
+<app-menu></app-menu>
 <div class="container">
   <!-- En-tête -->
   <div class="header">
     <h1>État Liste des Élèves</h1>
+    <div class="api-status" [class.connected]="apiStatus === 'API connectée'"
+                          [class.disconnected]="apiStatus !== 'API connectée'">
+      📡 {{ apiStatus }}
+    </div>
   </div>
 
   <!-- Formulaire de recherche -->
   <div class="search-form">
     <div class="form-row">
+      <!-- Campus -->
       <div class="form-group">
         <label for="campus">Campus :</label>
-        <select id="campus" [(ngModel)]="searchCriteria.campus" class="form-control">
+        <select id="campus" [(ngModel)]="campus" class="form-control">
           <option value="">Sélectionnez un campus</option>
           <option *ngFor="let campus of campuses" [value]="campus">{{ campus }}</option>
         </select>
       </div>
 
+      <!-- Année Scolaire -->
       <div class="form-group">
         <label for="anneeScolaire">Année Scolaire :</label>
-        <select id="anneeScolaire" [(ngModel)]="searchCriteria.anneeScolaire" class="form-control">
+        <select id="anneeScolaire" [(ngModel)]="anneeScolaire" class="form-control">
           <option value="">Sélectionnez une année</option>
           <option *ngFor="let annee of anneesScolaires" [value]="annee">{{ annee }}</option>
         </select>
       </div>
 
+      <!-- Classe -->
       <div class="form-group">
         <label for="classe">Classe :</label>
-        <select id="classe" [(ngModel)]="searchCriteria.classe" class="form-control">
-          <option value="">Sélectionnez une classe</option>
-          <option *ngFor="let classe of classes" [value]="classe">{{ classe }}</option>
-        </select>
+        <input type="text"
+               id="classe"
+               [(ngModel)]="classe"
+               class="form-control"
+               [placeholder]="'Ex: ' + getRandomExample()"
+               maxlength="50">
+        <small class="form-text text-muted">
+          Saisir le code de la classe (ex: URGL1, BTS2, LICENCE1)
+        </small>
       </div>
     </div>
 
     <!-- Boutons d'action -->
     <div class="action-buttons">
-      <button type="button" class="btn btn-primary" (click)="searchStudents()" [disabled]="isLoading">
+      <button type="button"
+              class="btn btn-success"
+              (click)="exportToExcel()"
+              [disabled]="isLoading || !campus || !anneeScolaire || !classe">
         <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"></span>
-        {{ isLoading ? 'Recherche...' : 'Actualiser' }}
+        {{ isLoading ? 'Génération...' : 'Impression Excel' }}
       </button>
 
-      <button type="button" class="btn btn-success" (click)="exportToExcel()" [disabled]="isLoading || students.length === 0">
-        <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"></span>
-        Impression Excel
-      </button>
-
-      <button type="button" class="btn btn-info" (click)="exportToPDF()" [disabled]="isLoading || students.length === 0">
-        Impression PDF
-      </button>
-
-      <button type="button" class="btn btn-secondary" (click)="refresh()" [disabled]="isLoading">
+      <button type="button" class="btn btn-secondary" (click)="resetForm()">
         Nouvelle Recherche
+      </button>
+
+      <button type="button" class="btn btn-info" (click)="exportToPDF()">
+        Impression PDF
       </button>
     </div>
   </div>
 
-  <!-- Message d'erreur -->
-  <div *ngIf="errorMessage" class="alert alert-danger">
+  <!-- Messages -->
+  <div *ngIf="errorMessage" class="alert"
+       [class.alert-success]="errorMessage.includes('succès')"
+       [class.alert-danger]="!errorMessage.includes('succès') && errorMessage.includes('Erreur')"
+       [class.alert-info]="!errorMessage.includes('succès') && !errorMessage.includes('Erreur')">
     {{ errorMessage }}
   </div>
 
-  <!-- Résultats -->
-  <div *ngIf="hasSearched" class="results-section">
-    <div class="results-header">
-      <h3>Résultats de la recherche</h3>
-      <span class="badge badge-primary">Total: {{ totalStudents }} étudiant(s)</span>
-    </div>
-
-    <!-- Aucun résultat -->
-    <div *ngIf="students.length === 0 && !isLoading" class="no-results">
-      <div class="alert alert-warning">
-        <strong>Aucun élève trouvé.</strong> Veuillez saisir des critères de recherche.
+  <!-- Résumé après recherche -->
+  <div *ngIf="campus && anneeScolaire && classe" class="results-section">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Critères de recherche sélectionnés</h5>
+        <p class="card-text"><strong>Campus:</strong> {{ campus }}</p>
+        <p class="card-text"><strong>Année Scolaire:</strong> {{ anneeScolaire }}</p>
+        <p class="card-text"><strong>Classe:</strong> {{ classe }}</p>
+        <p class="card-text text-success">✅ Prêt pour l'export</p>
       </div>
-    </div>
-
-    <!-- Tableau des résultats -->
-    <div *ngIf="students.length > 0" class="table-responsive">
-      <table class="table table-striped table-bordered">
-        <thead class="thead-dark">
-          <tr>
-            <th>Matricule</th>
-            <th>Nom</th>
-            <th>Lieu de naissance</th>
-            <th>Date de naissance</th>
-            <th>Sexe</th>
-            <th>Téléphone</th>
-            <th>Nationalité</th>
-            <th>Classe</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let student of students">
-            <td>{{ student.matriElev || '-' }}</td>
-            <td>{{ student.nomElev || '-' }}</td>
-            <td>{{ student.lieunaisElev || '-' }}</td>
-            <td>{{ student.datenaisElev | date:'dd/MM/yyyy' || '-' }}</td>
-            <td>{{ student.sexeElev || '-' }}</td>
-            <td>{{ student.celetud || '-' }}</td>
-            <td>{{ student.desNat || '-' }}</td>
-            <td>{{ student.codeDetcla || '-' }}</td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </div>
