@@ -1,0 +1,106 @@
+<div class="container">
+  <!-- En-tête -->
+  <div class="header">
+    <h1>État Liste des Élèves</h1>
+  </div>
+
+  <!-- Formulaire de recherche -->
+  <div class="search-form">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="campus">Campus :</label>
+        <select id="campus" [(ngModel)]="searchCriteria.campus" class="form-control">
+          <option value="">Sélectionnez un campus</option>
+          <option *ngFor="let campus of campuses" [value]="campus">{{ campus }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="anneeScolaire">Année Scolaire :</label>
+        <select id="anneeScolaire" [(ngModel)]="searchCriteria.anneeScolaire" class="form-control">
+          <option value="">Sélectionnez une année</option>
+          <option *ngFor="let annee of anneesScolaires" [value]="annee">{{ annee }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="classe">Classe :</label>
+        <select id="classe" [(ngModel)]="searchCriteria.classe" class="form-control">
+          <option value="">Sélectionnez une classe</option>
+          <option *ngFor="let classe of classes" [value]="classe">{{ classe }}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Boutons d'action -->
+    <div class="action-buttons">
+      <button type="button" class="btn btn-primary" (click)="searchStudents()" [disabled]="isLoading">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"></span>
+        {{ isLoading ? 'Recherche...' : 'Actualiser' }}
+      </button>
+
+      <button type="button" class="btn btn-success" (click)="exportToExcel()" [disabled]="isLoading || students.length === 0">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"></span>
+        Impression Excel
+      </button>
+
+      <button type="button" class="btn btn-info" (click)="exportToPDF()" [disabled]="isLoading || students.length === 0">
+        Impression PDF
+      </button>
+
+      <button type="button" class="btn btn-secondary" (click)="refresh()" [disabled]="isLoading">
+        Nouvelle Recherche
+      </button>
+    </div>
+  </div>
+
+  <!-- Message d'erreur -->
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Résultats -->
+  <div *ngIf="hasSearched" class="results-section">
+    <div class="results-header">
+      <h3>Résultats de la recherche</h3>
+      <span class="badge badge-primary">Total: {{ totalStudents }} étudiant(s)</span>
+    </div>
+
+    <!-- Aucun résultat -->
+    <div *ngIf="students.length === 0 && !isLoading" class="no-results">
+      <div class="alert alert-warning">
+        <strong>Aucun élève trouvé.</strong> Veuillez saisir des critères de recherche.
+      </div>
+    </div>
+
+    <!-- Tableau des résultats -->
+    <div *ngIf="students.length > 0" class="table-responsive">
+      <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+          <tr>
+            <th>Matricule</th>
+            <th>Nom</th>
+            <th>Lieu de naissance</th>
+            <th>Date de naissance</th>
+            <th>Sexe</th>
+            <th>Téléphone</th>
+            <th>Nationalité</th>
+            <th>Classe</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let student of students">
+            <td>{{ student.matriElev || '-' }}</td>
+            <td>{{ student.nomElev || '-' }}</td>
+            <td>{{ student.lieunaisElev || '-' }}</td>
+            <td>{{ student.datenaisElev | date:'dd/MM/yyyy' || '-' }}</td>
+            <td>{{ student.sexeElev || '-' }}</td>
+            <td>{{ student.celetud || '-' }}</td>
+            <td>{{ student.desNat || '-' }}</td>
+            <td>{{ student.codeDetcla || '-' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
