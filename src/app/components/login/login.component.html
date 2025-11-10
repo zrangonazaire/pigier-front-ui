@@ -1,68 +1,70 @@
-<div class="elegant-container-wrapper">
-  <div class="elegant-login-container">
-    <div class="elegant-login-header text-center mb-4">
-      <h1 class="app-main-title">KRANJA-APP</h1>
-      <p class="app-main-subtitle">La nouvelle plateforme de gestion de PIGIER CI</p>
-    </div>
-  <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="elegant-login-form">
-    <div class="form-header">
-      <img src="assets/pigier-logo.png" alt="PIGIER COTE D'IVOIRE Logo" class="logo">
-      <h2>ACCÈS SÉCURISÉ</h2>
+<div class="login-container">
+  <div class="login-card">
+    <div class="logo-section">
+      <img src="assets/pigier-logo.png" alt="Zra Consulting Logo" class="logo" />
+      <h1 class="app-title">KRANJA-APP</h1>
+      <div class="separator"></div>
     </div>
 
-    @if (errorMessage()) {
-      <div class="alert alert-error">
-        {{ errorMessage() }}
+    <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="login-form">
+      <div class="form-group">
+        <label for="email">LOGIN</label>
+        <div class="input-wrapper">
+          <i class="fas fa-user"></i>
+          <input
+            type="text"
+            id="email"
+            [(ngModel)]="authLogin.username"
+            name="email"
+            required
+            email
+            class="form-input"
+            placeholder="votre.email@zra-consulting.ci"
+          />
+        </div>
       </div>
-    }
 
-    <div class="form-group">
-      <label for="email">LOGIN</label>
-      <input
-        type="text"
-        id="email"
-        [(ngModel)]="authLogin.username"
-        name="email"
-        required
-        email
-        class="elegant-input"
-        placeholder="votre.email@pigier.ci"
-      >
-      <span class="input-focus-line"></span>
-    </div>
+      <div class="form-group">
+        <label for="password">CODE D'ACCÈS CRYPTÉ</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock"></i>
+          <input
+            type="password"
+            id="password"
+            [(ngModel)]="authLogin.password"
+            name="password"
+            required
+            minlength="6"
+            class="form-input"
+            placeholder="••••••••"
+          />
+        </div>
+      </div>
 
-    <div class="form-group">
-      <label for="password">CODE D'ACCÈS CRYPTÉ</label>
-      <input
-        type="password"
-        id="password"
-        [(ngModel)]="authLogin.password"
-        name="password"
-        required
-        minlength="6"
-        class="elegant-input"
-        placeholder="••••••••"
-      >
-      <span class="input-focus-line"></span>
-    </div>
-
-    <button
-      type="submit"
-      class="elegant-btn"
-      [disabled]="isLoading()"
-    >
-      @if (isLoading()) {
-        <span class="elegant-spinner"></span>
-        INITIATION DE SESSION...
-      } @else {
-        ACCÉDER AU SYSTÈME
+      @if (errorMessage()) {
+        <div class="alert alert-error">
+          {{ errorMessage() }}
+        </div>
       }
-    </button>
 
-    <div class="elegant-links">
-      <a routerLink="/forgot-password" class="link-forgot-password">CODE D'ACCÈS OUBLIÉ ?</a>
-    </div>
-  </form>
+      <button
+        type="submit"
+        class="login-btn"
+        [disabled]="isLoading()"
+      >
+        @if (isLoading()) {
+          <span class="spinner"></span>
+          INITIATION DE SESSION...
+        } @else {
+          ACCÉDER AU SYSTÈME
+        }
+      </button>
+
+      <div class="extra-links">
+        <a routerLink="/forgot-password" class="forgot-link">
+          CODE D'ACCÈS OUBLIÉ ?
+        </a>
+      </div>
+    </form>
+  </div>
 </div>
-
-<div class="elegant-background"></div>

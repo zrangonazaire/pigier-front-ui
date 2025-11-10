@@ -1,0 +1,70 @@
+<div class="futuristic-container">
+  <div class="cyber-grid"></div>
+  <div class="login-box">
+    <div class="content-box">
+      <div class="logo-container">
+        <img src="assets/pigier-logo.png" alt="PIGIER COTE D'IVOIRE Logo" class="hover-glow">
+        <h1 class="cyber-text">KRANJA-APP</h1>
+        <div class="scanner-line"></div>
+      </div>
+      
+      <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="login-form">
+        <div class="input-group">
+          <div class="cyber-input-container">
+            <i class="fas fa-user"></i>
+            <input
+              type="text"
+              id="email"
+              [(ngModel)]="authLogin.username"
+              name="email"
+              required
+              email
+              class="form-input"
+              placeholder="Nom d'utilisateur / Email"
+            >
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div class="cyber-input-container">
+            <i class="fas fa-lock"></i>
+            <input
+              type="password"
+              id="password"
+              [(ngModel)]="authLogin.password"
+              name="password"
+              required
+              minlength="6"
+              class="form-input"
+              placeholder="Mot de passe"
+            >
+          </div>
+        </div>
+
+        @if (errorMessage()) {
+          <div class="alert-error">
+            {{ errorMessage() }}
+          </div>
+        }
+
+        <button
+          type="submit"
+          [disabled]="isLoading()"
+        >
+          @if (isLoading()) {
+            <span class="elegant-spinner"></span>
+            CONNEXION EN COURS...
+          } @else {
+            ACCÉDER AU SYSTÈME
+          }
+        </button>
+
+        <div class="form-footer">
+          <a routerLink="/forgot-password" class="forgot-link">
+            Mot de passe oublié?
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
