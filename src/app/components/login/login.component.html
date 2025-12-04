@@ -1,8 +1,9 @@
 <div class="login-container">
   <div class="login-card">
     <div class="logo-section">
-      <img src="assets/pigier-logo.png" alt="Zra Consulting Logo" class="logo" />
+      <img src="assets/pigier-logo.png" alt="Pigier logo" class="logo" />
       <h1 class="app-title">KRANJA-APP</h1>
+      <p class="tagline">Portail Pigier - Acces securise</p>
       <div class="separator"></div>
     </div>
 
@@ -19,13 +20,13 @@
             required
             email
             class="form-input"
-            placeholder="votre.email@zra-consulting.ci"
+            placeholder="prenom.nom@pigier.ci"
           />
         </div>
       </div>
 
       <div class="form-group">
-        <label for="password">CODE D'ACCÈS CRYPTÉ</label>
+        <label for="password">CODE D'ACCES CRYPTE</label>
         <div class="input-wrapper">
           <i class="fas fa-lock"></i>
           <input
@@ -36,7 +37,7 @@
             required
             minlength="6"
             class="form-input"
-            placeholder="••••••••"
+            placeholder="********"
           />
         </div>
       </div>
@@ -47,22 +48,18 @@
         </div>
       }
 
-      <button
-        type="submit"
-        class="login-btn"
-        [disabled]="isLoading()"
-      >
+      <button type="submit" class="login-btn" [disabled]="isLoading()">
         @if (isLoading()) {
           <span class="spinner"></span>
           INITIATION DE SESSION...
         } @else {
-          ACCÉDER AU SYSTÈME
+          ACCEDER AU SYSTEME
         }
       </button>
 
       <div class="extra-links">
         <a routerLink="/forgot-password" class="forgot-link">
-          CODE D'ACCÈS OUBLIÉ ?
+          CODE D'ACCES OUBLIE ?
         </a>
       </div>
     </form>

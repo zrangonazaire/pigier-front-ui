@@ -1,307 +1,363 @@
-
-.futuristic-login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  position: relative;
-  z-index: 2;
-  padding: 20px;
-  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); /* Dégradé statique */
-}
-
-.futuristic-login-form {
-  width: 100%;
-  max-width: 450px;
-  padding: 2.5rem;
-  background: rgba(15, 23, 42, 0.9); /* Fond légèrement plus opaque */
-  border-radius: 16px;
-  box-shadow: 0 0 30px rgba(0, 255, 255, 0.5),
-              0 0 60px rgba(0, 150, 255, 0.3),
-              inset 0 0 10px rgba(0, 200, 255, 0.2);
-  border: 1px solid #00ffff;
-  backdrop-filter: blur(5px);
-}
-
-.form-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.form-header h2 {
-  font-weight: 500;
-  letter-spacing: 3px;
-  text-shadow: 0 0 10px #00ffff;
-  margin-top: 1rem;
-}
-
-.logo {
-  max-width: 180px;
-  margin: 0 auto;
-  display: block;
-  filter: drop-shadow(0 0 8px #00ffff);
-}
-
-.form-group {
-  position: relative;
-  margin-bottom: 1.8rem;
-}
-
-.futuristic-input {
-  width: 100%;
-  padding: 14px 18px;
-  background: rgba(0, 10, 20, 0.6);
-  border: 1px solid #00aaff;
-  border-radius: 8px;
-  color: #00ffea;
-  font-family: 'Arial', sans-serif;
-  letter-spacing: 1px;
-  transition: all 0.3s ease;
-}
-
-.futuristic-input::placeholder {
-  color: rgba(0, 200, 255, 0.6);
-}
-
-.futuristic-input:focus {
-  outline: none;
-  border-color: #00ffff;
-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
-  background: rgba(0, 20, 40, 0.8);
-}
-
-.input-glow {
-  position: absolute;
-  bottom: -5px;
-  left: 5%;
-  width: 90%;
-  height: 4px;
-  background: rgba(0, 255, 255, 0.5);
-  border-radius: 50%;
-  filter: blur(4px);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.futuristic-input:focus ~ .input-glow {
-  opacity: 1;
-}
-
-.futuristic-btn {
-  width: 100%;
-  padding: 16px;
-  background: linear-gradient(135deg, #00aaff, #0077ff);
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-size: 1.1rem;
-  letter-spacing: 1.5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.futuristic-btn:hover {
-  background: linear-gradient(135deg, #00ffff, #00aaff);
-  box-shadow: 0 0 20px rgba(0, 200, 255, 0.7);
-  transform: translateY(-2px);
-}
-
-.futuristic-btn:disabled {
-  background: linear-gradient(135deg, #0066aa, #004488);
-  cursor: not-allowed;
-}
-
-.spinner {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: #00ffff;
-  animation: spin 1s ease-in-out infinite;
-  margin-right: 10px;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.futuristic-links {
-  text-align: center;
-  margin-top: 1.5rem;
-}
-
-.link-forgot-password {
-  color: #00aaff;
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: color 0.3s ease;
-}
-
-.link-forgot-password:hover {
-  color: #00ffff;
-  text-shadow: 0 0 8px rgba(0, 200, 255, 0.8);
-}
-
-.alert-error {
-  padding: 12px;
-  background: rgba(255, 50, 50, 0.2);
-  border: 1px solid #ff0055;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  text-align: center;
-  color: #ff5577;
-}
-/* La barre de navigation elle-même */
-.navbar {
-  /* Assurez-vous que Bootstrap n'écrase pas ces styles importants */
-  background: linear-gradient(90deg, #102a43, #0a1829); /* Dégradé de bleus foncés pour le fond */
-  border-bottom: 2px solid #007bff; /* Ligne bleue vive en bas pour une touche futuriste */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Ombre douce pour la profondeur */
-  padding: 1rem 2rem; /* Augmente le padding pour un look plus "spacieux" */
-  z-index: 100; /* Assure que la nav est au-dessus du contenu */
-  position: relative; /* Pour positionner des éléments internes si besoin */
-}
-
-/* Texte de la marque (PIGIER COTE D'IVOIRE) */
-.navbar-brand {
-  color: #FFEA00 !important; /* Jaune vif pour le nom de la marque */
-  font-weight: bold;
-  font-size: 1.6em;
-  letter-spacing: 1px;
-  text-shadow: 0 0 10px rgba(255, 234, 0, 0.7); /* Lueur jaune autour du texte */
-  transition: all 0.3s ease;
-}
-
-.navbar-brand:hover {
-  color: #FFFF00 !important; /* Jaune plus brillant au survol */
-  text-shadow: 0 0 15px rgba(255, 255, 0, 0.9);
-}
-
-/* Liens de navigation (Accueil, Gestion, Paramètres, etc.) */
-.navbar-nav .nav-link {
-  color: #a0c0e0 !important; /* Bleu clair pour les liens par défaut */
-  font-size: 1.05em;
-  padding: 0.8rem 1.2rem; /* Padding pour les liens */
-  margin: 0 0.5rem; /* Espacement entre les liens */
-  border-radius: 5px;
-  transition: all 0.3s ease;
-  position: relative; /* Pour l'effet de survol */
-  overflow: hidden;
-}
-
-.navbar-nav .nav-link:hover {
-  color: #FFEA00 !important; /* Jaune vif au survol */
-  background-color: rgba(65, 105, 225, 0.2); /* Fond légèrement bleu transparent au survol */
-  transform: translateY(-2px); /* Léger soulèvement */
-}
-
-/* Indicateur de lien actif (si utilisé par Bootstrap ou Angular) */
-.navbar-nav .nav-link.active {
-  color: #FFEA00 !important; /* Jaune vif pour le lien actif */
-  background-color: rgba(65, 105, 225, 0.4); /* Fond bleu transparent plus prononcé */
-  border-bottom: 2px solid #FFEA00; /* Ligne jaune en bas du lien actif */
-  transform: translateY(-1px);
-}
-
-/* Boutons de la barre de navigation (Notifications, Déconnexion) */
-.navbar .btn {
-  padding: 0.7rem 1.5rem;
-  font-weight: bold;
-  border-radius: 8px;
-  margin-left: 1rem;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Bouton Notifications */
-.btn-notifications {
-  background: linear-gradient(45deg, #FFEA00, #FFD700); /* Dégradé de jaunes */
-  color: #333333; /* Texte foncé pour le contraste */
-  border: none; /* Pas de bordure pour un look plus lisse */
-  box-shadow: 0 4px 10px rgba(255, 204, 0, 0.4); /* Ombre jaune */
-}
-
-.btn-notifications:hover {
-  background: linear-gradient(45deg, #FFFF00, #FFEA00); /* Dégradé inversé au survol */
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(255, 204, 0, 0.6);
-}
-
-/* Bouton Déconnexion */
-.btn-disconnect {
-  background: linear-gradient(45deg, #dc3545, #c82333); /* Dégradé de rouges vifs */
-  color: #ffffff;
-  border: none;
-  box-shadow: 0 4px 10px rgba(220, 53, 69, 0.4); /* Ombre rouge */
-}
-
-.btn-disconnect:hover {
-  background: linear-gradient(45deg, #c82333, #dc3545);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(220, 53, 69, 0.6);
-}
-
-/* Icônes Bootstrap (si vous les utilisez, ex: pour Notifications) */
-.navbar .bi-bell-fill { /* Exemple pour une icône de cloche de Bootstrap Icons */
-    margin-right: 5px;
-}
-
-/* Petits détails de style pour améliorer le rendu */
-.navbar-toggler {
-  border-color: rgba(255, 234, 0, 0.5) !important; /* Bordure du bouton toggle en jaune */
-}
-
-.navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 234, 0, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important; /* Icône du hamburger en jaune */
-}
-
-/* Styles globaux pour le dashboard et autres composants */
-
-.elegant-spinner {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(0, 0, 0, 0.1);
-  border-radius: 50%;
-  border-top-color: #3498db;
-  /* Utilise l'animation 'spin' déjà définie dans ce fichier */
-  animation: spin 0.8s linear infinite;
-}
+/* ---------------------------------------------------------------------------
+   Thème Pigier : palette bleu / jaune / blanc
+   Applique une esthétique unifiée (nav, boutons, formulaires, tableaux, cartes)
+--------------------------------------------------------------------------- */
 
 :root {
-  --primary-color: #3498db;
-  --secondary-color: #2c3e50;
-  --accent-color: #e74c3c;
-  --success-color: #27ae60;
-  --warning-color: #f39c12;
-  --dark-bg: #ffffff;
-  --card-bg: #f8f9fa;
-  --text-light: #333333;
-  --text-muted: #6c757d;
-  --border-color: #dee2e6;
-  --calendar-bg: #ffffff;
-  --calendar-text: #212529;
-  --calendar-hover: #e9ecef;
-  --calendar-active: #3498db;
+  --brand-blue: #0b4da3;
+  --brand-navy: #0a2f6f;
+  --brand-yellow: #f5c64e;
+  --brand-cream: #fff9ec;
+  --text-strong: #0f1f3d;
+  --text-muted: #5a6b87;
+  --surface: #ffffff;
+  --surface-muted: #f3f6fc;
+  --border: #d6e0f0;
+  --shadow-strong: 0 18px 48px rgba(11, 77, 163, 0.22);
+  --shadow-soft: 0 10px 28px rgba(11, 45, 110, 0.24);
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --font-base: "Poppins", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+/* Reset de base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
-  /* Le background est déjà géré par les composants comme le login, mais on garde une base */
-  color: var(--text-light);
+  margin: 0;
   min-height: 100vh;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--font-base);
+  color: var(--text-strong);
+  background: radial-gradient(circle at 20% 10%, rgba(245, 198, 78, 0.14), transparent 32%),
+              radial-gradient(circle at 80% 0%, rgba(11, 77, 163, 0.12), transparent 28%),
+              linear-gradient(180deg, #f7f9ff 0%, #eef2fb 55%, #ffffff 100%);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Styles pour les statuts */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-strong);
+  letter-spacing: 0.3px;
+  margin: 0 0 12px 0;
+}
+
+p {
+  margin: 0 0 12px 0;
+  color: var(--text-muted);
+}
+
+a {
+  color: var(--brand-blue);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--brand-yellow);
+}
+
+/* ---------------------------------------------------------------------------
+   Barre de navigation
+--------------------------------------------------------------------------- */
+.navbar {
+  background: linear-gradient(105deg, var(--brand-blue), var(--brand-navy));
+  border-bottom: 2px solid var(--brand-yellow);
+  box-shadow: var(--shadow-soft);
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-brand {
+  color: var(--brand-yellow) !important;
+  font-weight: 700;
+  font-size: 1.6rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.navbar-brand:hover {
+  color: #ffeaa0 !important;
+}
+
+.navbar-nav .nav-link {
+  color: #e7ecf5 !important;
+  font-weight: 600;
+  padding: 0.8rem 1.1rem;
+  border-radius: 10px;
+  transition: all 0.25s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  color: var(--brand-yellow) !important;
+  background-color: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+  box-shadow: inset 0 0 0 1px rgba(245, 198, 78, 0.4);
+}
+
+.navbar-nav .nav-link.active {
+  color: #0b2244 !important;
+  background-color: rgba(245, 198, 78, 0.2);
+  border-bottom: 2px solid var(--brand-yellow);
+  transform: translateY(-1px);
+}
+
+.navbar .btn {
+  margin-left: 0.75rem;
+}
+
+.btn-notifications {
+  background: linear-gradient(45deg, var(--brand-yellow), #ffd666);
+  color: #0b2244;
+  border: none;
+  box-shadow: 0 4px 12px rgba(245, 198, 78, 0.4);
+}
+
+.btn-notifications:hover {
+  background: linear-gradient(45deg, #ffd666, var(--brand-yellow));
+  transform: translateY(-2px);
+}
+
+.btn-disconnect {
+  background: linear-gradient(45deg, #e35353, #c82333);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 4px 10px rgba(220, 53, 69, 0.35);
+}
+
+.navbar-toggler {
+  border-color: rgba(245, 198, 78, 0.6) !important;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28245, 198, 78, 0.85%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Boutons
+--------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(115deg, var(--brand-blue), var(--brand-navy));
+  border-color: #0a3a84;
+  color: #ffffff;
+  box-shadow: var(--shadow-soft);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(115deg, var(--brand-yellow), var(--brand-blue));
+  color: #0b2244;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--surface-muted);
+  color: var(--text-strong);
+  border-color: var(--border);
+}
+
+.btn-secondary:hover {
+  border-color: var(--brand-blue);
+  box-shadow: 0 10px 20px rgba(11, 77, 163, 0.15);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--brand-blue);
+  border-color: rgba(11, 77, 163, 0.25);
+}
+
+.btn-ghost:hover {
+  background: rgba(11, 77, 163, 0.08);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Cartes / panneaux
+--------------------------------------------------------------------------- */
+.card,
+.panel,
+.widget {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+  padding: 22px;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.card-meta {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Formulaires
+--------------------------------------------------------------------------- */
+label,
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface-muted);
+  color: var(--text-strong);
+  font-size: 0.98rem;
+  transition: all 0.2s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--brand-blue);
+  box-shadow: 0 14px 26px rgba(11, 77, 163, 0.18);
+  background: #ffffff;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(15, 31, 61, 0.5);
+}
+
+.form-group {
+  margin-bottom: 1.1rem;
+}
+
+.alert-error {
+  background: #ffe5e5;
+  color: #d10000;
+  border-left: 4px solid #d10000;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  margin-bottom: 1rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Tableaux unifiés
+--------------------------------------------------------------------------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+th,
+td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  background: linear-gradient(135deg, rgba(11, 77, 163, 0.12), rgba(11, 77, 163, 0.06));
+  color: var(--text-strong);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+tr:nth-child(even) {
+  background: var(--surface-muted);
+}
+
+tr:hover {
+  background: rgba(11, 77, 163, 0.06);
+}
+
+.table-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.table-actions button,
+.table-actions .btn {
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+}
+
+.data-table {
+  width: 100%;
+}
+
+.data-table th,
+.data-table td {
+  white-space: nowrap;
+}
+
+.empty-state {
+  padding: 40px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.empty-state i {
+  font-size: 3rem;
+  color: rgba(11, 77, 163, 0.35);
+}
+
+/* ---------------------------------------------------------------------------
+   Statuts & badges
+--------------------------------------------------------------------------- */
 .status-pending {
   background: #fff3cd;
   color: #856404;
-  padding: 5px 12px;
-  border-radius: 20px;
+  padding: 6px 14px;
+  border-radius: 999px;
   font-size: 0.85rem;
   border: 1px solid #ffeeba;
 }
@@ -309,34 +365,35 @@ body {
 .status-approved {
   background: #d4edda;
   color: #155724;
-  padding: 5px 12px;
-  border-radius: 20px;
+  padding: 6px 14px;
+  border-radius: 999px;
   font-size: 0.85rem;
   border: 1px solid #c3e6cb;
 }
 
 .status-warning {
-  background: #f8d7da;
-  color: #721c24;
-  padding: 5px 12px;
-  border-radius: 20px;
+  background: #fff6e2;
+  color: #8a5b00;
+  padding: 6px 14px;
+  border-radius: 999px;
   font-size: 0.85rem;
-  border: 1px solid #f5c6cb;
+  border: 1px solid #ffe7a3;
 }
 
-/* Badge site */
 .site-badge {
   background: #e3f2fd;
   color: #0d47a1;
-  padding: 5px 12px;
-  border-radius: 20px;
+  padding: 6px 12px;
+  border-radius: 999px;
   font-size: 0.85rem;
   border: 1px solid #bbdefb;
 }
 
-/* Pied de page centré */
+/* ---------------------------------------------------------------------------
+   Pied de page / dashboard footer
+--------------------------------------------------------------------------- */
 .dashboard-footer {
-  background: #f8f9fa;
+  background: var(--surface);
   padding: 20px;
   text-align: center;
   font-size: 0.9rem;
@@ -344,7 +401,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--border);
 }
 
 .system-status {
@@ -356,20 +413,18 @@ body {
 
 .system-status::before {
   content: "";
-  display: block;
   width: 10px;
   height: 10px;
-  background: var(--success-color);
+  background: #27ae60;
   border-radius: 50%;
 }
 
-/* Modal centré */
+/* ---------------------------------------------------------------------------
+   Modales
+--------------------------------------------------------------------------- */
 .modal-backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: rgba(0, 0, 0, 0.5);
   z-index: 1000;
 }
@@ -380,58 +435,94 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1001;
-  background: white;
-  border-radius: 12px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
   width: 90%;
-  max-width: 500px;
+  max-width: 520px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border);
 }
 
 .modal-header {
   padding: 20px;
-  border-bottom: 1px solid var(--border-color);
-  color: var(--secondary-color);
+  border-bottom: 1px solid var(--border);
+  color: var(--text-strong);
 }
 
 .modal-body {
-  padding: 30px 20px;
-  color: var(--text-light);
+  padding: 26px 20px;
+  color: var(--text-strong);
 }
 
 .modal-footer {
-  padding: 20px;
+  padding: 18px 20px;
   display: flex;
   justify-content: flex-end;
-  gap: 15px;
-  border-top: 1px solid var(--border-color);
+  gap: 12px;
+  border-top: 1px solid var(--border);
 }
 
-.btn {
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
+/* ---------------------------------------------------------------------------
+   Loaders
+--------------------------------------------------------------------------- */
+.elegant-spinner,
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 3px solid rgba(0, 0, 0, 0.08);
+  border-radius: 50%;
+  border-top-color: var(--brand-yellow);
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------------------------------------------------------------------------
+   Styles login (alignés au nouveau thème)
+--------------------------------------------------------------------------- */
+.futuristic-login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 24px;
+  background: radial-gradient(circle at 20% 20%, rgba(245, 198, 78, 0.2), transparent 35%),
+              radial-gradient(circle at 80% 0%, rgba(11, 77, 163, 0.15), transparent 30%),
+              linear-gradient(125deg, #f8fbff, #e5edfa 55%, #fdfdfd);
+}
+
+.futuristic-login-form {
+  width: 100%;
+  max-width: 460px;
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 18px;
+  box-shadow: var(--shadow-strong);
+  border: 1px solid rgba(11, 77, 163, 0.18);
+  backdrop-filter: blur(5px);
+}
+
+.futuristic-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-navy));
   border: none;
-  font-weight: 500;
-  transition: all 0.3s;
-}
-
-.btn-secondary {
-  background: #6c757d;
+  border-radius: 10px;
   color: white;
+  font-size: 1.05rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.btn-primary {
-  background: var(--primary-color);
-  color: white;
-}
-
-/* Styles pour le calendrier qui pourraient être utilisés ailleurs */
-.calendar-container {
-  background: var(--calendar-bg);
-  border-radius: 8px;
-  padding: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  border: 1px solid var(--border-color);
-  color: var(--calendar-text);
+.futuristic-btn:hover {
+  background: linear-gradient(135deg, var(--brand-yellow), var(--brand-blue));
+  color: #0b2244;
+  box-shadow: 0 15px 28px rgba(11, 77, 163, 0.22);
+  transform: translateY(-2px);
 }
