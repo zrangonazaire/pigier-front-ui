@@ -1,0 +1,88 @@
+<app-menu></app-menu>
+<div class="container">
+  <!-- En-tête -->
+  <div class="header">
+    <h1>État Liste des Élèves</h1>
+    <div class="api-status" [class.connected]="apiStatus === 'API connectée'"
+                          [class.disconnected]="apiStatus !== 'API connectée'">
+      📡 {{ apiStatus }}
+    </div>
+  </div>
+
+  <!-- Formulaire de recherche -->
+  <div class="search-form">
+    <div class="form-row">
+      <!-- Campus -->
+      <div class="form-group">
+        <label for="campus">Campus :</label>
+        <select id="campus" [(ngModel)]="campus" class="form-control">
+          <option value="">Sélectionnez un campus</option>
+          <option *ngFor="let campus of campuses" [value]="campus">{{ campus }}</option>
+        </select>
+      </div>
+
+      <!-- Année Scolaire -->
+      <div class="form-group">
+        <label for="anneeScolaire">Année Scolaire :</label>
+        <select id="anneeScolaire" [(ngModel)]="anneeScolaire" class="form-control">
+          <option value="">Sélectionnez une année</option>
+          <option *ngFor="let annee of anneesScolaires" [value]="annee">{{ annee }}</option>
+        </select>
+      </div>
+
+      <!-- Classe -->
+      <div class="form-group">
+        <label for="classe">Classe :</label>
+        <input type="text"
+               id="classe"
+               [(ngModel)]="classe"
+               class="form-control"
+               [placeholder]="'Ex: ' + getRandomExample()"
+               maxlength="50">
+        <small class="form-text text-muted">
+          Saisir le code de la classe (ex: URGL1, BTS2, LICENCE1)
+        </small>
+      </div>
+    </div>
+
+    <!-- Boutons d'action -->
+    <div class="action-buttons">
+      <button type="button"
+              class="btn btn-success"
+              (click)="exportToExcel()"
+              [disabled]="isLoading || !campus || !anneeScolaire || !classe">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"></span>
+        {{ isLoading ? 'Génération...' : 'Impression Excel' }}
+      </button>
+
+      <button type="button" class="btn btn-secondary" (click)="resetForm()">
+        Nouvelle Recherche
+      </button>
+
+      <button type="button" class="btn btn-info" (click)="exportToPDF()">
+        Impression PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div *ngIf="errorMessage" class="alert"
+       [class.alert-success]="errorMessage.includes('succès')"
+       [class.alert-danger]="!errorMessage.includes('succès') && errorMessage.includes('Erreur')"
+       [class.alert-info]="!errorMessage.includes('succès') && !errorMessage.includes('Erreur')">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Résumé après recherche -->
+  <div *ngIf="campus && anneeScolaire && classe" class="results-section">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Critères de recherche sélectionnés</h5>
+        <p class="card-text"><strong>Campus:</strong> {{ campus }}</p>
+        <p class="card-text"><strong>Année Scolaire:</strong> {{ anneeScolaire }}</p>
+        <p class="card-text"><strong>Classe:</strong> {{ classe }}</p>
+        <p class="card-text text-success">✅ Prêt pour l'export</p>
+      </div>
+    </div>
+  </div>
+</div>
