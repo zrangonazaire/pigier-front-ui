@@ -29,7 +29,7 @@ interface Eleve {
 
   selector: 'app-etatlisteeleve',
   templateUrl: './etatlisteeleve.component.html',
-  styleUrls: ['./etatlisteeleve.component.css']
+  styleUrls: ['./etatlisteeleve.component.scss']
 })
 export class EtatlisteeleveComponent {
   PARAMEANNE: string = '';

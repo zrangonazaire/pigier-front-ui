@@ -15,7 +15,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MenuComponent } from '../menu/menu.component';
 import { Chart, registerables } from 'chart.js';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { startOfDay, endOfDay } from 'date-fns';
 // Ajout des imports Angular Material nécessaires
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -246,8 +245,8 @@ export class DashboardPreinscriptionComponent
 
   ngOnInit(): void {
     const today = new Date();
-    this.startDate = startOfDay(today); // 00:00:00
-    this.endDate = endOfDay(today); // 23:59:59
+    this.startDate = moment(today).startOf('day').toDate(); // 00:00:00
+    this.endDate = moment(today).endOf('day').toDate(); // 23:59:59
     this.filterByDateRange();
   }
   ngAfterViewInit(): void {
