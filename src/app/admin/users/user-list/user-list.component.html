@@ -56,8 +56,20 @@
                     </div>
                 </div>
 
-                <!-- Mot de passe (conditionnel pour édition) -->
-                @if (!userRequest.id) {
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Statut *</label>
+                        <select class="form-select" formControlName="statut"
+                            [ngClass]="{'is-invalid': userForm.get('statut')?.invalid && userForm.get('statut')?.touched}">
+                            <option *ngFor="let statut of statutOptions" [value]="statut">{{ statut }}</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Le statut est requis
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mot de passe -->
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label">Mot de passe *</label>
@@ -76,7 +88,6 @@
                         </div>
                     </div>
                 </div>
-                }
 
                 <!-- Rôles -->
                 <div class="mb-4">
@@ -152,7 +163,7 @@
                     <tr *ngFor="let user of pagedUsers; trackBy: trackById">
                         <td class="text-start">{{ user.username }}</td>
                         <td>{{ user.lastname }}</td>
-                        <td>{{ user.enable ? 'Actif' : 'Désactivé' }}</td>
+                        <td>{{ user.statut || (user.enable ? 'ACTIVE' : 'DESACTIVE') }}</td>
                         <td>{{ user.email || 'Non défini' }}</td>
                         <td>
                             <ng-container *ngIf="user.roles?.length; else noRole">
@@ -177,7 +188,7 @@
                                 <button (click)="editUser(user)" class="btn btn-outline-primary btn-sm">
                                     <i class="bi bi-pencil-square me-1"></i>Modifier
                                 </button>
-                                <button class="btn btn-outline-danger btn-sm">
+                                <button (click)="deleteUser(user)" class="btn btn-outline-danger btn-sm">
                                     <i class="bi bi-trash me-1"></i>Supprimer
                                 </button>
                             </div>

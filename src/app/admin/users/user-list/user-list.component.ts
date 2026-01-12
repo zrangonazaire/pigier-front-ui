@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 import {
   RoleResponse,
   RolesService,
+  StatutUtilisateur,
   UserRequest,
   UserResponse,
   UtilisateurControllerService,
@@ -37,6 +38,7 @@ export class UserListComponent implements OnInit {
   listeUsers = signal<UserResponse[]>([]);
   userForm: FormGroup;
   userId: number = 0;
+  statutOptions: StatutUtilisateur[] = ['ACTIVE', 'DESACTIVE', 'SUSPENDUE'];
   private utilisateurService = inject(UtilisateurControllerService);
   private roleService = inject(RolesService);
   userRoles = signal<RoleResponse[]>([]);
@@ -46,6 +48,7 @@ export class UserListComponent implements OnInit {
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       telephone: [''],
+      statut: ['ACTIVE', Validators.required],
       password: ['', [Validators.required, Validators.minLength(8)]],
       passwordConfirm: ['', Validators.required],
       roleIds: [[], Validators.required],
@@ -100,11 +103,14 @@ export class UserListComponent implements OnInit {
 
   initNewUser() {
     this.userRequest = {};
-    this.userForm.reset();
+    this.userForm.reset({
+      statut: 'ACTIVE',
+      roleIds: [],
+    });
     this.showFormMode = true;
   }
 
-  editUser(user: UserRequest) {
+  editUser(user: UserResponse) {
     console.log('Edit user called with:', user);
     this.userRequest = { ...user };
     this.utilisateurService.getByUsername(user.username!).subscribe({
@@ -117,7 +123,10 @@ export class UserListComponent implements OnInit {
           username: fullUser.username,
           email: fullUser.email,
           telephone: fullUser.telephone,
+          statut: fullUser.statut ?? 'ACTIVE',
           roleIds: fullUser.roles ? fullUser.roles.map(r => r.id) : [],
+          password: '',
+          passwordConfirm: '',
           // Ajoute d'autres champs si besoin
         });
         //console.log('Formulaire patché avec :', this.userForm.value);
@@ -178,7 +187,8 @@ export class UserListComponent implements OnInit {
         username: formValue.username,
         email: formValue.email,
         telephone: formValue.telephone,
-        roleIds: new Set(formValue.roleIds),
+        statut: formValue.statut,
+        roleIds: formValue.roleIds as unknown as Set<number>,
       };
 
       // On ajoute le mot de passe uniquement s'il a été saisi.
@@ -190,7 +200,11 @@ export class UserListComponent implements OnInit {
       const isUpdate = !!userRequest.id;
       console.log('Données du formulaire envoyées :', userRequest);
 
-      this.utilisateurService.create(this.userForm.value).subscribe({
+      const save$ = isUpdate
+        ? this.utilisateurService.update(userRequest.id!, userRequest)
+        : this.utilisateurService.create(userRequest);
+
+      save$.subscribe({
         next: () => {
           alert(`Utilisateur ${isUpdate ? 'mis à jour' : 'ajouté'} avec succès`);
           this.listUtilisateurs();
@@ -201,6 +215,25 @@ export class UserListComponent implements OnInit {
         },
       });
     }
+  }
+
+  deleteUser(user: UserResponse) {
+    if (!user.id) {
+      return;
+    }
+    const confirmed = confirm(`Supprimer l'utilisateur ${user.username} ?`);
+    if (!confirmed) {
+      return;
+    }
+    this.utilisateurService._delete(user.id).subscribe({
+      next: () => {
+        alert('Utilisateur supprimé avec succès');
+        this.listUtilisateurs();
+      },
+      error: (error) => {
+        alert(`Erreur lors de la suppression: ` + (error.error?.message || error.message));
+      },
+    });
   }
 
   cancelForm() {

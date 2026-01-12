@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 
+import { StatutUtilisateur } from './statutUtilisateur';
 
 export interface UserRequest { 
     id?: number;
@@ -16,6 +17,7 @@ export interface UserRequest {
     nomPrenoms?: string;
     telephone?: string;
     email?: string;
+    statut?: StatutUtilisateur;
     roleIds?: Set<number>;
 }
 

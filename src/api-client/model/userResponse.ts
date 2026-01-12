@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { StatutUtilisateur } from './statutUtilisateur';
 import { URole } from './uRole';
 
 
@@ -14,6 +15,7 @@ export interface UserResponse {
     id?: number;
     username?: string;
     enable?: boolean;
+    statut?: StatutUtilisateur;
     firstname?: string;
     lastname?: string;
     telephone?: string;

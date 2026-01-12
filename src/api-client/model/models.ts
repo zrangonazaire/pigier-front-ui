@@ -18,3 +18,4 @@ export * from './roleResponse';
 export * from './uRole';
 export * from './userRequest';
 export * from './userResponse';
+export * from './statutUtilisateur';
