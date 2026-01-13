@@ -11,11 +11,11 @@ import { RouterModule } from '@angular/router';
 import {
   RoleResponse,
   RolesService,
-  StatutUtilisateur,
   UserRequest,
   UserResponse,
   UtilisateurControllerService,
 } from '../../../../api-client';
+import type { StatutUtilisateur } from '../../../../api-client/model/statutUtilisateur';
 import { Role } from '../../../features/permission-management/permission.service';
 import { formatDate } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
@@ -275,7 +275,31 @@ export class UserListComponent implements OnInit {
     return this.listeUsers().slice(start, start + this.pageSize);
   }
 
+  getUserStatus(user: UserResponse): string {
+    if (user.statut === 'SUSPENDUE') {
+      return 'EN_ATTENTE';
+    }
+    return user.statut || (user.enable ? 'ACTIVE' : 'DESACTIVE');
+  }
+
+  getUserStatusClass(status: string): string {
+    switch (status) {
+      case 'ACTIVE':
+        return 'bg-success text-success';
+      case 'DESACTIVE':
+        return 'bg-danger text-danger';
+      case 'EN_ATTENTE':
+      case 'SUSPENDUE':
+        return 'bg-secondary text-secondary';
+      default:
+        return 'bg-secondary text-secondary';
+    }
+  }
+
   trackById(index: number, user: UserResponse) {
     return user.id;
   }
 }
+
+
+

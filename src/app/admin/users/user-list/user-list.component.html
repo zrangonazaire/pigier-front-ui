@@ -156,14 +156,18 @@
                         <th>Email</th>
                         <th>Rôles</th>
                         <th>Créé le</th>
-                        <th class="text-end">Actions</th>
+                        <th class="text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let user of pagedUsers; trackBy: trackById">
                         <td class="text-start">{{ user.username }}</td>
                         <td>{{ user.lastname }}</td>
-                        <td>{{ user.statut || (user.enable ? 'ACTIVE' : 'DESACTIVE') }}</td>
+                        <td>
+                            <span class="badge bg-opacity-10" [ngClass]="getUserStatusClass(getUserStatus(user))">
+                                {{ getUserStatus(user) }}
+                            </span>
+                        </td>
                         <td>{{ user.email || 'Non défini' }}</td>
                         <td>
                             <ng-container *ngIf="user.roles?.length; else noRole">
@@ -183,8 +187,8 @@
                                 {{ user.formattedCreatedDate || (user.createdDate | date:'shortDate') }}
                             </span>
                         </td>
-                        <td class="text-end">
-                            <div class="d-flex justify-content-end gap-2">
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center gap-2">
                                 <button (click)="editUser(user)" class="btn btn-outline-primary btn-sm">
                                     <i class="bi bi-pencil-square me-1"></i>Modifier
                                 </button>
@@ -237,3 +241,4 @@
     </div>
     }
 </div>
+
