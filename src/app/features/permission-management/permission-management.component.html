@@ -29,7 +29,7 @@
           <thead class="thead-dark">
             <tr>
               <th scope="col">Rôle</th>
-              <th *ngFor="let permission of permissions" scope="col" class="text-center">{{ permission.name }}</th>
+              <th *ngFor="let permission of permissions" scope="col" class="text-center text-nowrap permission-header">{{ permission.name }}</th>
               <th scope="col" class="text-center">Actions</th>
             </tr>
           </thead>
@@ -59,3 +59,4 @@
     </div>
   </div>
 </div>
+

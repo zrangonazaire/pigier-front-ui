@@ -82,7 +82,7 @@
               <th>Nom</th>
               <th>Description</th>
               <th>Permissions</th>
-              <th class="text-end">Actions</th>
+              <th class="text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -258,7 +258,7 @@
               <th width="25%">Module</th>
               <th width="30%">Description</th>
               <th width="20%" class="text-center">Droits d'accès</th>
-              <th class="text-end">Actions</th> <!-- Ajout colonne actions -->
+              <th class="text-center">Actions</th> <!-- Ajout colonne actions -->
             </tr>
           </thead>
           <tbody>
@@ -277,24 +277,24 @@
                 <div class="d-flex justify-content-center gap-2">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" [checked]="permission.canRead" disabled>
-                    <label class="form-check-label text-success" title="Lecture">Lecture</label>
+                    <label class="form-check-label text-success text-nowrap rights-label" title="Lecture">Lecture</label>
                   </div>
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" [checked]="permission.canWrite" disabled>
-                    <label class="form-check-label text-warning" title="Écriture">Écriture</label>
+                    <label class="form-check-label text-warning text-nowrap rights-label" title="Écriture">Écriture</label>
                   </div>
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" [checked]="permission.canEdit" disabled>
-                    <label class="form-check-label text-primary" title="Modification">Modification</label>
+                    <label class="form-check-label text-primary text-nowrap rights-label" title="Modification">Modification</label>
                   </div>
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" [checked]="permission.canDelete" disabled>
-                    <label class="form-check-label text-danger" title="Suppression">Suppression</label>
+                    <label class="form-check-label text-danger text-nowrap rights-label" title="Suppression">Suppression</label>
                   </div>
                 </div>
               </td>
-              <td class="text-end">
-                <div class="d-flex justify-content-end gap-2">
+              <td class="text-center">
+                <div class="d-flex justify-content-center gap-2">
                   <button class="btn btn-outline-primary btn-sm"
                           (click)="editPermission(permission)" title="Modifier">
                     <i class="bi bi-pencil me-1"></i>Modifier
