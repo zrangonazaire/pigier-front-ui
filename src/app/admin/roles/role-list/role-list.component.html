@@ -1,7 +1,7 @@
 <app-menu></app-menu>
 
 <div class="container mt-4">
- <app-user-list></app-user-list>
+  <app-user-list></app-user-list>
   <div class="card shadow">
     <div class="card-header bg-light d-flex justify-content-between align-items-center">
       <h2 class="h4 mb-0">
@@ -12,14 +12,14 @@
       </a>
     </div>
     @if (showFormMode)
-    {
-    <!-- Formulaire de création/édition -->
-    <div class="card shadow mb-4">
-      <div class="card-header bg-light">
-        <!-- <h2 class="h4 mb-0">
-        <i class="bi me-2" [ngClass]="{'bi-plus-circle': !roleRequest.permissionIds, 'bi-pencil': role.id}"></i>
-        {{ role.id ? 'Modifier le rôle' : 'Créer un nouveau rôle' }}
-      </h2> -->
+      {
+      <!-- Formulaire de création/édition -->
+      <div class="card shadow mb-4">
+        <div class="card-header bg-light">
+          <!-- <h2 class="h4 mb-0">
+          <i class="bi me-2" [ngClass]="{'bi-plus-circle': !roleRequest.permissionIds, 'bi-pencil': role.id}"></i>
+          {{ role.id ? 'Modifier le rôle' : 'Créer un nouveau rôle' }}
+        </h2> -->
       </div>
       <div class="card-body">
         <form [formGroup]="roleForm">
@@ -44,115 +44,115 @@
             <div class="border rounded p-3 bg-light">
               <div class="d-flex flex-wrap gap-2">
                 @for (permission of allPermissions; track permission.id) {
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" [id]="'perm-' + permission.id" [value]="permission.id"
-                    (change)="onPermissionChange($event, permission.id!)">
-                  <label class="form-check-label" [for]="'perm-' + permission.id">
-                    {{ permission.nomPermission }}
-                  </label>
-                </div>
-                }
-              </div>
-              @if (roleForm.get('permissionIds')?.invalid && roleForm.get('permissionIds')?.touched) {
-              <div class="text-danger small mt-2">Au moins une permission doit être sélectionnée</div>
-              }
-            </div>
-          </div>
-
-          <!-- Actions -->
-          <div class="d-flex justify-content-end gap-2">
-            <button type="button" class="btn btn-outline-secondary" (click)="cancelForm()">
-              Annuler
-            </button>
-            <button type="submit" class="btn btn-primary" [disabled]="roleForm.invalid" (click)="submitForm()">
-              Valider
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-    }
-    @if (!showFormMode) {
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table table-hover">
-          <thead class="table-light">
-            <tr>
-              <th>Nom</th>
-              <th>Description</th>
-              <th>Permissions</th>
-              <th class="text-end">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (role of roles; track role.id) {
-            <tr>
-              <td class="fw-semibold">{{ role.nomRole }}</td>
-              <td>{{ role.descriptionRole || '-' }}</td>
-              <td>
-                <div class="d-flex flex-wrap gap-1">
-                  @for (permission of role.permissions; track permission.id) {
-                  <span class="badge bg-primary bg-opacity-10 text-primary">
-                    {{ permission.nomPermission }}
-                  </span>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" [id]="'perm-' + permission.id" [value]="permission.id"
+                      (change)="onPermissionChange($event, permission.id!)">
+                      <label class="form-check-label" [for]="'perm-' + permission.id">
+                        {{ permission.nomPermission }}
+                      </label>
+                    </div>
                   }
                 </div>
-              </td>
-              <td class="text-end">
-                <div class="d-flex justify-content-end gap-2">
-                  <a [routerLink]="['/admin/roles/edit', role.id]" class="btn btn-outline-primary btn-sm"
-                    title="Modifier">
-                    <i class="bi bi-pencil me-1"></i>Modifier
-                  </a>
-                  <button (click)="confirmDelete(role.id)" class="btn btn-outline-danger btn-sm" title="Supprimer">
-                    <i class="bi bi-trash me-1"></i>Supprimer
-                  </button>
-                </div>
-              </td>
-            </tr>
-            }
+                @if (roleForm.get('permissionIds')?.invalid && roleForm.get('permissionIds')?.touched) {
+                  <div class="text-danger small mt-2">Au moins une permission doit être sélectionnée</div>
+                }
+              </div>
+            </div>
 
-            @if (loading) {
-            <tr>
-              <td colspan="4" class="text-center py-4">
-                <div class="spinner-border text-primary" role="status">
-                  <span class="visually-hidden">Chargement...</span>
-                </div>
-              </td>
-            </tr>
-            }
-
-            @if (!loading && (!roles || roles.length === 0)) {
-            <tr>
-              <td colspan="4" class="text-center text-muted py-4">
-                Aucun rôle disponible
-              </td>
-            </tr>
-            }
-          </tbody>
-        </table>
+            <!-- Actions -->
+            <div class="d-flex justify-content-end gap-2">
+              <button type="button" class="btn btn-outline-secondary" (click)="cancelForm()">
+                Annuler
+              </button>
+              <button type="submit" class="btn btn-primary" [disabled]="roleForm.invalid" (click)="submitForm()">
+                Valider
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
+    }
+    @if (!showFormMode) {
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead class="table-light">
+              <tr>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Permissions</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (role of roles; track role.id) {
+                <tr>
+                  <td class="fw-semibold">{{ role.nomRole }}</td>
+                  <td>{{ role.descriptionRole || '-' }}</td>
+                  <td>
+                    <div class="d-flex flex-wrap gap-1">
+                      @for (permission of role.permissions; track permission.id) {
+                        <span class="badge bg-primary bg-opacity-10 text-primary">
+                          {{ permission.nomPermission }}
+                        </span>
+                      }
+                    </div>
+                  </td>
+                  <td class="text-end">
+                    <div class="d-flex justify-content-end gap-2">
+                      <a [routerLink]="['/admin/roles/edit', role.id]" class="btn btn-outline-primary btn-sm"
+                        title="Modifier">
+                        <i class="bi bi-pencil me-1"></i>Modifier
+                      </a>
+                      <button (click)="confirmDelete(role.id)" class="btn btn-outline-danger btn-sm" title="Supprimer">
+                        <i class="bi bi-trash me-1"></i>Supprimer
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
 
-      @if (roles.length > 0) {
-      <nav aria-label="Pagination">
-        <ul class="pagination justify-content-center mt-3">
-          <li class="page-item disabled">
-            <a class="page-link" tabindex="-1" aria-disabled="true">
-              <i class="bi bi-chevron-left"></i> Précédent
-            </a>
-          </li>
-          <li class="page-item active"><a class="page-link">1</a></li>
-          <li class="page-item"><a class="page-link">2</a></li>
-          <li class="page-item"><a class="page-link">3</a></li>
-          <li class="page-item">
-            <a class="page-link">
-              Suivant <i class="bi bi-chevron-right"></i>
-            </a>
-          </li>
-        </ul>
-      </nav>
-      }
-    </div>
+              @if (loading) {
+                <tr>
+                  <td colspan="4" class="text-center py-4">
+                    <div class="spinner-border text-primary" role="status">
+                      <span class="visually-hidden">Chargement...</span>
+                    </div>
+                  </td>
+                </tr>
+              }
+
+              @if (!loading && (!roles || roles.length === 0)) {
+                <tr>
+                  <td colspan="4" class="text-center text-muted py-4">
+                    Aucun rôle disponible
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        @if (roles.length > 0) {
+          <nav aria-label="Pagination">
+            <ul class="pagination justify-content-center mt-3">
+              <li class="page-item disabled">
+                <a class="page-link" tabindex="-1" aria-disabled="true">
+                  <i class="bi bi-chevron-left"></i> Précédent
+                </a>
+              </li>
+              <li class="page-item active"><a class="page-link">1</a></li>
+              <li class="page-item"><a class="page-link">2</a></li>
+              <li class="page-item"><a class="page-link">3</a></li>
+              <li class="page-item">
+                <a class="page-link">
+                  Suivant <i class="bi bi-chevron-right"></i>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        }
+      </div>
     }
 
 
@@ -170,163 +170,167 @@
       </a>
     </div>
     @if (showPermissionForm)
-    {
+      {
 
-    <form [formGroup]="permissionForm" (ngSubmit)="onSubmitPerm()" class="needs-validation" novalidate>
-      <div class="card shadow">
-        <div class="card-header bg-light">
-          <h2 class="h4 mb-0">
-            <i class="bi bi-shield-check me-2"></i>
-            {{ isEditMode ? 'Modifier la Permission' : 'Créer une Nouvelle Permission' }}
-          </h2>
-        </div>
-
-        <div class="card-body">
-          <!-- Nom de la Permission -->
-          <div class="mb-3">
-            <label for="nomPermission" class="form-label">Nom de la Permission *</label>
-            <input type="text" class="form-control" id="nomPermission" formControlName="nomPermission"
-              [ngClass]="{ 'is-invalid': submitted && f['nomPermission'].errors }">
-            <div class="invalid-feedback">
-              Le nom de la permission est obligatoire
-            </div>
+      <form [formGroup]="permissionForm" (ngSubmit)="onSubmitPerm()" class="needs-validation" novalidate>
+        <div class="card shadow">
+          <div class="card-header bg-light">
+            <h2 class="h4 mb-0">
+              <i class="bi bi-shield-check me-2"></i>
+              {{ isEditMode ? 'Modifier la Permission' : 'Créer une Nouvelle Permission' }}
+            </h2>
           </div>
 
-          <!-- Description -->
-          <div class="mb-3">
-            <label for="descriptionPermission" class="form-label">Description</label>
-            <textarea class="form-control" id="descriptionPermission" rows="3"
-              formControlName="descriptionPermission"></textarea>
-          </div>
+          <div class="card-body">
+            <!-- Nom de la Permission -->
+            <div class="mb-3">
+              <label for="nomPermission" class="form-label">Nom de la Permission *</label>
+              <input type="text" class="form-control" id="nomPermission" formControlName="nomPermission"
+                [ngClass]="{ 'is-invalid': submitted && f['nomPermission'].errors }">
+                <div class="invalid-feedback">
+                  Le nom de la permission est obligatoire
+                </div>
+              </div>
 
-          <!-- Module -->
-          <div class="mb-3">
-            <label for="module" class="form-label">Module *</label>
-            <select class="form-select" id="module" formControlName="module"
-              [ngClass]="{ 'is-invalid': submitted && f['module'].errors }">
-              <option value="">Sélectionner un module</option>
-              <option *ngFor="let module of availableModules" [value]="module">
-                {{ module }}
-              </option>
-            </select>
-            <div class="invalid-feedback">
-              Veuillez sélectionner un module
-            </div>
-          </div>
+              <!-- Description -->
+              <div class="mb-3">
+                <label for="descriptionPermission" class="form-label">Description</label>
+                <textarea class="form-control" id="descriptionPermission" rows="3"
+                formControlName="descriptionPermission"></textarea>
+              </div>
 
-          <!-- Droits d'accès -->
-          <div class="mb-4">
-            <label class="form-label">Droits d'accès *</label>
-            <div class="card">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-md-3" *ngFor="let right of accessRights">
-                    <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" [id]="'right-' + right.key"
-                        [formControlName]="right.key">
-                      <label class="form-check-label" [for]="'right-' + right.key">
-                        {{ right.label }}
-                      </label>
+              <!-- Module -->
+              <div class="mb-3">
+                <label for="module" class="form-label">Module *</label>
+                <select class="form-select" id="module" formControlName="module"
+                  [ngClass]="{ 'is-invalid': submitted && f['module'].errors }">
+                  <option value="">Sélectionner un module</option>
+                  @for (module of availableModules; track module) {
+                    <option [value]="module">
+                      {{ module }}
+                    </option>
+                  }
+                </select>
+                <div class="invalid-feedback">
+                  Veuillez sélectionner un module
+                </div>
+              </div>
+
+              <!-- Droits d'accès -->
+              <div class="mb-4">
+                <label class="form-label">Droits d'accès *</label>
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      @for (right of accessRights; track right) {
+                        <div class="col-md-3">
+                          <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" [id]="'right-' + right.key"
+                              [formControlName]="right.key">
+                              <label class="form-check-label" [for]="'right-' + right.key">
+                                {{ right.label }}
+                              </label>
+                            </div>
+                          </div>
+                        }
+                      </div>
+                      <small class="text-muted">Au moins un droit doit être sélectionné</small>
                     </div>
                   </div>
                 </div>
-                <small class="text-muted">Au moins un droit doit être sélectionné</small>
+              </div>
+
+              <div class="card-footer bg-light d-flex justify-content-between">
+                <button type="button" class="btn btn-outline-secondary" (click)="onCancelPerm()">
+                  <i class="bi bi-x-circle me-1"></i> Annuler
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  <i class="bi bi-save me-1"></i> {{ isEditMode ? 'Mettre à jour' : 'Enregistrer' }}
+                </button>
               </div>
             </div>
+          </form>
+        }
+        @if (!showPermissionForm) {
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th width="25%">Nom</th>
+                    <th width="25%">Module</th>
+                    <th width="30%">Description</th>
+                    <th width="20%" class="text-center">Droits d'accès</th>
+                    <th class="text-end">Actions</th> <!-- Ajout colonne actions -->
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (permission of allPermissions; track permission.id) {
+                    <tr>
+                      <td class="fw-semibold">{{ permission.nomPermission || '-' }}</td>
+                      <td>
+                        @if (permission.module) {
+                          <span class="badge bg-secondary">{{ permission.module }}</span>
+                        } @else {
+                          -
+                        }
+                      </td>
+                      <td>{{ permission.descriptionPermission || '-' }}</td>
+                      <td class="text-center">
+                        <div class="d-flex justify-content-center gap-2">
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" [checked]="permission.canRead" disabled>
+                            <label class="form-check-label text-success" title="Lecture">Lecture</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" [checked]="permission.canWrite" disabled>
+                            <label class="form-check-label text-warning" title="Écriture">Écriture</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" [checked]="permission.canEdit" disabled>
+                            <label class="form-check-label text-primary" title="Modification">Modification</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" [checked]="permission.canDelete" disabled>
+                            <label class="form-check-label text-danger" title="Suppression">Suppression</label>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-end">
+                        <div class="d-flex justify-content-end gap-2">
+                          <button class="btn btn-outline-primary btn-sm"
+                            (click)="editPermission(permission)" title="Modifier">
+                            <i class="bi bi-pencil me-1"></i>Modifier
+                          </button>
+                          <button class="btn btn-outline-danger btn-sm"
+                            (click)="confirmDeletePermission(permission.id!)" title="Supprimer">
+                            <i class="bi bi-trash me-1"></i>Supprimer
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  }
+
+                  @if (loading) {
+                    <tr>
+                      <td colspan="4" class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                          <span class="visually-hidden">Chargement...</span>
+                        </div>
+                      </td>
+                    </tr>
+                  }
+
+                  @if (!loading && (!allPermissions || allPermissions.length === 0)) {
+                    <tr>
+                      <td colspan="4" class="text-center text-muted py-4">
+                        <i class="bi bi-exclamation-circle me-2"></i>Aucune permission disponible
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-
-        <div class="card-footer bg-light d-flex justify-content-between">
-          <button type="button" class="btn btn-outline-secondary" (click)="onCancelPerm()">
-            <i class="bi bi-x-circle me-1"></i> Annuler
-          </button>
-          <button type="submit" class="btn btn-primary">
-            <i class="bi bi-save me-1"></i> {{ isEditMode ? 'Mettre à jour' : 'Enregistrer' }}
-          </button>
-        </div>
+        }
       </div>
-    </form>
-    }
-    @if (!showPermissionForm) {
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table table-hover align-middle">
-          <thead class="table-light">
-            <tr>
-              <th width="25%">Nom</th>
-              <th width="25%">Module</th>
-              <th width="30%">Description</th>
-              <th width="20%" class="text-center">Droits d'accès</th>
-              <th class="text-end">Actions</th> <!-- Ajout colonne actions -->
-            </tr>
-          </thead>
-          <tbody>
-            @for (permission of allPermissions; track permission.id) {
-            <tr>
-              <td class="fw-semibold">{{ permission.nomPermission || '-' }}</td>
-              <td>
-                @if (permission.module) {
-                <span class="badge bg-secondary">{{ permission.module }}</span>
-                } @else {
-                -
-                }
-              </td>
-              <td>{{ permission.descriptionPermission || '-' }}</td>
-              <td class="text-center">
-                <div class="d-flex justify-content-center gap-2">
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" [checked]="permission.canRead" disabled>
-                    <label class="form-check-label text-success" title="Lecture">Lecture</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" [checked]="permission.canWrite" disabled>
-                    <label class="form-check-label text-warning" title="Écriture">Écriture</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" [checked]="permission.canEdit" disabled>
-                    <label class="form-check-label text-primary" title="Modification">Modification</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" [checked]="permission.canDelete" disabled>
-                    <label class="form-check-label text-danger" title="Suppression">Suppression</label>
-                  </div>
-                </div>
-              </td>
-              <td class="text-end">
-                <div class="d-flex justify-content-end gap-2">
-                  <button class="btn btn-outline-primary btn-sm"
-                          (click)="editPermission(permission)" title="Modifier">
-                    <i class="bi bi-pencil me-1"></i>Modifier
-                  </button>
-                  <button class="btn btn-outline-danger btn-sm"
-                          (click)="confirmDeletePermission(permission.id!)" title="Supprimer">
-                    <i class="bi bi-trash me-1"></i>Supprimer
-                  </button>
-                </div>
-              </td>
-            </tr>
-            }
-
-            @if (loading) {
-            <tr>
-              <td colspan="4" class="text-center py-4">
-                <div class="spinner-border text-primary" role="status">
-                  <span class="visually-hidden">Chargement...</span>
-                </div>
-              </td>
-            </tr>
-            }
-
-            @if (!loading && (!allPermissions || allPermissions.length === 0)) {
-            <tr>
-              <td colspan="4" class="text-center text-muted py-4">
-                <i class="bi bi-exclamation-circle me-2"></i>Aucune permission disponible
-              </td>
-            </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    </div>
-    }
-  </div>

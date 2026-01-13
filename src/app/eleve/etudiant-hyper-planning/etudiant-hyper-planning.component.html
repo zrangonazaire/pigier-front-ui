@@ -5,13 +5,21 @@
       <h2 class="mb-0 h5"><i class="fas fa-users me-2"></i> Hyper Planning des Étudiants</h2>
       <div class="d-flex gap-2">
         <button class="btn btn-light" (click)="search()" [disabled]="loadingSearch">
-          <span *ngIf="loadingSearch" class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>
-          <i *ngIf="!loadingSearch" class="fas fa-search me-1"></i>
+          @if (loadingSearch) {
+            <span class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>
+          }
+          @if (!loadingSearch) {
+            <i class="fas fa-search me-1"></i>
+          }
           {{ loadingSearch ? 'Recherche...' : 'Rechercher' }}
         </button>
         <button class="btn btn-success" (click)="exportExcel()" [disabled]="loadingExport || eleves.length === 0">
-           <span *ngIf="loadingExport" class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>
-          <i *ngIf="!loadingExport" class="fas fa-file-excel me-1"></i>
+          @if (loadingExport) {
+            <span class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>
+          }
+          @if (!loadingExport) {
+            <i class="fas fa-file-excel me-1"></i>
+          }
           {{ loadingExport ? 'Exportation...' : 'Exporter' }}
         </button>
       </div>
@@ -24,153 +32,177 @@
           <div class="col-md-4">
             <label for="anneeScolaire" class="form-label fw-semibold">Année Scolaire :</label>
             <select id="anneeScolaire" class="form-select" [(ngModel)]="anneeScolaire" (ngModelChange)="onAnneeScolaireChange()">
-              <option *ngIf="anneesScolaires.length === 0" value="" disabled>Chargement des années...</option>
-              <option *ngFor="let annee of anneesScolaires" [value]="annee.annee_Sco">
-                {{ annee.annee_Sco }}
-              </option>
+              @if (anneesScolaires.length === 0) {
+                <option value="" disabled>Chargement des années...</option>
+              }
+              @for (annee of anneesScolaires; track annee) {
+                <option [value]="annee.annee_Sco">
+                  {{ annee.annee_Sco }}
+                </option>
+              }
             </select>
           </div>
           <div class="col-md-8">
             <label class="form-label fw-semibold d-block mb-2">Établissements :</label>
             <div class="d-flex flex-wrap gap-3">
-              <div class="form-check form-check-inline" *ngFor="let etab of etablissements">
-                <input class="form-check-input" type="checkbox" [id]="etab.id" [value]="etab.value"
-                  [checked]="etab.checked" (change)="onEtablissementChange(etab)">
-                <label class="form-check-label" [for]="etab.id">{{ etab.name }}</label>
+              @for (etab of etablissements; track etab) {
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" [id]="etab.id" [value]="etab.value"
+                    [checked]="etab.checked" (change)="onEtablissementChange(etab)">
+                    <label class="form-check-label" [for]="etab.id">{{ etab.name }}</label>
+                  </div>
+                }
               </div>
             </div>
+            <!-- Ajout des champs calendrier -->
+            <div class="col-md-3">
+              <label for="dateDebut" class="form-label fw-semibold">Date début :</label>
+              <input type="date" id="dateDebut" class="form-control" [(ngModel)]="dateDebut">
+            </div>
+            <div class="col-md-3">
+              <label for="dateFin" class="form-label fw-semibold">Date fin :</label>
+              <input type="date" id="dateFin" class="form-control" [(ngModel)]="dateFin">
+            </div>
           </div>
-          <!-- Ajout des champs calendrier -->
-          <div class="col-md-3">
-            <label for="dateDebut" class="form-label fw-semibold">Date début :</label>
-            <input type="date" id="dateDebut" class="form-control" [(ngModel)]="dateDebut">
-          </div>
-          <div class="col-md-3">
-            <label for="dateFin" class="form-label fw-semibold">Date fin :</label>
-            <input type="date" id="dateFin" class="form-control" [(ngModel)]="dateFin">
-          </div>
-        </div>
-        <!-- ...dans le fieldset Filtres de recherche... -->
-<div class="row g-3 align-items-center">
-  <!-- ...année scolaire... -->
-  <!-- ...établissements... -->
-  <!-- ...date début... -->
-  <!-- ...date fin... -->
-  <!-- Champ montant payé -->
+          <!-- ...dans le fieldset Filtres de recherche... -->
+          <div class="row g-3 align-items-center">
+            <!-- ...année scolaire... -->
+            <!-- ...établissements... -->
+            <!-- ...date début... -->
+            <!-- ...date fin... -->
+            <!-- Champ montant payé -->
 
-</div>
-      </fieldset>
+          </div>
+        </fieldset>
 
-      <fieldset class="border rounded-3 p-3 mb-4" [disabled]="!anneeScolaire || selectedEtablissements.length === 0">
-        <legend class="float-none w-auto px-2 h6">Classes</legend>
-        <div class="class-list-container" style="max-height: 200px; overflow-y: auto;">
-          <ng-container *ngIf="anneeScolaire && selectedEtablissements.length > 0; else noSelection">
-            <div *ngIf="classes.length > 0; else noClasses" class="d-flex flex-wrap gap-3">
-              <div class="form-check form-check-inline" *ngFor="let cls of classes">
-                <input class="form-check-input" type="checkbox" [id]="cls.name" [value]="cls.name" [checked]="cls.checked"
-                  (change)="onClasseChange(cls)">
-                <label class="form-check-label" [for]="cls.name">{{ cls.name }}</label>
+        <fieldset class="border rounded-3 p-3 mb-4" [disabled]="!anneeScolaire || selectedEtablissements.length === 0">
+          <legend class="float-none w-auto px-2 h6">Classes</legend>
+          <div class="class-list-container" style="max-height: 200px; overflow-y: auto;">
+            @if (anneeScolaire && selectedEtablissements.length > 0) {
+              @if (classes.length > 0) {
+                <div class="d-flex flex-wrap gap-3">
+                  @for (cls of classes; track cls) {
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="checkbox" [id]="cls.name" [value]="cls.name" [checked]="cls.checked"
+                        (change)="onClasseChange(cls)">
+                        <label class="form-check-label" [for]="cls.name">{{ cls.name }}</label>
+                      </div>
+                    }
+                  </div>
+                } @else {
+                  @if (!loadingClasses) {
+                    <div class="text-muted text-center p-3">
+                      <i class="fas fa-exclamation-circle me-2"></i>
+                      Aucune classe trouvée pour cette sélection.
+                    </div>
+                  }
+                }
+              } @else {
+                @if (!anneeScolaire) {
+                  <div class="text-muted text-center p-3">
+                    <i class="fas fa-arrow-up me-2"></i>
+                    Veuillez d'abord sélectionner une année scolaire.
+                  </div>
+                }
+                @if (anneeScolaire && selectedEtablissements.length === 0) {
+                  <div class="text-muted text-center p-3">
+                    <i class="fas fa-school me-2"></i>
+                    Veuillez sélectionner au moins un établissement.
+                  </div>
+                }
+              }
+            </div>
+          </fieldset>
+
+          <hr class="my-4">
+
+          @if (error) {
+            <div class="alert alert-danger mt-3">
+              <i class="fas fa-exclamation-triangle me-2"></i> {{ error }}
+            </div>
+          }
+
+          @if (loadingSearch) {
+            <div class="text-center py-5">
+              <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                <span class="visually-hidden">Chargement...</span>
               </div>
+              <p class="mt-3 text-muted">Chargement des données...</p>
             </div>
-            <ng-template #noClasses>
-              <div *ngIf="!loadingClasses" class="text-muted text-center p-3">
-                <i class="fas fa-exclamation-circle me-2"></i>
-                Aucune classe trouvée pour cette sélection.
-              </div>
-            </ng-template>
-          </ng-container>
-          <ng-template #noSelection>
-            <div *ngIf="!anneeScolaire" class="text-muted text-center p-3">
-              <i class="fas fa-arrow-up me-2"></i>
-              Veuillez d'abord sélectionner une année scolaire.
-            </div>
-            <div *ngIf="anneeScolaire && selectedEtablissements.length === 0" class="text-muted text-center p-3">
-              <i class="fas fa-school me-2"></i>
-              Veuillez sélectionner au moins un établissement.
-            </div>
-          </ng-template>
-        </div>
-      </fieldset>
+          }
 
-      <hr class="my-4">
-
-      <div *ngIf="error" class="alert alert-danger mt-3">
-        <i class="fas fa-exclamation-triangle me-2"></i> {{ error }}
-      </div>
-
-      <div *ngIf="loadingSearch" class="text-center py-5">
-        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
-          <span class="visually-hidden">Chargement...</span>
-        </div>
-        <p class="mt-3 text-muted">Chargement des données...</p>
-      </div>
-
-      <div *ngIf="!loadingSearch && eleves.length > 0">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <span class="badge text-bg-primary fs-6">
-            Affichage {{ (page - 1) * pageSize + 1 }} -
-            {{ min(page * pageSize, eleves.length) }} sur {{ eleves.length }} étudiants
-          </span>
-          <div>
-            <button class="btn btn-outline-secondary btn-sm me-2"
+          @if (!loadingSearch && eleves.length > 0) {
+            <div>
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge text-bg-primary fs-6">
+                  Affichage {{ (page - 1) * pageSize + 1 }} -
+                  {{ min(page * pageSize, eleves.length) }} sur {{ eleves.length }} étudiants
+                </span>
+                <div>
+                  <button class="btn btn-outline-secondary btn-sm me-2"
                     (click)="page = page - 1"
                     [disabled]="page === 1">
-              Précédent
-            </button>
-            <span>Page {{ page }} / {{ totalPages }}</span>
-            <button class="btn btn-outline-secondary btn-sm ms-2"
+                    Précédent
+                  </button>
+                  <span>Page {{ page }} / {{ totalPages }}</span>
+                  <button class="btn btn-outline-secondary btn-sm ms-2"
                     (click)="page = page + 1"
                     [disabled]="page === totalPages">
-              Suivant
-            </button>
-          </div>
-        </div>
-        <div class="table-responsive">
-          <table class="table table-striped table-hover table-bordered align-middle">
-            <thead class="table-light">
-              <tr>
-                <th scope="col">Nom</th>
-                <th scope="col">Prénoms</th>
-                <th scope="col">Sexe</th>
-                <th scope="col">Date Naissance</th>
-                <th scope="col">Classe</th>
-                <th scope="col">Tél. Etudiant</th>
-                <th>Tél. Parent</th>
-                <th scope="col">E-mail</th>
-               
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let eleve of pagedEleves; let i = index">
-                <td>{{ eleve.nom }}</td>
-                <td>{{ eleve.prenoms }}</td>
-                <td>{{ eleve.sexe }}</td>
-                <td>{{ formatDate(eleve.dateNaissance) }}</td>
-                <td>{{ eleve.codeDetcla }}</td>
-                <td>{{eleve.telEleve}}</td>
-                <td>{{ eleve.telParent }}</td>
-                <td>{{ eleve.emailPersonnel }}</td>
-             
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+                    Suivant
+                  </button>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover table-bordered align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th scope="col">Nom</th>
+                      <th scope="col">Prénoms</th>
+                      <th scope="col">Sexe</th>
+                      <th scope="col">Date Naissance</th>
+                      <th scope="col">Classe</th>
+                      <th scope="col">Tél. Etudiant</th>
+                      <th>Tél. Parent</th>
+                      <th scope="col">E-mail</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (eleve of pagedEleves; track eleve; let i = $index) {
+                      <tr>
+                        <td>{{ eleve.nom }}</td>
+                        <td>{{ eleve.prenoms }}</td>
+                        <td>{{ eleve.sexe }}</td>
+                        <td>{{ formatDate(eleve.dateNaissance) }}</td>
+                        <td>{{ eleve.codeDetcla }}</td>
+                        <td>{{eleve.telEleve}}</td>
+                        <td>{{ eleve.telParent }}</td>
+                        <td>{{ eleve.emailPersonnel }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          }
 
-      <div *ngIf="!loadingSearch && !error && eleves.length === 0 && (anneeScolaire && selectedEtablissements.length > 0 && selectedClasses.length > 0)"
-        class="text-center py-5">
-        <i class="fas fa-search-minus fa-3x text-muted mb-3"></i>
-        <p class="text-muted h5">Aucun élève trouvé</p>
-        <p class="text-muted">Veuillez ajuster vos critères de recherche.</p>
-      </div>
+          @if (!loadingSearch && !error && eleves.length === 0 && (anneeScolaire && selectedEtablissements.length > 0 && selectedClasses.length > 0)) {
+            <div
+              class="text-center py-5">
+              <i class="fas fa-search-minus fa-3x text-muted mb-3"></i>
+              <p class="text-muted h5">Aucun élève trouvé</p>
+              <p class="text-muted">Veuillez ajuster vos critères de recherche.</p>
+            </div>
+          }
 
-      <div *ngIf="!loadingSearch && !error && eleves.length === 0 && (!anneeScolaire || selectedEtablissements.length === 0 || selectedClasses.length === 0)"
-        class="text-center py-5">
-        <i class="fas fa-filter fa-3x text-muted mb-3"></i>
-        <p class="text-muted h5">Prêt à rechercher</p>
-        <p class="text-muted">Veuillez saisir l'année scolaire et sélectionner les établissements et les classes
-          pour lancer la recherche.</p>
+          @if (!loadingSearch && !error && eleves.length === 0 && (!anneeScolaire || selectedEtablissements.length === 0 || selectedClasses.length === 0)) {
+            <div
+              class="text-center py-5">
+              <i class="fas fa-filter fa-3x text-muted mb-3"></i>
+              <p class="text-muted h5">Prêt à rechercher</p>
+              <p class="text-muted">Veuillez saisir l'année scolaire et sélectionner les établissements et les classes
+              pour lancer la recherche.</p>
+            </div>
+          }
+        </div>
       </div>
     </div>
-  </div>
-</div>

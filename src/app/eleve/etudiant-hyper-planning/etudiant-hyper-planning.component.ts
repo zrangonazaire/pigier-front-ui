@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ElevesService } from '../../../api-client/api/eleves.service';
 import { AnneeScolaireControllerService } from '../../../api-client/api/anneeScolaireController.service';
@@ -14,7 +14,7 @@ import { EleveRecordAvecPayerDto, EleveRecordDTO } from '../../../api-client';
 @Component({
   selector: 'app-etudiant-hyper-planning',
   standalone: true,
-  imports: [CommonModule, FormsModule, MenuComponent,],
+  imports: [FormsModule, MenuComponent],
   templateUrl: './etudiant-hyper-planning.component.html',
   styleUrls: ['./etudiant-hyper-planning.component.scss'],
 })

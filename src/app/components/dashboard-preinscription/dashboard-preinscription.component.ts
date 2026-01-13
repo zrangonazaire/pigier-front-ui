@@ -34,7 +34,7 @@ interface Preinscription {
   celetud: string;
   formsouh: string;
   decision: 'En attente' | 'Validée' | 'Rejetée' | 'A' | 'E' | 'I';
-  etab_source: 'ABIDJAN PLATEAU' | 'ABIDJAN YOPOUGON' | 'YAMOUSSOUKRO';
+  etab_source: 'ABIDJAN PLATEAU' | 'ABIDJAN YOPOUGON' | 'CAMPUS EN LIGNE' | 'YAMOUSSOUKRO';
   isInscrit?: boolean;
   utilisateurCreateur?: string;
   anneeScolaire?: string;
@@ -135,6 +135,7 @@ export class DashboardPreinscriptionComponent
                   (dto.etablissementSource as
                     | 'ABIDJAN PLATEAU'
                     | 'ABIDJAN YOPOUGON'
+                    | 'CAMPUS EN LIGNE'
                     | 'YAMOUSSOUKRO') || 'ABIDJAN PLATEAU',
                 isInscrit:
                   dto.decision === 'Validée' ? Math.random() > 0.5 : false,
@@ -393,6 +394,9 @@ export class DashboardPreinscriptionComponent
     const yopougon = this.allPreinscrits().filter(
       (p) => p.etab_source === 'ABIDJAN YOPOUGON'
     ).length;
+    const campus = this.allPreinscrits().filter(
+      (p) => p.etab_source === 'CAMPUS EN LIGNE'
+    ).length;
     const yamoussoukro = this.allPreinscrits().filter(
       (p) => p.etab_source === 'YAMOUSSOUKRO'
     ).length;
@@ -415,6 +419,12 @@ export class DashboardPreinscriptionComponent
         value: yopougon.toString(),
         icon: 'fas fa-university',
         class: 'stat-tertiary',
+      },
+      {
+        title: 'Campus en Ligne',
+        value: campus.toString(),
+        icon: 'fas fa-university',
+        class: 'stat-quinary',
       },
       {
         title: 'Yamoussoukro',

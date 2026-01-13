@@ -69,11 +69,13 @@
               </div>
               <div class="combo-select">
                 <select
-                (change)="totalEleves(selectAnnee);totalActiveClasses(selectAnnee)"
+                  (change)="totalEleves(selectAnnee);totalActiveClasses(selectAnnee)"
                   class="form-select"
                   aria-label="Sélectionner l'année académique"
-                id="annee-select" [(ngModel)]="selectAnnee">
-                  <option *ngFor="let annee of anneeScolaires()" [value]="annee.annee_Sco">{{ annee.annee_Sco }}</option>
+                  id="annee-select" [(ngModel)]="selectAnnee">
+                  @for (annee of anneeScolaires(); track annee) {
+                    <option [value]="annee.annee_Sco">{{ annee.annee_Sco }}</option>
+                  }
                 </select>
               </div>
             </div>
@@ -116,7 +118,9 @@
       <h6 class="m-0 font-weight-bold text-primary">Effectifs par Parcours</h6>
       <select class="form-select w-25" (change)="updatePathChart()">
         <option value="all">Tous niveaux</option>
-        <option *ngFor="let level of levels" [value]="level.id">{{ level.name }}</option>
+        @for (level of levels; track level) {
+          <option [value]="level.id">{{ level.name }}</option>
+        }
       </select>
     </div>
     <div class="card-body">
@@ -145,26 +149,28 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let year of academicYears">
-              <td>{{ year.year }}</td>
-              <td>{{ year.licence1 }}</td>
-              <td>{{ year.licence2 }}</td>
-              <td>{{ year.licence3 }}</td>
-              <td>{{ year.master1 }}</td>
-              <td>{{ year.master2 }}</td>
-              <td class="font-weight-bold">{{ year.total }}</td>
-              <td>
-                <div class="progress">
+            @for (year of academicYears; track year) {
+              <tr>
+                <td>{{ year.year }}</td>
+                <td>{{ year.licence1 }}</td>
+                <td>{{ year.licence2 }}</td>
+                <td>{{ year.licence3 }}</td>
+                <td>{{ year.master1 }}</td>
+                <td>{{ year.master2 }}</td>
+                <td class="font-weight-bold">{{ year.total }}</td>
+                <td>
+                  <div class="progress">
                   <div class="progress-bar" [ngClass]="{
                     'bg-success': year.rate >= 75,
                     'bg-warning': year.rate >= 50 && year.rate < 75,
                     'bg-danger': year.rate < 50
                   }" [style.width]="year.rate + '%'">
-                    {{ year.rate }}%
+                      {{ year.rate }}%
+                    </div>
                   </div>
-                </div>
-              </td>
-            </tr>
+                </td>
+              </tr>
+            }
           </tbody>
         </table>
       </div>
@@ -194,15 +200,17 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let path of pathDetails">
-              <td>{{ path.name }}</td>
-              <td>{{ path.licence1 }}</td>
-              <td>{{ path.licence2 }}</td>
-              <td>{{ path.licence3 }}</td>
-              <td>{{ path.master1 }}</td>
-              <td>{{ path.master2 }}</td>
-              <td class="font-weight-bold">{{ path.total }}</td>
-            </tr>
+            @for (path of pathDetails; track path) {
+              <tr>
+                <td>{{ path.name }}</td>
+                <td>{{ path.licence1 }}</td>
+                <td>{{ path.licence2 }}</td>
+                <td>{{ path.licence3 }}</td>
+                <td>{{ path.master1 }}</td>
+                <td>{{ path.master2 }}</td>
+                <td class="font-weight-bold">{{ path.total }}</td>
+              </tr>
+            }
             <tr class="font-weight-bold">
               <td>Total</td>
               <td>{{ totals.licence1 }}</td>

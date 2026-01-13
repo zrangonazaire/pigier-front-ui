@@ -53,13 +53,13 @@
   <ul class="nav nav-tabs" id="notesTabs" role="tablist">
     <li class="nav-item" role="presentation">
       <button class="nav-link active" id="cc-tab" data-bs-toggle="tab" data-bs-target="#cc"
-              type="button" role="tab">
+        type="button" role="tab">
         📘 Notes Contrôle Continu
       </button>
     </li>
     <li class="nav-item" role="presentation">
       <button class="nav-link" id="exam-tab" data-bs-toggle="tab" data-bs-target="#exam"
-              type="button" role="tab">
+        type="button" role="tab">
         📝 Notes Examen
       </button>
     </li>
@@ -90,14 +90,16 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let etu of etudiants; let i = index">
-              <td>{{ i+1 }}</td>
-              <td>{{ etu.matricule }}</td>
-              <td>{{ etu.nom }}</td>
-              <td>
-                <input type="number" [(ngModel)]="etu.cc" class="form-control form-control-sm">
-              </td>
-            </tr>
+            @for (etu of etudiants; track etu; let i = $index) {
+              <tr>
+                <td>{{ i+1 }}</td>
+                <td>{{ etu.matricule }}</td>
+                <td>{{ etu.nom }}</td>
+                <td>
+                  <input type="number" [(ngModel)]="etu.cc" class="form-control form-control-sm">
+                </td>
+              </tr>
+            }
           </tbody>
         </table>
       </div>
@@ -129,22 +131,24 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let etu of etudiants; let i = index">
-              <td>{{ i+1 }}</td>
-              <td>{{ etu.matricule }}</td>
-              <td>{{ etu.nom }}</td>
-              <td>
-                <input type="number" [(ngModel)]="etu.exam" class="form-control form-control-sm">
-              </td>
-              <td>
-                <span class="badge bg-info">
-                  {{ (etu.cc*2 + etu.exam)/3 | number:'1.2-2' }}
-                </span>
-              </td>
-              <td>
-                <input type="checkbox" [(ngModel)]="etu.absent">
-              </td>
-            </tr>
+            @for (etu of etudiants; track etu; let i = $index) {
+              <tr>
+                <td>{{ i+1 }}</td>
+                <td>{{ etu.matricule }}</td>
+                <td>{{ etu.nom }}</td>
+                <td>
+                  <input type="number" [(ngModel)]="etu.exam" class="form-control form-control-sm">
+                </td>
+                <td>
+                  <span class="badge bg-info">
+                    {{ (etu.cc*2 + etu.exam)/3 | number:'1.2-2' }}
+                  </span>
+                </td>
+                <td>
+                  <input type="checkbox" [(ngModel)]="etu.absent">
+                </td>
+              </tr>
+            }
           </tbody>
         </table>
       </div>
@@ -153,14 +157,16 @@
 
   <!-- ======= STATISTIQUES ======= -->
   <div class="row mt-4 g-3">
-    <div class="col-md-2" *ngFor="let s of statsCards">
-      <div class="card text-center shadow-sm h-100">
-        <div class="card-body">
-          <h6 class="fw-bold">{{ s.title }}</h6>
-          <p class="fs-4" [ngClass]="s.color">{{ s.value }}</p>
+    @for (s of statsCards; track s) {
+      <div class="col-md-2">
+        <div class="card text-center shadow-sm h-100">
+          <div class="card-body">
+            <h6 class="fw-bold">{{ s.title }}</h6>
+            <p class="fs-4" [ngClass]="s.color">{{ s.value }}</p>
+          </div>
         </div>
       </div>
-    </div>
+    }
   </div>
 
 </div>

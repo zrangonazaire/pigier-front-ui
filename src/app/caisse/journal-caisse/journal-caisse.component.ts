@@ -1,5 +1,5 @@
 import { Component, OnInit, signal, computed, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Observable, forkJoin } from 'rxjs';
 import { EncaissementDTO, EncaissementService } from '../../../api-client';
@@ -22,7 +22,7 @@ interface FacturationDetail {
 @Component({
   selector: 'app-journal-caisse',
   standalone: true,
-  imports: [CommonModule, FormsModule, MenuComponent],
+  imports: [CommonModule, FormsModule, MenuComponent, CurrencyPipe, DatePipe, DecimalPipe],
   templateUrl: './journal-caisse.component.html',
   styleUrls: ['./journal-caisse.component.scss']
 })

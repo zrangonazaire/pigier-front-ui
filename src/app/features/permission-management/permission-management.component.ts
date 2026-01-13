@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { PermissionService, Role, Permission } from './permission.service';
 import { finalize, forkJoin } from 'rxjs';
@@ -9,7 +9,7 @@ import { finalize, forkJoin } from 'rxjs';
   templateUrl: './permission-management.component.html',
   styleUrls: ['./permission-management.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [FormsModule]
 })
 export class PermissionManagementComponent implements OnInit {
   roles: Role[] = [];
