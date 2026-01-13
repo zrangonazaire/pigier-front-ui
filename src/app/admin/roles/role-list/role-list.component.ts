@@ -137,13 +137,17 @@ export class RoleListComponent implements OnInit {
 
   showFormMode = false;
   showPermissionForm = false;
+  isEditRoleMode = false;
+  selectedRoleId?: number;
 
   showForm() {
-    this.showFormMode = true;
+    this.initNewRole();
   }
 
   cancelForm() {
     this.showFormMode = false;
+    this.isEditRoleMode = false;
+    this.selectedRoleId = undefined;
   }
   roles: RoleResponse[] = [];
 
@@ -195,23 +199,27 @@ export class RoleListComponent implements OnInit {
       descriptionRole: '',
       permissionIds: new Set(),
     };
-    this.roleForm.reset();
+    this.roleForm.reset({
+      nomRole: '',
+      descriptionRole: '',
+      permissionIds: [],
+    });
+    this.isEditRoleMode = false;
+    this.selectedRoleId = undefined;
     this.showFormMode = true;
   }
-  editRole(): void {
-    if (this.roleRequest.permissionIds) {
-      const permissionObjects = Array.from(
-        this.roleRequest.permissionIds as any as Iterable<PermissionResponse>
-      );
-      this.roleRequest = {
-        ...this.roleRequest,
-        permissionIds: new Set(
-          permissionObjects
-            .map((p) => p.id)
-            .filter((id) => id != null) as number[]
-        ),
-      };
-    }
+  editRole(role: RoleResponse): void {
+    this.isEditRoleMode = true;
+    this.selectedRoleId = role.id;
+    const permissionIds = Array.from(role.permissions ?? [])
+      .map((p) => p.id)
+      .filter((id): id is number => id != null);
+
+    this.roleForm.patchValue({
+      nomRole: role.nomRole,
+      descriptionRole: role.descriptionRole,
+      permissionIds,
+    });
     this.showFormMode = true;
   }
   onPermissionChange(event: any, permissionId: number): void {
@@ -241,12 +249,18 @@ export class RoleListComponent implements OnInit {
       const roleRequest: RoleRequest = {
         nomRole: formValue.nomRole,
         descriptionRole: formValue.descriptionRole,
-        permissionIds: new Set(formValue.permissionIds),
+        permissionIds: formValue.permissionIds as unknown as Set<number>,
       };
-      this.roleService.createRole(this.roleForm.value).subscribe({
+      const save$ = this.isEditRoleMode && this.selectedRoleId
+        ? this.roleService.updateRole(this.selectedRoleId, roleRequest)
+        : this.roleService.createRole(roleRequest);
+
+      save$.subscribe({
         next: () => {
-          alert('Rôle créé avec succès');
+          alert(this.isEditRoleMode ? 'Role mis a jour avec succes' : 'Role cree avec succes');
           this.showFormMode = false;
+          this.isEditRoleMode = false;
+          this.selectedRoleId = undefined;
           this.loadRoles();
         },
         error: (err) =>

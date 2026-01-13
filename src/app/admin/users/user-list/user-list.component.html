@@ -56,18 +56,20 @@
                     </div>
                 </div>
 
+                @if (userRequest.id) {
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label">Statut *</label>
                         <select class="form-select" formControlName="statut"
                             [ngClass]="{'is-invalid': userForm.get('statut')?.invalid && userForm.get('statut')?.touched}">
-                            <option *ngFor="let statut of statutOptions" [value]="statut">{{ statut }}</option>
+                            <option *ngFor="let statut of statutOptionsForForm" [value]="statut">{{ statut }}</option>
                         </select>
                         <div class="invalid-feedback">
                             Le statut est requis
                         </div>
                     </div>
                 </div>
+                }
 
                 <!-- Mot de passe -->
                 <div class="row mb-3">

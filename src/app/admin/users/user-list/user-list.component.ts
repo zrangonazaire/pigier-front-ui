@@ -110,6 +110,13 @@ export class UserListComponent implements OnInit {
     this.showFormMode = true;
   }
 
+  get statutOptionsForForm(): StatutUtilisateur[] {
+    if (this.userRequest.id) {
+      return this.statutOptions.filter((statut) => statut !== 'DESACTIVE');
+    }
+    return this.statutOptions;
+  }
+
   editUser(user: UserResponse) {
     console.log('Edit user called with:', user);
     this.userRequest = { ...user };
