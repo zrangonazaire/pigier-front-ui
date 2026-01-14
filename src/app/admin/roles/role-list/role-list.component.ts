@@ -8,6 +8,7 @@ import {
   Output,
   signal,
   Signal,
+  ViewChild,
 } from '@angular/core';
 import {
   PermissionRequest,
@@ -51,6 +52,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './role-list.component.scss',
 })
 export class RoleListComponent implements OnInit {
+  @ViewChild(UserListComponent) userListComponent?: UserListComponent;
   @Input() isEditMode = false;
   @Input() permissionData?: PermissionRequest;
   @Output() submitFormPerm = new EventEmitter<PermissionRequest>();
@@ -61,7 +63,7 @@ export class RoleListComponent implements OnInit {
   submitted = false;
 
   availableModules = [
-    'PREINSCIPTION',
+    'PREINSCRIPTION',
     'COMPTABILITE',
     'COMMERCIALE',
     'EXAMEN',
@@ -113,20 +115,31 @@ export class RoleListComponent implements OnInit {
   submitPermissionForm() {
     console.log('Données du formulaire de permission:', this.permissionForm.value);
 
-    this.permissionService.createPermission(this.permissionForm.value).subscribe({
+    const save$ = this.isEditMode && this.selectedPermissionId != null
+      ? this.permissionService.updatePermission(this.selectedPermissionId, this.permissionForm.value)
+      : this.permissionService.createPermission(this.permissionForm.value);
+
+    save$.subscribe({
       next: () => {
 
         this.loadPermissions();
         this.cancelPermissionForm();
+        this.isEditMode = false;
+        this.selectedPermissionId = undefined;
       },
       error: (err) => {
         this.loading = false;
-        console.log('ERREUR DE CREATION DE PERMISSION', err);
-        this.toastService.error('Erreur lors de la création de la permission', 'Erreur');
+        console.log('ERREUR PERMISSION', err);
+        this.toastService.error(
+          this.isEditMode ? 'Erreur lors de la mise à jour de la permission' : 'Erreur lors de la création de la permission',
+          'Erreur'
+        );
       },
       complete: () => {
         this.loading = false;
-        this.toastService.success('Permission créée avec succès');
+        this.toastService.success(
+          this.isEditMode ? 'Permission mise à jour avec succès' : 'Permission créée avec succès'
+        );
       }
     });
   }
@@ -262,6 +275,7 @@ export class RoleListComponent implements OnInit {
           this.isEditRoleMode = false;
           this.selectedRoleId = undefined;
           this.loadRoles();
+          this.userListComponent?.listRoles();
         },
         error: (err) =>
           console.error(
@@ -288,6 +302,7 @@ export class RoleListComponent implements OnInit {
       this.roleService.deleteRole(role).subscribe({
         next: () => {
           this.loadRoles();
+          this.userListComponent?.listRoles();
         },
       });
     }

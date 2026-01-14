@@ -19,7 +19,7 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav me-auto">
         <!-- Gestion Commerciale -->
-        @if (roleAdmin==true||roleCommer==true || roleDirCom==true) {
+        @if (hasModuleAccess('COMMERCIALE') || hasModuleAccess('PREINSCRIPTION')) {
         <li class="nav-item dropdown mx-1">
           <a class="nav-link dropdown-toggle d-flex align-items-center px-3" href="#" id="commercialDropdown"
             role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -54,7 +54,7 @@
 
 
         <!-- Gestion Comptable -->
-         @if (roleComptable==true||roleAdmin==true) {
+         @if (hasModuleAccess('COMPTABILITE')) {
         <li class="nav-item dropdown mx-1">
           <a class="nav-link dropdown-toggle d-flex align-items-center px-3" href="#" id="comptableDropdown"
             role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -117,7 +117,7 @@
 
 
         <!-- Gestion pédagogique -->
-        @if ( roleAdmin==true ||roleNote==true) {
+        @if (hasModuleAccess('NOTE') || hasModuleAccess('EXAMEN') || hasModuleAccess('ELEVE')) {
                <li class="nav-item dropdown mx-1">
           <a class="nav-link dropdown-toggle d-flex align-items-center px-3" href="#" id="pedagogiqueDropdown"
             role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -245,7 +245,7 @@
                 </div>
               </a>
             </li>
-            @if (roleAdmin==true) {
+            @if (hasAnyAccess()) {
                <li>
               <a class="dropdown-item d-flex align-items-center py-3" href="#">
                 <div class="icon-container bg-info-subtle me-3">
