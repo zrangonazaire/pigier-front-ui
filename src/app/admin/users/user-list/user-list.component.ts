@@ -24,7 +24,7 @@ import { ToastrService } from 'ngx-toastr';
   selector: 'app-user-list',
   imports: [RouterModule, FormsModule, ReactiveFormsModule, CommonModule],
   templateUrl: './user-list.component.html',
-  styleUrl: './user-list.component.scss',
+  styleUrls: ['./user-list.component.scss'],
   providers: [DatePipe],
 })
 export class UserListComponent implements OnInit {

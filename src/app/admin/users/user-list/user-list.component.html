@@ -1,5 +1,5 @@
-<div class="card shadow">
-    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+<div class="card shadow user-management-card">
+    <div class="card-header bg-light d-flex justify-content-between align-items-center user-management-header">
         <h2 class="h4 mb-0">
             <i class="bi bi-people-fill me-2"></i>Gestion des Utilisateurs
         </h2>
@@ -10,15 +10,15 @@
 
     <!-- Formulaire de création/édition -->
     @if (showFormMode) {
-    <div class="card shadow mb-4">
-        <div class="card-header bg-light">
+    <div class="card shadow mb-4 user-form-card">
+        <div class="card-header bg-light user-form-header">
             <h2 class="h4 mb-0">
                 <i class="bi me-2"
                     [ngClass]="{'bi-person-plus': !userRequest.id, 'bi-person-gear': userRequest.id}"></i>
                 {{ userRequest.id ? 'Modifier Utilisateur' : 'Nouvel Utilisateur' }}
             </h2>
         </div>
-        <div class="card-body">
+        <div class="card-body user-form-body">
             <form [formGroup]="userForm" (ngSubmit)="submitForm()">
                 <!-- Identifiants -->
                 <div class="row mb-3">
@@ -94,16 +94,16 @@
                 <!-- Rôles -->
                 <div class="mb-4">
                     <label class="form-label">Rôles *</label>
-                    <div class="border rounded p-3 bg-light">
-                        <div class="d-flex flex-wrap gap-2">
+                    <div class="border rounded p-3 bg-light roles-box">
+                        <div class="d-flex flex-wrap gap-2 roles-options">
                             <ng-container *ngFor="let role of allRoles(); trackBy: trackById">
-                                <div>
-                                    <input class="form-check-input"
+                                <div class="role-option">
+                                    <input class="form-check-input role-check role-checkmark"
                                            type="checkbox"
                                            [id]="'user-role-' + role.id"
                                            [checked]="userForm.value.roleIds?.includes(role.id)"
                                            (change)="onRoleChange($event, role.id!)">
-                                    <label class="form-check-label" [for]="'user-role-' + role.id">
+                                    <label class="form-check-label role-label" [for]="'user-role-' + role.id">
                                         {{ role.nomRole }}
                                     </label>
                                 </div>
