@@ -1,239 +1,245 @@
-<div class="card shadow">
-  <div class="card-header bg-light d-flex justify-content-between align-items-center">
-    <h2 class="h4 mb-0">
-      <i class="bi bi-people-fill me-2"></i>Gestion des Utilisateurs
-    </h2>
-    <button class="btn btn-success" (click)="initNewUser()">
-      <i class="bi bi-person-add me-1"></i>Nouvel Utilisateur
-    </button>
-  </div>
-
-  <!-- Formulaire de création/édition -->
-  @if (showFormMode) {
-    <div class="card shadow mb-4">
-      <div class="card-header bg-light">
+<div class="card shadow user-management-card">
+    <div class="card-header bg-light d-flex justify-content-between align-items-center user-management-header">
         <h2 class="h4 mb-0">
-          <i class="bi me-2"
-          [ngClass]="{'bi-person-plus': !userRequest.id, 'bi-person-gear': userRequest.id}"></i>
-          {{ userRequest.id ? 'Modifier Utilisateur' : 'Nouvel Utilisateur' }}
+            <i class="bi bi-people-fill me-2"></i>Gestion des Utilisateurs
         </h2>
-      </div>
-      <div class="card-body">
-        <form [formGroup]="userForm" (ngSubmit)="submitForm()">
-          <!-- Identifiants -->
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label class="form-label">Nom complet *</label>
-              <input type="text" class="form-control" formControlName="nomPrenoms"
-                [ngClass]="{'is-invalid': userForm.get('nomPrenoms')?.invalid && userForm.get('nomPrenoms')?.touched}">
-                <div class="invalid-feedback">
-                  Le nom complet est requis
-                </div>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Nom d'utilisateur *</label>
-                <input type="text" class="form-control" formControlName="username"
-                  [ngClass]="{'is-invalid': userForm.get('username')?.invalid && userForm.get('username')?.touched}">
-                  <div class="invalid-feedback">
-                    Un nom d'utilisateur est requis
-                  </div>
-                </div>
-              </div>
+        <button class="btn btn-success" (click)="initNewUser()">
+            <i class="bi bi-person-add me-1"></i>Nouvel Utilisateur
+        </button>
+    </div>
 
-              <!-- Contacts -->
-              <div class="row mb-3">
-                <div class="col-md-6">
-                  <label class="form-label">Email *</label>
-                  <input type="email" class="form-control" formControlName="email"
-                    [ngClass]="{'is-invalid': userForm.get('email')?.invalid && userForm.get('email')?.touched}">
-                    <div class="invalid-feedback">
-                      Veuillez entrer un email valide
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <label class="form-label">Téléphone</label>
-                    <input type="tel" class="form-control" formControlName="telephone">
-                  </div>
-                </div>
-
-                <!-- Mot de passe (conditionnel pour édition) -->
-                @if (!userRequest.id) {
-                  <div class="row mb-3">
+    <!-- Formulaire de création/édition -->
+    @if (showFormMode) {
+    <div class="card shadow mb-4 user-form-card">
+        <div class="card-header bg-light user-form-header">
+            <h2 class="h4 mb-0">
+                <i class="bi me-2" [ngClass]="{'bi-person-plus': !userRequest.id, 'bi-person-gear': userRequest.id}"></i>
+                {{ userRequest.id ? 'Modifier Utilisateur' : 'Nouvel Utilisateur' }}
+            </h2>
+        </div>
+        <div class="card-body user-form-body">
+            <form [formGroup]="userForm" (ngSubmit)="submitForm()">
+                <!-- Identifiants -->
+                <div class="row mb-3">
                     <div class="col-md-6">
-                      <label class="form-label">Mot de passe *</label>
-                      <input type="password" class="form-control" formControlName="password"
-                        [ngClass]="{'is-invalid': userForm.get('password')?.invalid && userForm.get('password')?.touched}">
-                        <div class="invalid-feedback">
-                          Le mot de passe est requis (min. 8 caractères)
-                        </div>
-                      </div>
-                      <div class="col-md-6">
+                        <label class="form-label">Nom complet *</label>
+                        <input type="text" class="form-control" formControlName="nomPrenoms"
+                            [ngClass]="{'is-invalid': userForm.get('nomPrenoms')?.invalid && userForm.get('nomPrenoms')?.touched}">
+                        <div class="invalid-feedback">Le nom complet est requis</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Nom d'utilisateur *</label>
+                        <input type="text" class="form-control" formControlName="username"
+                            [ngClass]="{'is-invalid': userForm.get('username')?.invalid && userForm.get('username')?.touched}">
+                        <div class="invalid-feedback">Un nom d'utilisateur est requis</div>
+                    </div>
+                </div>
+
+                <!-- Contacts -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Email *</label>
+                        <input type="email" class="form-control" formControlName="email"
+                            [ngClass]="{'is-invalid': userForm.get('email')?.invalid && userForm.get('email')?.touched}">
+                        <div class="invalid-feedback">Veuillez entrer un email valide</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Téléphone</label>
+                        <input type="tel" class="form-control" formControlName="telephone">
+                    </div>
+                </div>
+
+                @if (userRequest.id) {
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Statut *</label>
+                        <select class="form-select" formControlName="statut"
+                            [ngClass]="{'is-invalid': userForm.get('statut')?.invalid && userForm.get('statut')?.touched}">
+                            @for (statut of statutOptionsForForm; track statut) {
+                            <option [value]="statut">{{ statut }}</option>
+                            }
+                        </select>
+                        <div class="invalid-feedback">Le statut est requis</div>
+                    </div>
+                </div>
+                }
+
+                <!-- Mot de passe -->
+                @if (!userRequest.id) {
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Mot de passe *</label>
+                        <input type="password" class="form-control" formControlName="password"
+                            [ngClass]="{'is-invalid': userForm.get('password')?.invalid && userForm.get('password')?.touched}">
+                        <div class="invalid-feedback">Le mot de passe est requis (min. 8 caractères)</div>
+                    </div>
+                    <div class="col-md-6">
                         <label class="form-label">Confirmation *</label>
                         <input type="password" class="form-control" formControlName="passwordConfirm"
-                          [ngClass]="{'is-invalid': userForm.get('passwordConfirm')?.invalid && userForm.get('passwordConfirm')?.touched}">
-                          <div class="invalid-feedback">
-                            Doit correspondre au mot de passe
-                          </div>
-                        </div>
-                      </div>
-                    }
-
-                    <!-- Rôles -->
-                    <div class="mb-4">
-                      <label class="form-label">Rôles *</label>
-                      <div class="border rounded p-3 bg-light">
-                        <div class="d-flex flex-wrap gap-2">
-                          @for (role of allRoles(); track trackById($index, role)) {
-                            <div>
-                              <input class="form-check-input"
-                                type="checkbox"
-                                [id]="'user-role-' + role.id"
-                                [checked]="userForm.value.roleIds?.includes(role.id)"
-                                (change)="onRoleChange($event, role.id!)">
-                                <label class="form-check-label" [for]="'user-role-' + role.id">
-                                  {{ role.nomRole }}
-                                </label>
-                              </div>
-                            }
-                          </div>
-                          @if (userForm.get('roleIds')?.invalid && userForm.get('roleIds')?.touched) {
-                            <div class="text-danger small mt-2">
-                              Au moins un rôle doit être sélectionné
-                            </div>
-                          }
-                        </div>
-                      </div>
-
-                      <!-- Actions -->
-                      <div class="d-flex justify-content-end gap-2">
-                        <button type="button" class="btn btn-outline-secondary" (click)="cancelForm()">
-                          Annuler
-                        </button>
-                        <button type="submit" class="btn btn-primary" >
-                          {{ userRequest.id ? 'Mettre à jour' : 'Créer' }}
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              }
-
-              <!-- Liste des utilisateurs -->
-              @if (!showFormMode) {
-                <div class="card-body">
-
-                  <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="badge text-bg-primary fs-6">
-                      Affichage {{ (page - 1) * pageSize + 1 }} -
-                      {{ min(page * pageSize, listeUsers().length) }} sur {{ listeUsers().length }} utilisateurs
-                    </span>
-                    <div class="d-flex align-items-center gap-2">
-                      <label for="pageSizeSelect" class="mb-0">Afficher</label>
-                      <select id="pageSizeSelect" class="form-select form-select-sm w-auto"
-                        [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange()">
-                        @for (size of pageSizeOptions; track size) {
-                          <option [value]="size">{{ size }}</option>
-                        }
-                      </select>
-                      <span class="mb-0">par page</span>
+                            [ngClass]="{'is-invalid': userForm.get('passwordConfirm')?.invalid && userForm.get('passwordConfirm')?.touched}">
+                        <div class="invalid-feedback">Doit correspondre au mot de passe</div>
                     </div>
-                  </div>
+                </div>
+                }
 
-                  <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                      <thead class="table-light">
-                        <tr>
-                          <th>Login</th>
-                          <th>Nom complet</th>
-                          <th>Statut</th>
-                          <th>Email</th>
-                          <th>Rôles</th>
-                          <th>Créé le</th>
-                          <th class="text-end">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @for (user of pagedUsers; track trackById($index, user)) {
-                          <tr>
-                            <td class="text-start">{{ user.username }}</td>
-                            <td>{{ user.lastname }}</td>
-                            <td>{{ user.enable ? 'Actif' : 'Désactivé' }}</td>
-                            <td>{{ user.email || 'Non défini' }}</td>
-                            <td>
-                              @if (user.roles?.length) {
-                                <div class="d-flex flex-wrap gap-1">
-                                  @for (role of user.roles; track role) {
-                                    <span class="badge bg-primary bg-opacity-10 text-primary">
-                                      {{ role.nomRole }}
-                                    </span>
-                                  }
-                                </div>
-                              } @else {
-                                <span class="text-muted">Aucun rôle</span>
-                              }
-                            </td>
-                            <td>
-                              <span data-bs-toggle="tooltip" data-bs-placement="top"
+                <!-- Rôles -->
+                <div class="mb-4">
+                    <label class="form-label">Rôles *</label>
+                    <div class="border rounded p-3 bg-light roles-box">
+                        <div class="d-flex flex-wrap gap-2 roles-options">
+                            @for (role of allRoles(); track role.id) {
+                            <div class="role-option">
+                                <input class="form-check-input role-check role-checkmark"
+                                    type="checkbox"
+                                    [id]="'user-role-' + role.id"
+                                    [checked]="userForm.value.roleIds?.includes(role.id)"
+                                    (change)="onRoleChange($event, role.id!)">
+                                <label class="form-check-label role-label" [for]="'user-role-' + role.id">
+                                    {{ role.nomRole }}
+                                </label>
+                            </div>
+                            }
+                        </div>
+                        <div *ngIf="userForm.get('roleIds')?.invalid && userForm.get('roleIds')?.touched"
+                            class="text-danger small mt-2">
+                            Au moins un rôle doit être sélectionné
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-outline-secondary" (click)="cancelForm()">
+                        Annuler
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        {{ userRequest.id ? 'Mettre à jour' : 'Créer' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    }
+
+    <!-- Liste des utilisateurs -->
+    @if (!showFormMode) {
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="badge text-bg-primary fs-6">
+                Affichage {{ (page - 1) * pageSize + 1 }} -
+                {{ min(page * pageSize, listeUsers().length) }} sur {{ listeUsers().length }} utilisateurs
+            </span>
+            <div class="d-flex align-items-center gap-2">
+                <label for="pageSizeSelect" class="mb-0">Afficher</label>
+                <select id="pageSizeSelect" class="form-select form-select-sm w-auto"
+                    [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange()">
+                    @for (size of pageSizeOptions; track size) {
+                    <option [value]="size">{{ size }}</option>
+                    }
+                </select>
+                <span class="mb-0">par page</span>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Login</th>
+                        <th>Nom complet</th>
+                        <th>Statut</th>
+                        <th>Email</th>
+                        <th>Rôles</th>
+                        <th>Créé le</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (user of pagedUsers; track trackById($index, user)) {
+                    <tr>
+                        <td class="text-start">{{ user.username }}</td>
+                        <td>{{ user.lastname }}</td>
+                        <td>
+                            <span class="badge bg-opacity-10" [ngClass]="getUserStatusClass(getUserStatus(user))">
+                                {{ getUserStatus(user) }}
+                            </span>
+                        </td>
+                        <td>{{ user.email || 'Non défini' }}</td>
+                        <td>
+                            @if (user.roles?.length) {
+                            <div class="d-flex flex-wrap gap-1">
+                                @for (role of user.roles; track role) {
+                                <span class="badge bg-primary bg-opacity-10 text-primary">
+                                    {{ role.nomRole }}
+                                </span>
+                                }
+                            </div>
+                            } @else {
+                            <span class="text-muted">Aucun rôle</span>
+                            }
+                        </td>
+                        <td>
+                            <span data-bs-toggle="tooltip" data-bs-placement="top"
                                 [attr.data-bs-title]="user.createdDate | date:'medium'">
                                 {{ user.formattedCreatedDate || (user.createdDate | date:'shortDate') }}
-                              </span>
-                            </td>
-                            <td class="text-end">
-                              <div class="d-flex justify-content-end gap-2">
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center gap-2">
                                 <button (click)="editUser(user)" class="btn btn-outline-primary btn-sm">
-                                  <i class="bi bi-pencil-square me-1"></i>Modifier
+                                    <i class="bi bi-pencil-square me-1"></i>Modifier
                                 </button>
-                                <button class="btn btn-outline-danger btn-sm">
-                                  <i class="bi bi-trash me-1"></i>Supprimer
+                                <button (click)="deleteUser(user)" class="btn btn-outline-danger btn-sm">
+                                    <i class="bi bi-trash me-1"></i>Supprimer
                                 </button>
-                              </div>
-                            </td>
-                          </tr>
-                        }
+                            </div>
+                        </td>
+                    </tr>
+                    }
 
-                        @if (loading) {
-                          <tr>
-                            <td colspan="7" class="text-center py-4">
-                              <div class="d-flex justify-content-center align-items-center">
+                    @if (loading) {
+                    <tr>
+                        <td colspan="7" class="text-center py-4">
+                            <div class="d-flex justify-content-center align-items-center">
                                 <div class="spinner-border text-primary me-2" role="status"></div>
                                 <span>Chargement des utilisateurs...</span>
-                              </div>
-                            </td>
-                          </tr>
-                        }
+                            </div>
+                        </td>
+                    </tr>
+                    }
 
-                        @if (!loading && (!listeUsers() || listeUsers().length === 0)) {
-                          <tr>
-                            <td colspan="7" class="text-center text-muted py-4">
-                              <i class="bi bi-people me-2"></i>Aucun utilisateur trouvé
-                            </td>
-                          </tr>
-                        }
-                      </tbody>
-                    </table>
-                  </div>
+                    @if (!loading && (!listeUsers() || listeUsers().length === 0)) {
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">
+                            <i class="bi bi-people me-2"></i>Aucun utilisateur trouvé
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
 
-                  @if (listeUsers().length > 0) {
-                    <nav aria-label="Pagination">
-                      <ul class="pagination justify-content-center mt-3">
-                        <li class="page-item" [class.disabled]="page === 1">
-                          <button class="page-link" (click)="changePage(page - 1)" [disabled]="page === 1">
-                            <i class="bi bi-chevron-left"></i>
-                          </button>
-                        </li>
-                        @for (p of pages; track p) {
-                          <li class="page-item" [class.active]="page === p">
-                            <button class="page-link" (click)="changePage(p)">{{ p }}</button>
-                          </li>
-                        }
-                        <li class="page-item" [class.disabled]="page === totalPages">
-                          <button class="page-link" (click)="changePage(page + 1)" [disabled]="page === totalPages">
-                            <i class="bi bi-chevron-right"></i>
-                          </button>
-                        </li>
-                      </ul>
-                    </nav>
-                  }
-                </div>
-              }
-            </div>
+        @if (listeUsers().length > 0) {
+        <nav aria-label="Pagination">
+            <ul class="pagination justify-content-center mt-3">
+                <li class="page-item" [class.disabled]="page === 1">
+                    <button class="page-link" (click)="changePage(page - 1)" [disabled]="page === 1">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+                </li>
+                @for (p of pages; track p) {
+                <li class="page-item" [class.active]="page === p">
+                    <button class="page-link" (click)="changePage(p)">{{ p }}</button>
+                </li>
+                }
+                <li class="page-item" [class.disabled]="page === totalPages">
+                    <button class="page-link" (click)="changePage(page + 1)" [disabled]="page === totalPages">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        }
+    </div>
+    }
+</div>

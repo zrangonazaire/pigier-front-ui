@@ -1,0 +1,167 @@
+:host {
+  --accent: #0d6efd;
+  --ink: #1e2a3a;
+  --soft: #f7f9fc;
+  --border: #e3eaf5;
+  --shadow: 0 10px 24px rgba(13, 38, 76, 0.10);
+  --shadow-soft: 0 4px 12px rgba(13, 38, 76, 0.08);
+  --shadow-active: 0 10px 20px rgba(13, 110, 253, 0.18);
+}
+
+.role-management-card {
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, #eaf3ff 0%, #ffffff 45%, #fff4cc 100%);
+}
+
+.role-management-header {
+  background: transparent !important;
+  border-bottom: 1px solid var(--border);
+}
+
+.role-form-card {
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, #eaf3ff 0%, #ffffff 45%, #fff4cc 100%);
+}
+
+.role-form-body {
+  background: transparent;
+}
+
+.permission-list-card {
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, #eaf3ff 0%, #ffffff 45%, #fff4cc 100%);
+}
+
+.permission-list-body {
+  background: transparent;
+}
+
+.permission-list-header {
+  background: transparent !important;
+  border-bottom: 1px solid var(--border);
+}
+
+.permission-form-card {
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, #eaf3ff 0%, #ffffff 45%, #fff4cc 100%);
+}
+
+.permission-form-header,
+.permission-form-body,
+.permission-form-footer {
+  background: transparent !important;
+}
+
+.permission-form-header,
+.permission-form-footer {
+  border-color: var(--border);
+}
+
+.permission-check {
+  accent-color: var(--accent);
+  appearance: auto;
+  -webkit-appearance: auto;
+}
+
+.permission-check:checked {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3 6-6'/%3e%3c/svg%3e");
+}
+
+.access-rights-card {
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, #ffffff 0%, var(--soft) 100%);
+  box-shadow: var(--shadow);
+}
+
+.access-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.6rem;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.access-right .form-check-input {
+  margin-top: 0;
+  width: 2.1rem;
+  height: 1.1rem;
+}
+
+.access-right .form-check-label {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.access-right:has(.form-check-input:checked) {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-active);
+  transform: translateY(-1px);
+}
+
+.access-right:hover {
+  border-color: #c8d6ee;
+  transform: translateY(-1px);
+}
+
+.permissions-wrap {
+  background: linear-gradient(180deg, #ffffff 0%, var(--soft) 100%);
+  border-color: var(--border);
+  box-shadow: var(--shadow);
+}
+
+.permissions-list {
+  width: 100%;
+  scrollbar-color: #c8d6ee transparent;
+}
+
+.permission-pill {
+  flex: 1 1 220px;
+  max-width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: #ffffff;
+  box-shadow: var(--shadow-soft);
+  padding: 0.5rem 0.7rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  animation: permission-in 0.25s ease;
+}
+
+.permission-pill:has(.permission-check:checked) {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-active);
+  transform: translateY(-1px);
+}
+
+.permission-pill:hover {
+  border-color: #c8d6ee;
+  transform: translateY(-1px);
+}
+
+.permission-label {
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.permission-pill .permission-check {
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-left: 0;
+}
+
+@keyframes permission-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

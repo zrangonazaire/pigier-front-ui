@@ -1,15 +1,12 @@
 
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {
-  AuthenticationRequest,
-  AuthenticationService,
-} from '../../../api-client';
+import { AuthenticationRequest } from '../../../api-client';
 import { Router, RouterLink } from '@angular/router';
 import { TokenService } from '../../services/token.service';
-import { jwtDecode } from 'jwt-decode';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { UserAuthservice } from '../../services/user.auth.service';
 
 export interface AuthResponse {
   accessToken: string;
@@ -20,7 +17,7 @@ export interface DecodedToken {
   sub: string; // Subject (username)
   exp: number; // Expiration timestamp
   iat: number; // Issued at timestamp
-  authorities: string; // String de rôles/permissions séparés par des virgules
+  authorities: string; // String de roles/permissions separes par des virgules
 }
 
 @Component({
@@ -33,17 +30,9 @@ export interface DecodedToken {
 export class LoginComponent {
   toastService = inject(ToastrService);
   currentUser = '';
-  roleCommer = false;
-  roleAdmin = false;
-  roleComptable = false;
-  roleNote = false;
-  roleDirCom = false;
-
-  currentUserRole: string = 'Poste Utilisateur';
-  currentRole: any[] = [];
   private subscription: Subscription[] = [];
   private tokenService = inject(TokenService);
-  private authService = inject(AuthenticationService);
+  private authService = inject(UserAuthservice);
   private router = inject(Router);
   tokken = signal<string | null>(null);
   authResponse = signal<string | null>(null);
@@ -61,47 +50,16 @@ export class LoginComponent {
     this.subscription.push(
       this.authService.login(this.authLogin).subscribe({
         next: (response: any) => {
-          this.tokenService.saveToken(response.token!);
           localStorage.setItem('access_token', response.token!);
-          this.currentUser = localStorage.getItem('access_token') || '';
-          if (this.currentUser) {
-            this.roleAdmin = false;
-            this.roleCommer = false;
-            this.roleComptable = false;
-            this.roleNote = false;
-            this.roleDirCom = false;
-
-            try {
-              const decodedToken = jwtDecode<any>(this.currentUser);
-              this.currentRole = decodedToken.fullUser.roles;
-              this.currentUser =
-                decodedToken.fullUser.lastname || 'Utilisateur';
-
-              for (let index = 0; index < this.currentRole.length; index++) {
-                const element = this.currentRole[index].nomRole;
-                if (element === 'ROLE_ADMIN') {
-                  this.router.navigate(['/tb-preinscr']);
-                } else if (element === 'ROLE_COMMERCIALE') {
-                  this.router.navigate(['/tb-preinscr']);
-                } else if (element === 'ROLE_COMPTABLE') {
-                  this.router.navigate(['/tb-compta']);
-                } else if (element === 'ROLE_NOTE') {
-                  this.router.navigate(['/tb-peda']);
-                } else if (element === 'ROLE_DIR_COM') {
-                  this.router.navigate(['/tb-preinscr']);
-                }
-              }
-              this.toastService.success(
-                'Connexion réussie ! Bienvenue ' + this.currentUser,
-                'Succès'
-              );
-            } catch (error) {
-              this.currentUser = 'Utilisateur';
-            }
-          } else {
-            this.currentUser = 'Utilisateur';
-          }
-          console.log('User logged role', this.currentRole);
+          const decodedToken: any = this.tokenService.decodeToken();
+          const tokenUser = decodedToken?.fullUser ?? decodedToken;
+          this.currentUser = tokenUser?.lastname || 'Utilisateur';
+          const redirectTo = this.resolveDefaultRoute();
+          this.router.navigate([redirectTo]);
+          this.toastService.success(
+            'Connexion reussie ! Bienvenue ' + this.currentUser,
+            'Succes'
+          );
         },
         error: (error) => {
           this.errorMessage.set('Email ou mot de passe incorrect');
@@ -113,5 +71,33 @@ export class LoginComponent {
         },
       })
     );
+  }
+
+  private modulePermissions(module: string): string[] {
+    const key = module.replace(/\s+/g, '_').toUpperCase();
+    return [
+      `READ_${key}`,
+      `WRITE_${key}`,
+      `EDIT_${key}`,
+      `DELETE_${key}`,
+    ];
+  }
+
+  private hasModuleAccess(module: string): boolean {
+    return this.authService.hasAnyPermission(this.modulePermissions(module));
+  }
+
+  private resolveDefaultRoute(): string {
+    const moduleRoutes = [
+      { module: 'PREINSCRIPTION', route: '/tb-preinscr' },
+      { module: 'COMMERCIALE', route: '/tb-preinscr' },
+      { module: 'COMPTABILITE', route: '/compta/tb-compta' },
+      { module: 'NOTE', route: '/notes/note' },
+      { module: 'EXAMEN', route: '/tb-peda' },
+      { module: 'ELEVE', route: '/eleve/etat-etudiant-dianenew' },
+    ];
+
+    const match = moduleRoutes.find(({ module }) => this.hasModuleAccess(module));
+    return match ? match.route : '/login';
   }
 }

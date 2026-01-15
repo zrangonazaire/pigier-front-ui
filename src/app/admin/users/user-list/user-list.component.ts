@@ -15,6 +15,7 @@ import {
   UserResponse,
   UtilisateurControllerService,
 } from '../../../../api-client';
+import type { StatutUtilisateur } from '../../../../api-client/model/statutUtilisateur';
 import { Role } from '../../../features/permission-management/permission.service';
 import { formatDate } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
@@ -23,7 +24,7 @@ import { ToastrService } from 'ngx-toastr';
   selector: 'app-user-list',
   imports: [RouterModule, FormsModule, ReactiveFormsModule, CommonModule],
   templateUrl: './user-list.component.html',
-  styleUrl: './user-list.component.scss',
+  styleUrls: ['./user-list.component.scss'],
   providers: [DatePipe],
 })
 export class UserListComponent implements OnInit {
@@ -37,6 +38,7 @@ export class UserListComponent implements OnInit {
   listeUsers = signal<UserResponse[]>([]);
   userForm: FormGroup;
   userId: number = 0;
+  statutOptions: StatutUtilisateur[] = ['ACTIVE', 'DESACTIVE', 'SUSPENDUE'];
   private utilisateurService = inject(UtilisateurControllerService);
   private roleService = inject(RolesService);
   userRoles = signal<RoleResponse[]>([]);
@@ -46,6 +48,7 @@ export class UserListComponent implements OnInit {
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       telephone: [''],
+      statut: ['ACTIVE', Validators.required],
       password: ['', [Validators.required, Validators.minLength(8)]],
       passwordConfirm: ['', Validators.required],
       roleIds: [[], Validators.required],
@@ -100,11 +103,21 @@ export class UserListComponent implements OnInit {
 
   initNewUser() {
     this.userRequest = {};
-    this.userForm.reset();
+    this.userForm.reset({
+      statut: 'ACTIVE',
+      roleIds: [],
+    });
     this.showFormMode = true;
   }
 
-  editUser(user: UserRequest) {
+  get statutOptionsForForm(): StatutUtilisateur[] {
+    if (this.userRequest.id) {
+      return this.statutOptions.filter((statut) => statut !== 'DESACTIVE');
+    }
+    return this.statutOptions;
+  }
+
+  editUser(user: UserResponse) {
     console.log('Edit user called with:', user);
     this.userRequest = { ...user };
     this.utilisateurService.getByUsername(user.username!).subscribe({
@@ -117,7 +130,10 @@ export class UserListComponent implements OnInit {
           username: fullUser.username,
           email: fullUser.email,
           telephone: fullUser.telephone,
+          statut: fullUser.statut ?? 'ACTIVE',
           roleIds: fullUser.roles ? fullUser.roles.map(r => r.id) : [],
+          password: '',
+          passwordConfirm: '',
           // Ajoute d'autres champs si besoin
         });
         //console.log('Formulaire patché avec :', this.userForm.value);
@@ -178,7 +194,8 @@ export class UserListComponent implements OnInit {
         username: formValue.username,
         email: formValue.email,
         telephone: formValue.telephone,
-        roleIds: new Set(formValue.roleIds),
+        statut: formValue.statut,
+        roleIds: formValue.roleIds as unknown as Set<number>,
       };
 
       // On ajoute le mot de passe uniquement s'il a été saisi.
@@ -190,7 +207,11 @@ export class UserListComponent implements OnInit {
       const isUpdate = !!userRequest.id;
       console.log('Données du formulaire envoyées :', userRequest);
 
-      this.utilisateurService.create(this.userForm.value).subscribe({
+      const save$ = isUpdate
+        ? this.utilisateurService.update(userRequest.id!, userRequest)
+        : this.utilisateurService.create(userRequest);
+
+      save$.subscribe({
         next: () => {
           alert(`Utilisateur ${isUpdate ? 'mis à jour' : 'ajouté'} avec succès`);
           this.listUtilisateurs();
@@ -201,6 +222,25 @@ export class UserListComponent implements OnInit {
         },
       });
     }
+  }
+
+  deleteUser(user: UserResponse) {
+    if (!user.id) {
+      return;
+    }
+    const confirmed = confirm(`Supprimer l'utilisateur ${user.username} ?`);
+    if (!confirmed) {
+      return;
+    }
+    this.utilisateurService._delete(user.id).subscribe({
+      next: () => {
+        alert('Utilisateur supprimé avec succès');
+        this.listUtilisateurs();
+      },
+      error: (error) => {
+        alert(`Erreur lors de la suppression: ` + (error.error?.message || error.message));
+      },
+    });
   }
 
   cancelForm() {
@@ -242,7 +282,31 @@ export class UserListComponent implements OnInit {
     return this.listeUsers().slice(start, start + this.pageSize);
   }
 
+  getUserStatus(user: UserResponse): string {
+    if (user.statut === 'SUSPENDUE') {
+      return 'EN_ATTENTE';
+    }
+    return user.statut || (user.enable ? 'ACTIVE' : 'DESACTIVE');
+  }
+
+  getUserStatusClass(status: string): string {
+    switch (status) {
+      case 'ACTIVE':
+        return 'bg-success text-success';
+      case 'DESACTIVE':
+        return 'bg-danger text-danger';
+      case 'EN_ATTENTE':
+      case 'SUSPENDUE':
+        return 'bg-secondary text-secondary';
+      default:
+        return 'bg-secondary text-secondary';
+    }
+  }
+
   trackById(index: number, user: UserResponse) {
     return user.id;
   }
 }
+
+
+

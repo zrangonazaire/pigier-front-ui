@@ -1,4 +1,3 @@
-
 import { Component, inject, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,8 +5,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatMenuModule } from '@angular/material/menu';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { jwtDecode } from 'jwt-decode';
-import { routes } from '../../app.routes';
+import { UserAuthservice } from '../../services/user.auth.service';
 
 @Component({
   selector: 'app-menu',
@@ -26,51 +24,13 @@ import { routes } from '../../app.routes';
 })
 export class MenuComponent implements OnInit {
   router = inject(Router);
+  private authService = inject(UserAuthservice);
   currentUser = '';
-  roleCommer = false;
-  roleAdmin = false;
-  roleComptable = false;
-  roleNote = false;
-  roleDirCom = false;
 
-  currentUserRole: string = 'Poste Utilisateur';
-  currentRole: any[] = [];
   ngOnInit(): void {
-    this.currentUser = localStorage.getItem('access_token') || '';
-    if (this.currentUser) {
-      this.roleAdmin = false;
-      this.roleCommer = false;
-      this.roleComptable = false;
-      this.roleNote = false;
-      this.roleDirCom = false;
-
-      try {
-        const decodedToken = jwtDecode<any>(this.currentUser);
-        this.currentRole = decodedToken.fullUser.roles;
-        this.currentUser = decodedToken.fullUser.lastname || 'Utilisateur';
-       
-        for (let index = 0; index < this.currentRole.length; index++) {
-          const element = this.currentRole[index].nomRole;       
-          if (element === 'ROLE_ADMIN') {
-            this.roleAdmin = true;
-          } else if (element === 'ROLE_COMMERCIALE') {
-            this.roleCommer = true;
-          } else if (element === 'ROLE_COMPTABLE') {
-            this.roleComptable = true;
-          } else if (element === 'ROLE_NOTE') {
-            this.roleNote = true;
-          } else if (element === 'ROLE_DIR_COM') {
-            this.roleDirCom = true;
-          }
-        }
-
-      } catch (error) {
-        console.error('Erreur lors du décodage du token:', error);
-        this.currentUser = 'Utilisateur';
-      }
-    } else {
-      this.currentUser = 'Utilisateur';
-    }
+    this.authService.currentUser$.subscribe((user) => {
+      this.currentUser = user?.lastname || user?.firstname || 'Utilisateur';
+    });
   }
   navbarOpen = false;
   // currentUser is already declared above, you can set its value as needed
@@ -86,16 +46,36 @@ export class MenuComponent implements OnInit {
     parent?.classList.toggle('show');
   }
 
+  private modulePermissions(module: string): string[] {
+    const key = module.replace(/\s+/g, '_').toUpperCase();
+    return [
+      `READ_${key}`,
+      `WRITE_${key}`,
+      `EDIT_${key}`,
+      `DELETE_${key}`,
+    ];
+  }
+
+  hasModuleAccess(module: string): boolean {
+    return this.authService.hasAnyPermission(this.modulePermissions(module));
+  }
+
+  hasAnyAccess(): boolean {
+    return this.authService.hasAnyPermission([
+      ...this.modulePermissions('PREINSCRIPTION'),
+      ...this.modulePermissions('COMMERCIALE'),
+      ...this.modulePermissions('COMPTABILITE'),
+      ...this.modulePermissions('EXAMEN'),
+      ...this.modulePermissions('NOTE'),
+      ...this.modulePermissions('ELEVE'),
+    ]);
+  }
+
   logout() {
-    console.log('Déconnexion...');
+    console.log('DǸconnexion...');
+    this.authService.logout();
     localStorage.removeItem('access_token');
     this.router.navigate(['/login']);
     this.currentUser = '';
-    //this.currentRole = '';
-    this.roleAdmin = false;
-    this.roleCommer = false;
-    this.roleComptable = false;
-    this.roleNote = false;
-    this.roleDirCom = false;
   }
 }

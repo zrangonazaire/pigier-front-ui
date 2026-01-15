@@ -8,6 +8,7 @@ import {
   Output,
   signal,
   Signal,
+  ViewChild,
 } from '@angular/core';
 import {
   PermissionRequest,
@@ -51,6 +52,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './role-list.component.scss',
 })
 export class RoleListComponent implements OnInit {
+  @ViewChild(UserListComponent) userListComponent?: UserListComponent;
   @Input() isEditMode = false;
   @Input() permissionData?: PermissionRequest;
   @Output() submitFormPerm = new EventEmitter<PermissionRequest>();
@@ -61,7 +63,7 @@ export class RoleListComponent implements OnInit {
   submitted = false;
 
   availableModules = [
-    'PREINSCIPTION',
+    'PREINSCRIPTION',
     'COMPTABILITE',
     'COMMERCIALE',
     'EXAMEN',
@@ -113,20 +115,31 @@ export class RoleListComponent implements OnInit {
   submitPermissionForm() {
     console.log('Données du formulaire de permission:', this.permissionForm.value);
 
-    this.permissionService.createPermission(this.permissionForm.value).subscribe({
+    const save$ = this.isEditMode && this.selectedPermissionId != null
+      ? this.permissionService.updatePermission(this.selectedPermissionId, this.permissionForm.value)
+      : this.permissionService.createPermission(this.permissionForm.value);
+
+    save$.subscribe({
       next: () => {
 
         this.loadPermissions();
         this.cancelPermissionForm();
+        this.isEditMode = false;
+        this.selectedPermissionId = undefined;
       },
       error: (err) => {
         this.loading = false;
-        console.log('ERREUR DE CREATION DE PERMISSION', err);
-        this.toastService.error('Erreur lors de la création de la permission', 'Erreur');
+        console.log('ERREUR PERMISSION', err);
+        this.toastService.error(
+          this.isEditMode ? 'Erreur lors de la mise à jour de la permission' : 'Erreur lors de la création de la permission',
+          'Erreur'
+        );
       },
       complete: () => {
         this.loading = false;
-        this.toastService.success('Permission créée avec succès');
+        this.toastService.success(
+          this.isEditMode ? 'Permission mise à jour avec succès' : 'Permission créée avec succès'
+        );
       }
     });
   }
@@ -137,13 +150,17 @@ export class RoleListComponent implements OnInit {
 
   showFormMode = false;
   showPermissionForm = false;
+  isEditRoleMode = false;
+  selectedRoleId?: number;
 
   showForm() {
-    this.showFormMode = true;
+    this.initNewRole();
   }
 
   cancelForm() {
     this.showFormMode = false;
+    this.isEditRoleMode = false;
+    this.selectedRoleId = undefined;
   }
   roles: RoleResponse[] = [];
 
@@ -195,23 +212,27 @@ export class RoleListComponent implements OnInit {
       descriptionRole: '',
       permissionIds: new Set(),
     };
-    this.roleForm.reset();
+    this.roleForm.reset({
+      nomRole: '',
+      descriptionRole: '',
+      permissionIds: [],
+    });
+    this.isEditRoleMode = false;
+    this.selectedRoleId = undefined;
     this.showFormMode = true;
   }
-  editRole(): void {
-    if (this.roleRequest.permissionIds) {
-      const permissionObjects = Array.from(
-        this.roleRequest.permissionIds as any as Iterable<PermissionResponse>
-      );
-      this.roleRequest = {
-        ...this.roleRequest,
-        permissionIds: new Set(
-          permissionObjects
-            .map((p) => p.id)
-            .filter((id) => id != null) as number[]
-        ),
-      };
-    }
+  editRole(role: RoleResponse): void {
+    this.isEditRoleMode = true;
+    this.selectedRoleId = role.id;
+    const permissionIds = Array.from(role.permissions ?? [])
+      .map((p) => p.id)
+      .filter((id): id is number => id != null);
+
+    this.roleForm.patchValue({
+      nomRole: role.nomRole,
+      descriptionRole: role.descriptionRole,
+      permissionIds,
+    });
     this.showFormMode = true;
   }
   onPermissionChange(event: any, permissionId: number): void {
@@ -241,13 +262,20 @@ export class RoleListComponent implements OnInit {
       const roleRequest: RoleRequest = {
         nomRole: formValue.nomRole,
         descriptionRole: formValue.descriptionRole,
-        permissionIds: new Set(formValue.permissionIds),
+        permissionIds: formValue.permissionIds as unknown as Set<number>,
       };
-      this.roleService.createRole(this.roleForm.value).subscribe({
+      const save$ = this.isEditRoleMode && this.selectedRoleId
+        ? this.roleService.updateRole(this.selectedRoleId, roleRequest)
+        : this.roleService.createRole(roleRequest);
+
+      save$.subscribe({
         next: () => {
-          alert('Rôle créé avec succès');
+          alert(this.isEditRoleMode ? 'Role mis a jour avec succes' : 'Role cree avec succes');
           this.showFormMode = false;
+          this.isEditRoleMode = false;
+          this.selectedRoleId = undefined;
           this.loadRoles();
+          this.userListComponent?.listRoles();
         },
         error: (err) =>
           console.error(
@@ -274,6 +302,7 @@ export class RoleListComponent implements OnInit {
       this.roleService.deleteRole(role).subscribe({
         next: () => {
           this.loadRoles();
+          this.userListComponent?.listRoles();
         },
       });
     }
