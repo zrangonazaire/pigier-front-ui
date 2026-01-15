@@ -88,22 +88,16 @@ export class LoginComponent {
   }
 
   private resolveDefaultRoute(): string {
-    if (
-      this.hasModuleAccess('PREINSCRIPTION') ||
-      this.hasModuleAccess('COMMERCIALE')
-    ) {
-      return '/tb-preinscr';
-    }
-    if (this.hasModuleAccess('COMPTABILITE')) {
-      return '/tb-compta';
-    }
-    if (
-      this.hasModuleAccess('NOTE') ||
-      this.hasModuleAccess('EXAMEN') ||
-      this.hasModuleAccess('ELEVE')
-    ) {
-      return '/tb-peda';
-    }
-    return '/login';
+    const moduleRoutes = [
+      { module: 'PREINSCRIPTION', route: '/tb-preinscr' },
+      { module: 'COMMERCIALE', route: '/tb-preinscr' },
+      { module: 'COMPTABILITE', route: '/compta/tb-compta' },
+      { module: 'NOTE', route: '/notes/note' },
+      { module: 'EXAMEN', route: '/tb-peda' },
+      { module: 'ELEVE', route: '/eleve/etat-etudiant-dianenew' },
+    ];
+
+    const match = moduleRoutes.find(({ module }) => this.hasModuleAccess(module));
+    return match ? match.route : '/login';
   }
 }
