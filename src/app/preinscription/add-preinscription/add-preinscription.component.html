@@ -10,11 +10,13 @@
     <div class="card-body">
       <!-- Stepper Bootstrap -->
       <ul class="stepper d-flex justify-content-between mb-5">
-        <li *ngFor="let step of steps; let i = index" class="step"
-          [ngClass]="{'active': currentStep === i + 1, 'completed': currentStep > i + 1}">
-          <div class="step-circle">{{i + 1}}</div>
-          <div class="step-label">{{step}}</div>
-        </li>
+        @for (step of steps; track step; let i = $index) {
+          <li class="step"
+            [ngClass]="{'active': currentStep === i + 1, 'completed': currentStep > i + 1}">
+            <div class="step-circle">{{i + 1}}</div>
+            <div class="step-label">{{step}}</div>
+          </li>
+        }
       </ul>
 
       <form [formGroup]="preinscriptionForm">
@@ -25,17 +27,21 @@
             <div class="col-md-6">
               <label for="nomPrenoms" class="form-label">NOM ET PRENOMS*</label>
               <input type="text" class="form-control" id="nomPrenoms" formControlName="nomPrenoms">
-              <div *ngIf="showError('nomPrenoms')" class="invalid-feedback d-block">
-                Saisie obligatoire
-              </div>
+              @if (showError('nomPrenoms')) {
+                <div class="invalid-feedback d-block">
+                  Saisie obligatoire
+                </div>
+              }
             </div>
 
             <div class="col-md-6">
               <label for="dateNaissance" class="form-label">DATE DE NAISSANCE*</label>
               <input type="date" class="form-control" id="dateNaissance" formControlName="dateNaissance">
-              <div *ngIf="showError('dateNaissance')" class="invalid-feedback d-block">
-                Saisie obligatoire
-              </div>
+              @if (showError('dateNaissance')) {
+                <div class="invalid-feedback d-block">
+                  Saisie obligatoire
+                </div>
+              }
             </div>
 
             <div class="col-md-6">
@@ -50,155 +56,169 @@
                 <option value="M">Masculin</option>
                 <option value="F">Féminin</option>
               </select>
-              <div *ngIf="showError('sexe')" class="invalid-feedback d-block">
-                Saisie obligatoire
-              </div>
+              @if (showError('sexe')) {
+                <div class="invalid-feedback d-block">
+                  Saisie obligatoire
+                </div>
+              }
             </div>
             <div class="col-md-4">
               <label for="nationalite" class="form-label">NATIONALITE</label>
               <select class="form-select" id="nationalite" formControlName="nationalite">
                 <option value="">Sélectionner</option>
-                <option *ngFor="let nationalite of nationalites" [value]="nationalite">{{nationalite}}</option>
+                @for (nationalite of nationalites; track nationalite) {
+                  <option [value]="nationalite">{{nationalite}}</option>
+                }
               </select>
-              <div *ngIf="showError('nationalite')" class="invalid-feedback d-block">
-                Veuillez sélectionner une nationalité
-              </div>
+              @if (showError('nationalite')) {
+                <div class="invalid-feedback d-block">
+                  Veuillez sélectionner une nationalité
+                </div>
+              }
             </div>
             <!-- <div class="col-md-6">
-              <label for="nationalite" class="form-label">Nationalité</label>
-              <input type="text" class="form-control" id="nationalite" formControlName="nationalite">
-            </div> -->
-            <div class="col-md-4">
-              <label for="nationaliteIdentite" class="form-label">TYPE DE PIECE*</label>
-              <select class="form-select" id="nationaliteIdentite" formControlName="nationaliteIdentite">
-                <option value="">Sélectionner</option>
-                <option *ngFor="let type of typeIdent" [value]="type">{{type}}</option>
-              </select>
-              <div *ngIf="showError('nationaliteIdentite')" class="invalid-feedback d-block">
+            <label for="nationalite" class="form-label">Nationalité</label>
+            <input type="text" class="form-control" id="nationalite" formControlName="nationalite">
+          </div> -->
+          <div class="col-md-4">
+            <label for="nationaliteIdentite" class="form-label">TYPE DE PIECE*</label>
+            <select class="form-select" id="nationaliteIdentite" formControlName="nationaliteIdentite">
+              <option value="">Sélectionner</option>
+              @for (type of typeIdent; track type) {
+                <option [value]="type">{{type}}</option>
+              }
+            </select>
+            @if (showError('nationaliteIdentite')) {
+              <div class="invalid-feedback d-block">
                 Veuillez sélectionner un type de pièce
               </div>
+            }
 
 
-            </div>
-
-            <!-- <div class="col-md-6">
-              <label for="nationaliteIdentite" class="form-label">Nationalité sur pièce d'identité *</label>
-              <input type="text" class="form-control" id="nationaliteIdentite" formControlName="nationaliteIdentite">
-              <div *ngIf="showError('nationaliteIdentite')" class="invalid-feedback d-block">
-                Saisie obligatoire
-              </div>
-            </div> -->
-
-            <div class="col-md-4">
-              <label for="numeroIdentite" class="form-label">N° PIECE D'IDENTITE*</label>
-              <input type="text" class="form-control" id="numeroIdentite" formControlName="numeroIdentite">
-              <div *ngIf="showError('numeroIdentite')" class="invalid-feedback d-block">
-                Saisie obligatoire
-              </div>
-            </div>
- <div class="col-md-6">
-              <label for="nomPere" class="form-label">NOM ET PRENOMS DU PERE</label>
-              <input type="text" class="form-control" id="nomPere" formControlName="nomPere">
-            </div>
-
-            <div class="col-md-6">
-              <label for="nomMere" class="form-label">NOM ET PRENOMS DE LA MERE</label>
-              <input type="text" class="form-control" id="nomMere" formControlName="nomMere">
-            </div>
-              <div class="col-md-6">
-              <label for="cellulaireEtudiant" class="form-label">CONTACT 1 *</label>
-              <input type="tel" class="form-control" id="cellulaireEtudiant" formControlName="cellulaireEtudiant">
-              <div *ngIf="showError('cellulaireEtudiant')" class="invalid-feedback d-block">
-                Saisie obligatoire
-              </div>
-            </div>
-    <div class="col-md-6">
-              <label for="telephoneEtudiant" class="form-label">CONTACT 2</label>
-              <input type="tel" class="form-control" id="telephoneEtudiant" formControlName="telephoneEtudiant">
-            </div>
-
-           <div class="col-md-4">
-              <label for="villeEtudiant" class="form-label">Ville</label>
-              <input type="text" class="form-control" id="villeEtudiant" formControlName="villeEtudiant">
-            </div>
-
-            <div class="col-md-4">
-              <label for="communeEtudiant" class="form-label">Commune</label>
-              <input type="text" class="form-control" id="communeEtudiant" formControlName="communeEtudiant">
-            </div>
-
-            <div class="col-md-4">
-              <label for="emailEtudiant" class="form-label">Email</label>
-              <input type="email" class="form-control" id="emailEtudiant" formControlName="emailEtudiant">
-            </div>
           </div>
-  
-          <div class="d-flex justify-content-end mt-4">
-            <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!preinscriptionForm.get('cellulaireEtudiant')?.valid ||!preinscriptionForm.get('nomPrenoms')?.valid || !preinscriptionForm.get('dateNaissance')?.valid || !preinscriptionForm.get('sexe')?.valid || !preinscriptionForm.get('nationalite')?.valid || !preinscriptionForm.get('numeroIdentite')?.valid">
-              Suivant <i class="bi bi-arrow-right ms-2"></i>
-            </button>
+
+          <!-- <div class="col-md-6">
+          <label for="nationaliteIdentite" class="form-label">Nationalité sur pièce d'identité *</label>
+          <input type="text" class="form-control" id="nationaliteIdentite" formControlName="nationaliteIdentite">
+          <div *ngIf="showError('nationaliteIdentite')" class="invalid-feedback d-block">
+            Saisie obligatoire
           </div>
+        </div> -->
+
+        <div class="col-md-4">
+          <label for="numeroIdentite" class="form-label">N° PIECE D'IDENTITE*</label>
+          <input type="text" class="form-control" id="numeroIdentite" formControlName="numeroIdentite">
+          @if (showError('numeroIdentite')) {
+            <div class="invalid-feedback d-block">
+              Saisie obligatoire
+            </div>
+          }
+        </div>
+        <div class="col-md-6">
+          <label for="nomPere" class="form-label">NOM ET PRENOMS DU PERE</label>
+          <input type="text" class="form-control" id="nomPere" formControlName="nomPere">
         </div>
 
-        <!-- Étape 2: Contacts Étudiant -->
-        <div class="step-content" [class.active]="currentStep === 2">
-          <h4 class="mb-4 text-primary">NIVEAU ACADEMIQUE</h4>
-          <div class="row g-3">
-                    <div class="col-md-6">
-              <label for="baccalaureat" class="form-label">BACCALAUREAT SERIE</label>
-              <input type="text" class="form-control" id="baccalaureat" formControlName="baccalaureat">
+        <div class="col-md-6">
+          <label for="nomMere" class="form-label">NOM ET PRENOMS DE LA MERE</label>
+          <input type="text" class="form-control" id="nomMere" formControlName="nomMere">
+        </div>
+        <div class="col-md-6">
+          <label for="cellulaireEtudiant" class="form-label">CONTACT 1 *</label>
+          <input type="tel" class="form-control" id="cellulaireEtudiant" formControlName="cellulaireEtudiant">
+          @if (showError('cellulaireEtudiant')) {
+            <div class="invalid-feedback d-block">
+              Saisie obligatoire
             </div>
+          }
+        </div>
+        <div class="col-md-6">
+          <label for="telephoneEtudiant" class="form-label">CONTACT 2</label>
+          <input type="tel" class="form-control" id="telephoneEtudiant" formControlName="telephoneEtudiant">
+        </div>
 
-            <div class="col-md-6">
-              <label for="anneeBac" class="form-label">ANNEE D'OBTENTION</label>
-              <input type="text" class="form-control" id="anneeBac" formControlName="anneeBac">
-            </div>
-                <div class="col-md-2">
-              <label for="idPermanent" class="form-label">ID Permanent</label>
-              <input type="text" class="form-control" id="idPermanent" formControlName="idPermanent">
-            </div>
-              <div class="col-md-2">
-              <label for="numeroTable" class="form-label">Numéro de table</label>
-              <input type="text" class="form-control" id="numeroTable" formControlName="numeroTable">
-            </div>
+        <div class="col-md-4">
+          <label for="villeEtudiant" class="form-label">Ville</label>
+          <input type="text" class="form-control" id="villeEtudiant" formControlName="villeEtudiant">
+        </div>
 
-            <div class="col-md-2">
-              <label for="numeroMatricule" class="form-label">Numéro matricule</label>
-              <input type="text" class="form-control" id="numeroMatricule" formControlName="numeroMatricule">
-            </div>
+        <div class="col-md-4">
+          <label for="communeEtudiant" class="form-label">Commune</label>
+          <input type="text" class="form-control" id="communeEtudiant" formControlName="communeEtudiant">
+        </div>
 
-            <div class="col-md-2">
-              <label for="totalBac" class="form-label">Total au Bac</label>
-              <input type="number" class="form-control" id="totalBac" formControlName="totalBac">
-            </div>
+        <div class="col-md-4">
+          <label for="emailEtudiant" class="form-label">Email</label>
+          <input type="email" class="form-control" id="emailEtudiant" formControlName="emailEtudiant">
+        </div>
+      </div>
 
-            <div class="col-md-2">
-              <label for="matierePrincipale" class="form-label">Matricule PC</label>
-              <input type="text" class="form-control" id="matierePrincipale" formControlName="matierePrincipale">
-            </div>
-                       <div class="col-md-6">
-              <label for="niveauEtudes" class="form-label">NIVEAU D'ETUDES</label>
-              <input type="text" class="form-control" id="niveauEtudes" formControlName="niveauEtudes">
-            </div>
+      <div class="d-flex justify-content-end mt-4">
+        <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!preinscriptionForm.get('cellulaireEtudiant')?.valid ||!preinscriptionForm.get('nomPrenoms')?.valid || !preinscriptionForm.get('dateNaissance')?.valid || !preinscriptionForm.get('sexe')?.valid || !preinscriptionForm.get('nationalite')?.valid || !preinscriptionForm.get('numeroIdentite')?.valid">
+          Suivant <i class="bi bi-arrow-right ms-2"></i>
+        </button>
+      </div>
+    </div>
 
-            <div class="col-md-6">
-              <label for="anneeNiveauEtudes" class="form-label">ANNEE ACADEMIQUE</label>
-              <input type="text" class="form-control" id="anneeNiveauEtudes" formControlName="anneeNiveauEtudes">
-            </div>
-              <div class="col-md-12">
-              <label for="etablissementFrequente" class="form-label">DERNIER ETABLISSEMENT</label>
-              <input type="text" class="form-control" id="etablissementFrequente"
-                formControlName="etablissementFrequente">
-            </div>
-             <div class="col-md-6">
-              <label for="diplomeEquivalence" class="form-label">DERNIER DIPLOME OBTENU</label>
-              <input type="text" class="form-control" id="diplomeEquivalence" formControlName="diplomeEquivalence">
-            </div>
+    <!-- Étape 2: Contacts Étudiant -->
+    <div class="step-content" [class.active]="currentStep === 2">
+      <h4 class="mb-4 text-primary">NIVEAU ACADEMIQUE</h4>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label for="baccalaureat" class="form-label">BACCALAUREAT SERIE</label>
+          <input type="text" class="form-control" id="baccalaureat" formControlName="baccalaureat">
+        </div>
 
-            <div class="col-md-6">
-              <label for="anneeDiplomeEquivalence" class="form-label">ANNEE D'OBTENTION</label>
-              <input type="text" class="form-control" id="anneeDiplomeEquivalence"
-                formControlName="anneeDiplomeEquivalence">
+        <div class="col-md-6">
+          <label for="anneeBac" class="form-label">ANNEE D'OBTENTION</label>
+          <input type="text" class="form-control" id="anneeBac" formControlName="anneeBac">
+        </div>
+        <div class="col-md-2">
+          <label for="idPermanent" class="form-label">ID Permanent</label>
+          <input type="text" class="form-control" id="idPermanent" formControlName="idPermanent">
+        </div>
+        <div class="col-md-2">
+          <label for="numeroTable" class="form-label">Numéro de table</label>
+          <input type="text" class="form-control" id="numeroTable" formControlName="numeroTable">
+        </div>
+
+        <div class="col-md-2">
+          <label for="numeroMatricule" class="form-label">Numéro matricule</label>
+          <input type="text" class="form-control" id="numeroMatricule" formControlName="numeroMatricule">
+        </div>
+
+        <div class="col-md-2">
+          <label for="totalBac" class="form-label">Total au Bac</label>
+          <input type="number" class="form-control" id="totalBac" formControlName="totalBac">
+        </div>
+
+        <div class="col-md-2">
+          <label for="matierePrincipale" class="form-label">Matricule PC</label>
+          <input type="text" class="form-control" id="matierePrincipale" formControlName="matierePrincipale">
+        </div>
+        <div class="col-md-6">
+          <label for="niveauEtudes" class="form-label">NIVEAU D'ETUDES</label>
+          <input type="text" class="form-control" id="niveauEtudes" formControlName="niveauEtudes">
+        </div>
+
+        <div class="col-md-6">
+          <label for="anneeNiveauEtudes" class="form-label">ANNEE ACADEMIQUE</label>
+          <input type="text" class="form-control" id="anneeNiveauEtudes" formControlName="anneeNiveauEtudes">
+        </div>
+        <div class="col-md-12">
+          <label for="etablissementFrequente" class="form-label">DERNIER ETABLISSEMENT</label>
+          <input type="text" class="form-control" id="etablissementFrequente"
+            formControlName="etablissementFrequente">
+          </div>
+          <div class="col-md-6">
+            <label for="diplomeEquivalence" class="form-label">DERNIER DIPLOME OBTENU</label>
+            <input type="text" class="form-control" id="diplomeEquivalence" formControlName="diplomeEquivalence">
+          </div>
+
+          <div class="col-md-6">
+            <label for="anneeDiplomeEquivalence" class="form-label">ANNEE D'OBTENTION</label>
+            <input type="text" class="form-control" id="anneeDiplomeEquivalence"
+              formControlName="anneeDiplomeEquivalence">
             </div>
           </div>
 
@@ -218,8 +238,8 @@
 
           <div class="row g-3">
 
-<!-- 
-           
+            <!--
+
 
 
 
@@ -238,20 +258,24 @@
               <input type="text" class="form-control" id="specialiteGrade" formControlName="specialiteGrade">
             </div> -->
 
-          
+
 
             <div class="col-md-12">
               <label for="formationSouhaitee" class="form-label">FORMATION SOUHAITE *</label>
               <select class="form-select" id="formationSouhaitee" formControlName="formationSouhaitee">
                 <option value="">Sélectionner</option>
-                <option *ngFor="let formation of formations" [value]="formation">{{formation}}</option>
+                @for (formation of formations; track formation) {
+                  <option [value]="formation">{{formation}}</option>
+                }
               </select>
-              <div *ngIf="showError('formationSouhaitee')" class="invalid-feedback d-block">
-                Veuillez sélectionner une formation
-              </div>
+              @if (showError('formationSouhaitee')) {
+                <div class="invalid-feedback d-block">
+                  Veuillez sélectionner une formation
+                </div>
+              }
             </div>
 
-        
+
           </div>
 
           <div class="d-flex justify-content-between mt-4">
@@ -269,252 +293,256 @@
           <h4 class="mb-4 text-primary">RESPONSABLE DU PAIEMENT DE SCOLARITE</h4>
 
           <div class="row g-3">
-          <label class="form-label mb-2" for="etab_source">RESPONSABLE</label>
+            <label class="form-label mb-2" for="etab_source">RESPONSABLE</label>
             <div>
-              <div *ngFor="let tut of tuteur" class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" [id]="tut" formControlName="responsable" 
-                (onChange)="miseAjourRespo($event)"
-                  [value]="tut">
-                <label class="form-check-label" [for]="tut">
-                  {{ tut }}
-                </label>
+              @for (tut of tuteur; track tut) {
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" [id]="tut" formControlName="responsable"
+                    (onChange)="miseAjourRespo($event)"
+                    [value]="tut">
+                    <label class="form-check-label" [for]="tut">
+                      {{ tut }}
+                    </label>
+                  </div>
+                }
               </div>
-            </div>
-             <div class="col-md-12">
-              <label for="nomResponsable" class="form-label">NOM ET PRENOMS </label>
-              <input type="text" class="form-control" id="nomResponsable" formControlName="nomResponsable">
-            </div>
-            <!-- <div class="col-md-6">
+              <div class="col-md-12">
+                <label for="nomResponsable" class="form-label">NOM ET PRENOMS </label>
+                <input type="text" class="form-control" id="nomResponsable" formControlName="nomResponsable">
+              </div>
+              <!-- <div class="col-md-6">
               <label for="titreResponsable" class="form-label">Titre du responsable</label>
               <input type="text" class="form-control" id="titreResponsable" formControlName="titreResponsable">
-            </div> -->           
+            </div> -->
 
             <div class="col-md-4">
               <label for="professionResponsable" class="form-label">PROFESSEUR</label>
               <input type="text" class="form-control" id="professionResponsable"
                 formControlName="professionResponsable">
-            </div>
+              </div>
 
-            <div class="col-md-4">
-              <label for="employeurResponsable" class="form-label">EMPLOYE</label>
-              <input type="text" class="form-control" id="employeurResponsable" formControlName="employeurResponsable">
-            </div>
+              <div class="col-md-4">
+                <label for="employeurResponsable" class="form-label">EMPLOYE</label>
+                <input type="text" class="form-control" id="employeurResponsable" formControlName="employeurResponsable">
+              </div>
 
-            <div class="col-md-6">
-              <label for="villeResponsable" class="form-label">Ville</label>
-              <input type="text" class="form-control" id="villeResponsable" formControlName="villeResponsable">
-            </div>
+              <div class="col-md-6">
+                <label for="villeResponsable" class="form-label">Ville</label>
+                <input type="text" class="form-control" id="villeResponsable" formControlName="villeResponsable">
+              </div>
 
-            <div class="col-md-6">
-              <label for="communeResponsable" class="form-label">Commune</label>
-              <input type="text" class="form-control" id="communeResponsable" formControlName="communeResponsable">
-            </div>
+              <div class="col-md-6">
+                <label for="communeResponsable" class="form-label">Commune</label>
+                <input type="text" class="form-control" id="communeResponsable" formControlName="communeResponsable">
+              </div>
 
-            <div class="col-md-3">
-              <label for="boitePostaleResponsable" class="form-label">Boîte postale</label>
-              <input type="text" class="form-control" id="boitePostaleResponsable"
-                formControlName="boitePostaleResponsable">
-            </div>
+              <div class="col-md-3">
+                <label for="boitePostaleResponsable" class="form-label">Boîte postale</label>
+                <input type="text" class="form-control" id="boitePostaleResponsable"
+                  formControlName="boitePostaleResponsable">
+                </div>
 
-            <div class="col-md-3">
-              <label for="cellulaireResponsable" class="form-label">Téléphone portable</label>
-              <input type="tel" class="form-control" id="cellulaireResponsable" formControlName="cellulaireResponsable">
-            </div>
+                <div class="col-md-3">
+                  <label for="cellulaireResponsable" class="form-label">Téléphone portable</label>
+                  <input type="tel" class="form-control" id="cellulaireResponsable" formControlName="cellulaireResponsable">
+                </div>
 
-            <div class="col-md-3">
-              <label for="telephoneBureauResponsable" class="form-label">Téléphone bureau</label>
-              <input type="tel" class="form-control" id="telephoneBureauResponsable"
-                formControlName="telephoneBureauResponsable">
-            </div>
+                <div class="col-md-3">
+                  <label for="telephoneBureauResponsable" class="form-label">Téléphone bureau</label>
+                  <input type="tel" class="form-control" id="telephoneBureauResponsable"
+                    formControlName="telephoneBureauResponsable">
+                  </div>
 
-            <div class="col-md-3">
-              <label for="telephoneDomicileResponsable" class="form-label">Téléphone domicile</label>
-              <input type="tel" class="form-control" id="telephoneDomicileResponsable"
-                formControlName="telephoneDomicileResponsable">
-            </div>
+                  <div class="col-md-3">
+                    <label for="telephoneDomicileResponsable" class="form-label">Téléphone domicile</label>
+                    <input type="tel" class="form-control" id="telephoneDomicileResponsable"
+                      formControlName="telephoneDomicileResponsable">
+                    </div>
 
-            <div class="col-md-12">
-              <label for="emailResponsable" class="form-label">Email</label>
-              <input type="email" class="form-control" id="emailResponsable" formControlName="emailResponsable">
-            </div>
-          </div>
+                    <div class="col-md-12">
+                      <label for="emailResponsable" class="form-label">Email</label>
+                      <input type="email" class="form-control" id="emailResponsable" formControlName="emailResponsable">
+                    </div>
+                  </div>
 
-          <div class="d-flex justify-content-between mt-4">
-            <button type="button" class="btn btn-outline-primary" (click)="prevStep()">
-              <i class="bi bi-arrow-left me-2"></i> Précédent
-            </button>
-            <button type="button" class="btn btn-primary" (click)="nextStep()">
-              Suivant <i class="bi bi-arrow-right ms-2"></i>
-            </button>
-          </div>
-        </div>
+                  <div class="d-flex justify-content-between mt-4">
+                    <button type="button" class="btn btn-outline-primary" (click)="prevStep()">
+                      <i class="bi bi-arrow-left me-2"></i> Précédent
+                    </button>
+                    <button type="button" class="btn btn-primary" (click)="nextStep()">
+                      Suivant <i class="bi bi-arrow-right ms-2"></i>
+                    </button>
+                  </div>
+                </div>
 
-        <!-- Étape 5: Contacts d'urgence et Santé -->
-        <div class="step-content" [class.active]="currentStep === 5">
-          <h4 class="mb-4 text-primary">Contacts d'Urgence et Santé</h4>
+                <!-- Étape 5: Contacts d'urgence et Santé -->
+                <div class="step-content" [class.active]="currentStep === 5">
+                  <h4 class="mb-4 text-primary">Contacts d'Urgence et Santé</h4>
 
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label for="contactNomPrenom1" class="form-label">Contact 1 - Nom & Prénom</label>
-              <input type="text" class="form-control" id="contactNomPrenom1" formControlName="contactNomPrenom1">
-            </div>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label for="contactNomPrenom1" class="form-label">Contact 1 - Nom & Prénom</label>
+                      <input type="text" class="form-control" id="contactNomPrenom1" formControlName="contactNomPrenom1">
+                    </div>
 
-            <div class="col-md-6">
-              <label for="contactAdresse1" class="form-label">Adresse</label>
-              <input type="text" class="form-control" id="contactAdresse1" formControlName="contactAdresse1">
-            </div>
+                    <div class="col-md-6">
+                      <label for="contactAdresse1" class="form-label">Adresse</label>
+                      <input type="text" class="form-control" id="contactAdresse1" formControlName="contactAdresse1">
+                    </div>
 
-            <div class="col-md-6">
-              <label for="contactTelephone1" class="form-label">Téléphone</label>
-              <input type="tel" class="form-control" id="contactTelephone1" formControlName="contactTelephone1">
-            </div>
+                    <div class="col-md-6">
+                      <label for="contactTelephone1" class="form-label">Téléphone</label>
+                      <input type="tel" class="form-control" id="contactTelephone1" formControlName="contactTelephone1">
+                    </div>
 
-            <div class="col-md-6">
-              <label for="contactCellulaire1" class="form-label">Portable</label>
-              <input type="tel" class="form-control" id="contactCellulaire1" formControlName="contactCellulaire1">
-            </div>
+                    <div class="col-md-6">
+                      <label for="contactCellulaire1" class="form-label">Portable</label>
+                      <input type="tel" class="form-control" id="contactCellulaire1" formControlName="contactCellulaire1">
+                    </div>
 
-            <div class="col-md-6">
-              <label for="contactNomPrenom2" class="form-label">Contact 2 - Nom & Prénom</label>
-              <input type="text" class="form-control" id="contactNomPrenom2" formControlName="contactNomPrenom2">
-            </div>
+                    <div class="col-md-6">
+                      <label for="contactNomPrenom2" class="form-label">Contact 2 - Nom & Prénom</label>
+                      <input type="text" class="form-control" id="contactNomPrenom2" formControlName="contactNomPrenom2">
+                    </div>
 
-            <div class="col-md-6">
-              <label for="contactAdresse2" class="form-label">Adresse</label>
-              <input type="text" class="form-control" id="contactAdresse2" formControlName="contactAdresse2">
-            </div>
+                    <div class="col-md-6">
+                      <label for="contactAdresse2" class="form-label">Adresse</label>
+                      <input type="text" class="form-control" id="contactAdresse2" formControlName="contactAdresse2">
+                    </div>
 
-            <div class="col-md-6">
-              <label for="contactTelephone2" class="form-label">Téléphone</label>
-              <input type="tel" class="form-control" id="contactTelephone2" formControlName="contactTelephone2">
-            </div>
+                    <div class="col-md-6">
+                      <label for="contactTelephone2" class="form-label">Téléphone</label>
+                      <input type="tel" class="form-control" id="contactTelephone2" formControlName="contactTelephone2">
+                    </div>
 
-            <div class="col-md-6">
-              <label for="contactCellulaire2" class="form-label">Portable</label>
-              <input type="tel" class="form-control" id="contactCellulaire2" formControlName="contactCellulaire2">
-            </div>
+                    <div class="col-md-6">
+                      <label for="contactCellulaire2" class="form-label">Portable</label>
+                      <input type="tel" class="form-control" id="contactCellulaire2" formControlName="contactCellulaire2">
+                    </div>
 
-            <div class="col-md-12 mt-4">
-              <h5>Informations Médicales</h5>
-            </div>
+                    <div class="col-md-12 mt-4">
+                      <h5>Informations Médicales</h5>
+                    </div>
 
-            <div class="col-md-12">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="cliniqueDeclaree"
-                  formControlName="cliniqueDeclaree">
-                <label class="form-check-label" for="cliniqueDeclaree">
-                  Clinique déclarée
-                </label>
+                    <div class="col-md-12">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="cliniqueDeclaree"
+                          formControlName="cliniqueDeclaree">
+                          <label class="form-check-label" for="cliniqueDeclaree">
+                            Clinique déclarée
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <label for="nomClinique" class="form-label">Nom de la clinique</label>
+                        <input type="text" class="form-control" id="nomClinique" formControlName="nomClinique">
+                      </div>
+
+                      <div class="col-md-6">
+                        <label for="telephoneClinique" class="form-label">Téléphone</label>
+                        <input type="tel" class="form-control" id="telephoneClinique" formControlName="telephoneClinique">
+                      </div>
+
+                      <div class="col-md-6">
+                        <label for="medecinClinique" class="form-label">Médecin traitant</label>
+                        <input type="text" class="form-control" id="medecinClinique" formControlName="medecinClinique">
+                      </div>
+
+                      <div class="col-md-6">
+                        <label for="contactMedecin" class="form-label">Contact du médecin</label>
+                        <input type="tel" class="form-control" id="contactMedecin" formControlName="contactMedecin">
+                      </div>
+
+                      <div class="col-md-12">
+                        <label for="maladies" class="form-label">Maladies déclarées</label>
+                        <textarea class="form-control" id="maladies" formControlName="maladies" rows="2"></textarea>
+                      </div>
+
+                      <div class="col-md-12">
+                        <label for="soins" class="form-label">Soins particuliers</label>
+                        <textarea class="form-control" id="soins" formControlName="soins" rows="2"></textarea>
+                      </div>
+
+                      <div class="col-md-12">
+                        <label for="medicaments" class="form-label">Médicaments réguliers</label>
+                        <textarea class="form-control" id="medicaments" formControlName="medicaments" rows="2"></textarea>
+                      </div>
+
+                      <div class="col-md-12">
+                        <label for="premiersSoins" class="form-label">Premiers soins à connaître</label>
+                        <textarea class="form-control" id="premiersSoins" formControlName="premiersSoins" rows="2"></textarea>
+                      </div>
+
+                      <div class="col-md-12">
+                        <label for="interventionsChirurgicales" class="form-label">Interventions chirurgicales</label>
+                        <textarea class="form-control" id="interventionsChirurgicales"
+                        formControlName="interventionsChirurgicales" rows="2"></textarea>
+                      </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                      <button type="button" class="btn btn-outline-primary" (click)="prevStep()">
+                        <i class="bi bi-arrow-left me-2"></i> Précédent
+                      </button>
+                      <button type="button" class="btn btn-primary" (click)="nextStep()">
+                        Suivant <i class="bi bi-arrow-right ms-2"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Étape 6: Documents et Validation -->
+                  <div class="step-content" [class.active]="currentStep === 6">
+                    <h4 class="mb-4 text-primary">VALIDATION</h4>
+
+                    <div class="row g-3">
+                      <!-- <div class="col-md-6">
+                      <label for="copieBac" class="form-label">Copie du Bac</label>
+                      <input type="text" class="form-control" id="copieBac" formControlName="copieBac">
+                    </div> -->
+
+                    <!-- <div class="col-md-6">
+                    <label for="copieDernierDiplome" class="form-label">Copie du dernier diplôme</label>
+                    <input type="text" class="form-control" id="copieDernierDiplome" formControlName="copieDernierDiplome">
+                  </div> -->
+
+                  <!-- <div class="col-md-6">
+                  <label for="decision" class="form-label">Décision</label>
+                  <input type="text" class="form-control" id="decision" formControlName="decision">
+                </div> -->
+
+
+
+                <!-- <div class="col-md-6">
+                <label for="anneeScolaire" class="form-label">Année scolaire</label>
+                <input type="text" class="form-control" id="anneeScolaire" formControlName="anneeScolaire">
+              </div> -->
+
+
+              <label class="form-label mb-2" for="etab_source">ETABLISSEMENT SOUHAITE*</label>
+              <div>
+                @for (etab of etabSource; track etab) {
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" [id]="etab" formControlName="etablissementSource"
+                      [value]="etab">
+                      <label class="form-check-label" [for]="etab">
+                        {{ etab }}
+                      </label>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-between mt-4">
+                <button type="button" class="btn btn-outline-primary" (click)="prevStep()">
+                  <i class="bi bi-arrow-left me-2"></i> Précédent
+                </button>
+                <button type="button" class="btn btn-success" (click)="submit()" [disabled]="!preinscriptionForm.get('etablissementSource')?.value">
+                  <i class="bi bi-check-circle me-2"></i> Soumettre la préinscription
+                </button>
               </div>
             </div>
-
-            <div class="col-md-6">
-              <label for="nomClinique" class="form-label">Nom de la clinique</label>
-              <input type="text" class="form-control" id="nomClinique" formControlName="nomClinique">
-            </div>
-
-            <div class="col-md-6">
-              <label for="telephoneClinique" class="form-label">Téléphone</label>
-              <input type="tel" class="form-control" id="telephoneClinique" formControlName="telephoneClinique">
-            </div>
-
-            <div class="col-md-6">
-              <label for="medecinClinique" class="form-label">Médecin traitant</label>
-              <input type="text" class="form-control" id="medecinClinique" formControlName="medecinClinique">
-            </div>
-
-            <div class="col-md-6">
-              <label for="contactMedecin" class="form-label">Contact du médecin</label>
-              <input type="tel" class="form-control" id="contactMedecin" formControlName="contactMedecin">
-            </div>
-
-            <div class="col-md-12">
-              <label for="maladies" class="form-label">Maladies déclarées</label>
-              <textarea class="form-control" id="maladies" formControlName="maladies" rows="2"></textarea>
-            </div>
-
-            <div class="col-md-12">
-              <label for="soins" class="form-label">Soins particuliers</label>
-              <textarea class="form-control" id="soins" formControlName="soins" rows="2"></textarea>
-            </div>
-
-            <div class="col-md-12">
-              <label for="medicaments" class="form-label">Médicaments réguliers</label>
-              <textarea class="form-control" id="medicaments" formControlName="medicaments" rows="2"></textarea>
-            </div>
-
-            <div class="col-md-12">
-              <label for="premiersSoins" class="form-label">Premiers soins à connaître</label>
-              <textarea class="form-control" id="premiersSoins" formControlName="premiersSoins" rows="2"></textarea>
-            </div>
-
-            <div class="col-md-12">
-              <label for="interventionsChirurgicales" class="form-label">Interventions chirurgicales</label>
-              <textarea class="form-control" id="interventionsChirurgicales"
-                formControlName="interventionsChirurgicales" rows="2"></textarea>
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-between mt-4">
-            <button type="button" class="btn btn-outline-primary" (click)="prevStep()">
-              <i class="bi bi-arrow-left me-2"></i> Précédent
-            </button>
-            <button type="button" class="btn btn-primary" (click)="nextStep()">
-              Suivant <i class="bi bi-arrow-right ms-2"></i>
-            </button>
-          </div>
+          </form>
         </div>
-
-        <!-- Étape 6: Documents et Validation -->
-        <div class="step-content" [class.active]="currentStep === 6">
-          <h4 class="mb-4 text-primary">VALIDATION</h4>
-
-          <div class="row g-3">
-            <!-- <div class="col-md-6">
-              <label for="copieBac" class="form-label">Copie du Bac</label>
-              <input type="text" class="form-control" id="copieBac" formControlName="copieBac">
-            </div> -->
-
-            <!-- <div class="col-md-6">
-              <label for="copieDernierDiplome" class="form-label">Copie du dernier diplôme</label>
-              <input type="text" class="form-control" id="copieDernierDiplome" formControlName="copieDernierDiplome">
-            </div> -->
-
-            <!-- <div class="col-md-6">
-              <label for="decision" class="form-label">Décision</label>
-              <input type="text" class="form-control" id="decision" formControlName="decision">
-            </div> -->
-
-          
-
-            <!-- <div class="col-md-6">
-              <label for="anneeScolaire" class="form-label">Année scolaire</label>
-              <input type="text" class="form-control" id="anneeScolaire" formControlName="anneeScolaire">
-            </div> -->
-
-
-            <label class="form-label mb-2" for="etab_source">ETABLISSEMENT SOUHAITE*</label>
-            <div>
-              <div *ngFor="let etab of etabSource" class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" [id]="etab" formControlName="etablissementSource"
-                  [value]="etab">
-                <label class="form-check-label" [for]="etab">
-                  {{ etab }}
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-between mt-4">
-            <button type="button" class="btn btn-outline-primary" (click)="prevStep()">
-              <i class="bi bi-arrow-left me-2"></i> Précédent
-            </button>
-            <button type="button" class="btn btn-success" (click)="submit()" [disabled]="!preinscriptionForm.get('etablissementSource')?.value">
-              <i class="bi bi-check-circle me-2"></i> Soumettre la préinscription
-            </button>
-          </div>
-        </div>
-      </form>
+      </div>
     </div>
-  </div>
-</div>

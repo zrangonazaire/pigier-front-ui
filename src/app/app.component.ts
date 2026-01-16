@@ -2,7 +2,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { CommonModule } from '@angular/common'; // Import CommonModule for NgClass
+ // Import CommonModule for NgClass
 import { RouterOutlet } from '@angular/router'; // Import RouterOutlet
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -12,7 +12,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   standalone: true, // Si votre app.component est standalone
-  imports: [CommonModule, RouterOutlet,ToastModule,ConfirmDialogModule ] // Ajoutez RouterOutlet ici si standalone
+  imports: [RouterOutlet, ToastModule, ConfirmDialogModule] // Ajoutez RouterOutlet ici si standalone
 })
 export class AppComponent implements OnInit {
   router = inject(Router); 

@@ -4,13 +4,13 @@ import { ReportingAPIService } from '../../../api-client';
 import { saveAs } from 'file-saver';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { MenuComponent } from '../../components/menu/menu.component';
 
 @Component({
   selector: 'app-report-generator',
   standalone: true,
-  imports: [CommonModule, FormsModule, MenuComponent],
+  imports: [FormsModule, MenuComponent],
   templateUrl: './recapetudiant.html',
   styleUrls: ['./recapetudiant.scss']
 })

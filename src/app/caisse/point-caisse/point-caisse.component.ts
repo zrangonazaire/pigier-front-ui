@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -9,11 +9,9 @@ import { MenuComponent } from '../../components/menu/menu.component';
   standalone: true,
 
   imports: [
-
     FormsModule,
-    CommonModule,
     MenuComponent
-  ],
+],
   templateUrl: './point-caisse.component.html',
   styleUrl: './point-caisse.component.scss'
 })

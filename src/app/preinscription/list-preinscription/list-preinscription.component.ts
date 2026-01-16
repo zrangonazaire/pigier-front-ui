@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuComponent } from '../../components/menu/menu.component';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-list-preinscription',
   standalone: true,
-  imports: [MenuComponent,CommonModule],
+  imports: [MenuComponent],
   templateUrl: './list-preinscription.component.html',
   styleUrl: './list-preinscription.component.scss'
 })

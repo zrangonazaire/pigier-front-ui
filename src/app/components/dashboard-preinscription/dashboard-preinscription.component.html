@@ -9,11 +9,13 @@
 
   <!-- Cartes de statistiques responsive -->
   <div class="dashboard-stats">
-    <div class="stat-card" *ngFor="let stat of stats()">
-      <i [class]="stat.icon"></i>
-      <h3>{{ stat.title }}</h3>
-      <p>{{ stat.value }}</p>
-    </div>
+    @for (stat of stats(); track stat) {
+      <div class="stat-card">
+        <i [class]="stat.icon"></i>
+        <h3>{{ stat.title }}</h3>
+        <p>{{ stat.value }}</p>
+      </div>
+    }
   </div>
 
   <!-- Contrôles de filtrage responsive -->
@@ -44,6 +46,7 @@
           <option value="all">Tous les sites</option>
           <option value="ABIDJAN PLATEAU">Abidjan Plateau</option>
           <option value="ABIDJAN YOPOUGON">Abidjan Yopougon</option>
+          <option value="CAMPUS EN LIGNE">Campus en Ligne</option>
           <option value="YAMOUSSOUKRO">Yamoussoukro</option>
         </select>
       </div>
@@ -82,73 +85,79 @@
       <table class="data-table">
         <thead>
           <tr>
-            <th *ngFor="let column of columns" (click)="sortTable(column.key)">
-              {{ column.label }}
-              <i class="fas fa-sort" *ngIf="sortColumn() !== column.key"></i>
-              <i class="fas fa-sort-up" *ngIf="sortColumn() === column.key && sortDirection() === 'asc'"></i>
-              <i class="fas fa-sort-down" *ngIf="sortColumn() === column.key && sortDirection() === 'desc'"></i>
-            </th>
+            @for (column of columns; track column) {
+              <th (click)="sortTable(column.key)">
+                {{ column.label }}
+                @if (sortColumn() !== column.key) {
+                  <i class="fas fa-sort"></i>
+                }
+                @if (sortColumn() === column.key && sortDirection() === 'asc') {
+                  <i class="fas fa-sort-up"></i>
+                }
+                @if (sortColumn() === column.key && sortDirection() === 'desc') {
+                  <i class="fas fa-sort-down"></i>
+                }
+              </th>
+            }
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngIf="filteredPreinscriptions().length > 0; else noData">
-            <tr
-              *ngFor="let item of filteredPreinscriptions() | paginate : { itemsPerPage: itemsPerPage(), currentPage: currentPage() }">
-              <td data-label="ID">{{ item.id }}</td>
-              <td data-label="Date">{{ item.datinscrip | date : 'dd/MM/yyyy' }}</td>
-              <td data-label="Créateur">{{ item.utilisateurCreateur }}</td>
-              <td data-label="Nom">{{ item.nomprenoms }}</td>
-              <td data-label="Téléphone">{{ item.celetud }}</td>
-              <td data-label="Formation">{{ item.formsouh }}</td>
-              <td data-label="Statut">
-                @if (item.decision == 'E') {
-                <span class="status-pending">En attente</span>
-                } @else if (item.decision == 'I') {
-                <span class="status-approved">Inscrit(e)</span>
-                } @else if (item.decision == 'A') {
-                <span class="status-warning">Autorisé(e) à s'inscrire</span>
-                }
-              </td>
-              <td data-label="Site">
-                <span class="site-badge">
-                  {{ item.etab_source }}
-                </span>
-              </td>
-              <td data-label="Année Scolaire">
-                <span>
-                  {{ item.anneeScolaire }}
-                </span>
-              </td>
-              <td class="action-buttons" data-label="Actions">
-                <button class="action-btn" title="Dossier médical" (click)="openMedicalForm(item)">
-                  @if (isLoadingMedical()[item.id]) {
-                    <span class="elegant-spinner"></span>
-                  } @else {
-                    <i class="fas fa-file-medical"></i>
+          @if (filteredPreinscriptions().length > 0) {
+            @for (item of filteredPreinscriptions() | paginate : { itemsPerPage: itemsPerPage(), currentPage: currentPage() }; track item) {
+              <tr
+                >
+                <td data-label="ID">{{ item.id }}</td>
+                <td data-label="Date">{{ item.datinscrip | date : 'dd/MM/yyyy' }}</td>
+                <td data-label="Créateur">{{ item.utilisateurCreateur }}</td>
+                <td data-label="Nom">{{ item.nomprenoms }}</td>
+                <td data-label="Téléphone">{{ item.celetud }}</td>
+                <td data-label="Formation">{{ item.formsouh }}</td>
+                <td data-label="Statut">
+                  @if (item.decision == 'E') {
+                    <span class="status-pending">En attente</span>
+                  } @else if (item.decision == 'I') {
+                    <span class="status-approved">Inscrit(e)</span>
+                  } @else if (item.decision == 'A') {
+                    <span class="status-warning">Autorisé(e) à s'inscrire</span>
                   }
-                </button>
-                <button class="action-btn" title="Fiche Préinscription" (click)="viewPreinscription(item)">
-                  @if (isLoadingPreinscription()[item.id]) {
-                    <span class="elegant-spinner"></span>
-                  } @else {
-                    <i class="fas fa-file-alt"></i>
-                  }
-                 
-                </button>
-                <button class="action-btn" title="Fiche d'Inscrire" (click)="processInscription(item)">
-                  @if (isLoadingInscription()[item.id]) {
-                    <span class="elegant-spinner"></span>
-                  } @else {
-                    <i class="fas fa-print"></i>
-                  }
-                  
-                </button>
-              </td>
-            </tr>
-          </ng-container>
-
-          <ng-template #noData>
+                </td>
+                <td data-label="Site">
+                  <span class="site-badge">
+                    {{ item.etab_source }}
+                  </span>
+                </td>
+                <td data-label="Année Scolaire">
+                  <span>
+                    {{ item.anneeScolaire }}
+                  </span>
+                </td>
+                <td class="action-buttons" data-label="Actions">
+                  <button class="action-btn" title="Dossier médical" (click)="openMedicalForm(item)">
+                    @if (isLoadingMedical()[item.id]) {
+                      <span class="elegant-spinner"></span>
+                    } @else {
+                      <i class="fas fa-file-medical"></i>
+                    }
+                  </button>
+                  <button class="action-btn" title="Fiche Préinscription" (click)="viewPreinscription(item)">
+                    @if (isLoadingPreinscription()[item.id]) {
+                      <span class="elegant-spinner"></span>
+                    } @else {
+                      <i class="fas fa-file-alt"></i>
+                    }
+                  </button>
+                  <button class="action-btn" title="Fiche d'Inscrire" (click)="processInscription(item)">
+                    @if (isLoadingInscription()[item.id]) {
+                      <span class="elegant-spinner"></span>
+                    } @else {
+                      <i class="fas fa-print"></i>
+                    }
+                  </button>
+                </td>
+              </tr>
+            }
+          } @else {
             <tr class="no-data-row">
               <td [colSpan]="columns.length + 1">
                 <div class="empty-state">
@@ -160,7 +169,8 @@
                 </div>
               </td>
             </tr>
-          </ng-template>
+          }
+
         </tbody>
       </table>
     </div>
@@ -182,27 +192,35 @@
       </div>
     </div>
   </div>
-  <div *ngIf="showModal()" class="modal-backdrop show"></div>
-  <div *ngIf="showModal()" class="modal fade show d-block" tabindex="-1" style="background:rgba(0,0,0,0.3)">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">{{ modalTitle() }}</h5>
-          <button type="button" class="btn-close" (click)="closeModal()"></button>
-        </div>
-        <div class="modal-body">
-          <p>{{ modalMessage() }}</p>
-        </div>
-        <div class="modal-footer" *ngIf="modalType() === 'confirm'">
-          <button type="button" class="btn btn-secondary" (click)="closeModal()">Annuler</button>
-          <button type="button" class="btn btn-primary" (click)="confirmAction()">Confirmer</button>
-        </div>
-        <div class="modal-footer" *ngIf="modalType() === 'alert'">
-          <button type="button" class="btn btn-primary" (click)="closeModal()">Fermer</button>
+  @if (showModal()) {
+    <div class="modal-backdrop show"></div>
+  }
+  @if (showModal()) {
+    <div class="modal fade show d-block" tabindex="-1" style="background:rgba(0,0,0,0.3)">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ modalTitle() }}</h5>
+            <button type="button" class="btn-close" (click)="closeModal()"></button>
+          </div>
+          <div class="modal-body">
+            <p>{{ modalMessage() }}</p>
+          </div>
+          @if (modalType() === 'confirm') {
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" (click)="closeModal()">Annuler</button>
+              <button type="button" class="btn btn-primary" (click)="confirmAction()">Confirmer</button>
+            </div>
+          }
+          @if (modalType() === 'alert') {
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" (click)="closeModal()">Fermer</button>
+            </div>
+          }
         </div>
       </div>
     </div>
-  </div>
+  }
   <!-- Footer responsive -->
   <div class="dashboard-footer">
     <p>© {{ currentYear }} Université - Système de Gestion v3.0</p>

@@ -11,16 +11,16 @@
         <div class="d-flex">
           <!-- Bouton d'impression PDF -->
           <button class="btn btn-light btn-sm me-2"
-                  (click)="generatePDF()"
-                  [disabled]="!isFormValid() || isLoading">
+            (click)="generatePDF()"
+            [disabled]="!isFormValid() || isLoading">
             <i class="fas fa-file-pdf mr-1" [class.fa-spin]="isLoading"></i>
             {{ isLoading ? 'Génération...' : 'Impression PDF' }}
           </button>
 
           <!-- Bouton d'impression Excel -->
           <button class="btn btn-light btn-sm me-2"
-                  (click)="generateExcel()"
-                  [disabled]="!isFormValid()">
+            (click)="generateExcel()"
+            [disabled]="!isFormValid()">
             <i class="fas fa-file-excel mr-1"></i> Impression EXCEL
           </button>
 
@@ -41,80 +41,92 @@
           </div>
           <div class="col-md-10">
             <div class="d-flex flex-wrap gap-3">
-              <div class="form-check form-check-inline" *ngFor="let campus of campusOptions">
-                <input class="form-check-input" type="radio"
-                       name="campus" [id]="'campus-' + campus"
-                       [value]="campus" [(ngModel)]="reportData.campus">
-                <label class="form-check-label" [for]="'campus-' + campus">
-                  {{ campus }}
-                </label>
+              @for (campus of campusOptions; track campus) {
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio"
+                    name="campus" [id]="'campus-' + campus"
+                    [value]="campus" [(ngModel)]="reportData.campus">
+                    <label class="form-check-label" [for]="'campus-' + campus">
+                      {{ campus }}
+                    </label>
+                  </div>
+                }
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Année Scolaire Section -->
-      <div class="form-group mb-3">
-        <div class="row align-items-center">
-          <div class="col-md-2">
-            <label class="font-weight-bold mb-0">Année Scolaire :</label>
-          </div>
-          <div class="col-md-10">
-            <div class="row">
-              <div class="col-md-3">
-                <select class="form-select" [(ngModel)]="reportData.anneedebut" name="anneedebut">
-                  <option value="">Année début</option>
-                  <option *ngFor="let annee of anneeOptions" [value]="annee">{{ annee }}</option>
-                </select>
-              </div>
-              <div class="col-md-3">
-                <select class="form-select" [(ngModel)]="reportData.anneefin" name="anneefin">
-                  <option value="">Année fin</option>
-                  <option *ngFor="let annee of anneeOptions" [value]="annee">{{ annee }}</option>
-                </select>
-              </div>
-              <div class="col-md-6">
-                <div class="annee-display p-2 rounded text-center">
-                  {{ anneeScolaire || 'Ex: 2023/2024' }}
+        <!-- Année Scolaire Section -->
+        <div class="form-group mb-3">
+          <div class="row align-items-center">
+            <div class="col-md-2">
+              <label class="font-weight-bold mb-0">Année Scolaire :</label>
+            </div>
+            <div class="col-md-10">
+              <div class="row">
+                <div class="col-md-3">
+                  <select class="form-select" [(ngModel)]="reportData.anneedebut" name="anneedebut">
+                    <option value="">Année début</option>
+                    @for (annee of anneeOptions; track annee) {
+                      <option [value]="annee">{{ annee }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <select class="form-select" [(ngModel)]="reportData.anneefin" name="anneefin">
+                    <option value="">Année fin</option>
+                    @for (annee of anneeOptions; track annee) {
+                      <option [value]="annee">{{ annee }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <div class="annee-display p-2 rounded text-center">
+                    {{ anneeScolaire || 'Ex: 2023/2024' }}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Classe Section -->
-      <div class="form-group mb-3">
-        <div class="row align-items-center">
-          <div class="col-md-2">
-            <label class="font-weight-bold mb-0">Classe :</label>
-          </div>
-          <div class="col-md-10">
-            <div class="row">
-              <div class="col-md-6">
-                <select class="form-select" [(ngModel)]="reportData.niveau" name="niveau">
-                  <option value="">Sélectionner un niveau</option>
-                  <option *ngFor="let niveau of niveauOptions" [value]="niveau">{{ niveau }}</option>
-                </select>
-                <small class="text-muted">Ex: LPRG.1</small>
+        <!-- Classe Section -->
+        <div class="form-group mb-3">
+          <div class="row align-items-center">
+            <div class="col-md-2">
+              <label class="font-weight-bold mb-0">Classe :</label>
+            </div>
+            <div class="col-md-10">
+              <div class="row">
+                <div class="col-md-6">
+                  <select class="form-select" [(ngModel)]="reportData.niveau" name="niveau">
+                    <option value="">Sélectionner un niveau</option>
+                    @for (niveau of niveauOptions; track niveau) {
+                      <option [value]="niveau">{{ niveau }}</option>
+                    }
+                  </select>
+                  <small class="text-muted">Ex: LPRG.1</small>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Error Message -->
-      <div *ngIf="errorMessage" class="alert alert-danger">
-        <i class="fas fa-exclamation-triangle me-2"></i>
-        {{ errorMessage }}
-      </div>
+        <!-- Error Message -->
+        @if (errorMessage) {
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            {{ errorMessage }}
+          </div>
+        }
 
-      <!-- No Data Message -->
-      <div *ngIf="!isFormValid()" class="text-center py-4 bg-light rounded">
-        <i class="fas fa-search fa-2x text-muted mb-3"></i>
-        <p class="text-muted mb-0">Aucun élève trouvé. Veuillez saisir des critères de recherche.</p>
+        <!-- No Data Message -->
+        @if (!isFormValid()) {
+          <div class="text-center py-4 bg-light rounded">
+            <i class="fas fa-search fa-2x text-muted mb-3"></i>
+            <p class="text-muted mb-0">Aucun élève trouvé. Veuillez saisir des critères de recherche.</p>
+          </div>
+        }
       </div>
     </div>
   </div>
-</div>

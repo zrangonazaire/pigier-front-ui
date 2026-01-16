@@ -8,15 +8,15 @@
         </h2>
         <div class="d-flex">
 
-       <!-- Bouton d'impression -->
-  <button class="btn btn-light btn-sm me-2" (click)="printeleves()" [disabled]="chargement">
-    <i class="fas fa-print mr-1" [class.fa-spin]="chargement"></i> {{ chargement ? 'Chargement...' : 'Impression PDF' }}
-  </button>
+          <!-- Bouton d'impression -->
+          <button class="btn btn-light btn-sm me-2" (click)="printeleves()" [disabled]="chargement">
+            <i class="fas fa-print mr-1" [class.fa-spin]="chargement"></i> {{ chargement ? 'Chargement...' : 'Impression PDF' }}
+          </button>
 
-      <!-- Bouton d'impression -->
-  <button class="btn btn-light btn-sm me-2" (click)="printeleveExcel()" [disabled]="chargement">
-    <i class="fas fa-print mr-1"></i> Impression EXCEL
-  </button>
+          <!-- Bouton d'impression -->
+          <button class="btn btn-light btn-sm me-2" (click)="printeleveExcel()" [disabled]="chargement">
+            <i class="fas fa-print mr-1"></i> Impression EXCEL
+          </button>
 
 
 
@@ -28,112 +28,120 @@
       </div>
     </div>
 
-<!--debut insertion campuse -------------------------------------fhfhffffff-->
+    <!--debut insertion campuse -------------------------------------fhfhffffff-->
 
-<div class="form-group">
-  <div class="row align-items-center">
-    <div class="col-md-3"> <!-- Label sur 3 colonnes -->
-      <label class="font-weight-bold mb-0">Campus :</label>
-    </div>
-    <div class="col-md-9"> <!-- Boutons radio sur 9 colonnes -->
-      <div class="d-flex flex-wrap gap-3">
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="campus" id="plateau"
-                 value="ABIDJAN PLATEAU" [(ngModel)]="PARAMETAB" checked>
-          <label class="form-check-label" for="plateau">
-            ABIDJAN PLATEAU
-          </label>
+    <div class="form-group">
+      <div class="row align-items-center">
+        <div class="col-md-3"> <!-- Label sur 3 colonnes -->
+          <label class="font-weight-bold mb-0">Campus :</label>
         </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="campus" id="yopougon"
-                 value="ABIDJAN YOPOUGON" [(ngModel)]="PARAMETAB">
-          <label class="form-check-label" for="yopougon">
-            ABIDJAN YOPOUGON
-          </label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="campus" id="yamoussoukro"
-                 value="YAMOUSSOUKRO" [(ngModel)]="PARAMETAB">
-          <label class="form-check-label" for="yamoussoukro">
-            YAMOUSSOUKRO
-          </label>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-<!--fin  insertion campuse -------------------------------------fhfhffffff-->
-    <div class="card-body">
-      <!-- Formulaire de filtrage -->
-      <div class="row mb-4">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="anneeScolaire" class="font-weight-bold">
-              <i class="fas fa-calendar-alt mr-1"></i>Année Scolaire
-            </label>
-            <input type="text" id="anneeScolaire" class="form-control"
-                   [(ngModel)]="PARAMEANNE" placeholder="Ex: 2023/2024">
+        <div class="col-md-9"> <!-- Boutons radio sur 9 colonnes -->
+          <div class="d-flex flex-wrap gap-3">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="campus" id="plateau"
+                value="ABIDJAN PLATEAU" [(ngModel)]="PARAMETAB" checked>
+                <label class="form-check-label" for="plateau">
+                  ABIDJAN PLATEAU
+                </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="campus" id="yopougon"
+                  value="ABIDJAN YOPOUGON" [(ngModel)]="PARAMETAB">
+                  <label class="form-check-label" for="yopougon">
+                    ABIDJAN YOPOUGON
+                  </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="campus" id="yamoussoukro"
+                    value="YAMOUSSOUKRO" [(ngModel)]="PARAMETAB">
+                    <label class="form-check-label" for="yamoussoukro">
+                      YAMOUSSOUKRO
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="classe" class="font-weight-bold">
-              <i class="fas fa-graduation-cap mr-1"></i>Classe
-            </label>
-            <input type="text" id="classe" class="form-control"
-                   [(ngModel)]="PARAMCLASSE" placeholder="Ex: LPRGL1">
+
+
+
+          <!--fin  insertion campuse -------------------------------------fhfhffffff-->
+          <div class="card-body">
+            <!-- Formulaire de filtrage -->
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="anneeScolaire" class="font-weight-bold">
+                    <i class="fas fa-calendar-alt mr-1"></i>Année Scolaire
+                  </label>
+                  <input type="text" id="anneeScolaire" class="form-control"
+                    [(ngModel)]="PARAMEANNE" placeholder="Ex: 2023/2024">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="classe" class="font-weight-bold">
+                      <i class="fas fa-graduation-cap mr-1"></i>Classe
+                    </label>
+                    <input type="text" id="classe" class="form-control"
+                      [(ngModel)]="PARAMCLASSE" placeholder="Ex: LPRGL1">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Messages d'erreur -->
+                @if (erreur) {
+                  <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle mr-2"></i>{{ erreur }}
+                  </div>
+                }
+
+                <!-- Tableau des élèves -->
+                @if (eleves.length > 0) {
+                  <div class="table-responsive-md">
+                    <table class="table table-bordered table-hover">
+                      <thead class="thead-dark">
+                        <tr>
+                          <th scope="col">Matricule</th>
+                          <th scope="col">Nom</th>
+                          <th scope="col">Lieu Naissance</th>
+                          <th scope="col">Date Naissance</th>
+                          <th scope="col">Sexe</th>
+                          <th scope="col">Téléphone</th>
+                          <th scope="col">Nationalité</th>
+                          <th scope="col">Classe</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (eleve of eleves; track eleve) {
+                          <tr>
+                            <td>{{ eleve.Matri_Elev }}</td>
+                            <td>{{ eleve.Nom_Elev }}</td>
+                            <td>{{ eleve.Lieunais_Elev }}</td>
+                            <td>{{ eleve.Datenais_Elev | date:'dd/MM/yyyy' }}</td>
+                            <td>{{ eleve.Sexe_Elev }}</td>
+                            <td>{{ eleve.celetud }}</td>
+                            <td>{{ eleve.Des_Nat }}</td>
+                            <td>{{ eleve.Code_Detcla }}</td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                    <div class="text-right mt-2">
+                      <span class="badge badge-primary p-2">
+                        Effectif total: {{ eleves.length }} élève(s)
+                      </span>
+                    </div>
+                  </div>
+                }
+
+                <!-- Message si aucun résultat -->
+                @if (eleves.length === 0 && !chargement && !erreur) {
+                  <div class="text-center py-4">
+                    <i class="fas fa-info-circle fa-2x text-muted mb-3"></i>
+                    <p class="text-muted">Aucun élève trouvé. Veuillez saisir des critères de recherche.</p>
+                  </div>
+                }
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-
-      <!-- Messages d'erreur -->
-      <div *ngIf="erreur" class="alert alert-danger">
-        <i class="fas fa-exclamation-circle mr-2"></i>{{ erreur }}
-      </div>
-
-      <!-- Tableau des élèves -->
-      <div *ngIf="eleves.length > 0" class="table-responsive-md">
-        <table class="table table-bordered table-hover">
-          <thead class="thead-dark">
-            <tr>
-              <th scope="col">Matricule</th>
-              <th scope="col">Nom</th>
-              <th scope="col">Lieu Naissance</th>
-              <th scope="col">Date Naissance</th>
-              <th scope="col">Sexe</th>
-              <th scope="col">Téléphone</th>
-              <th scope="col">Nationalité</th>
-              <th scope="col">Classe</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let eleve of eleves">
-              <td>{{ eleve.Matri_Elev }}</td>
-              <td>{{ eleve.Nom_Elev }}</td>
-              <td>{{ eleve.Lieunais_Elev }}</td>
-              <td>{{ eleve.Datenais_Elev | date:'dd/MM/yyyy' }}</td>
-              <td>{{ eleve.Sexe_Elev }}</td>
-              <td>{{ eleve.celetud }}</td>
-              <td>{{ eleve.Des_Nat }}</td>
-              <td>{{ eleve.Code_Detcla }}</td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="text-right mt-2">
-          <span class="badge badge-primary p-2">
-            Effectif total: {{ eleves.length }} élève(s)
-          </span>
-        </div>
-      </div>
-
-      <!-- Message si aucun résultat -->
-      <div *ngIf="eleves.length === 0 && !chargement && !erreur" class="text-center py-4">
-        <i class="fas fa-info-circle fa-2x text-muted mb-3"></i>
-        <p class="text-muted">Aucun élève trouvé. Veuillez saisir des critères de recherche.</p>
-      </div>
-    </div>
-  </div>
-</div>
