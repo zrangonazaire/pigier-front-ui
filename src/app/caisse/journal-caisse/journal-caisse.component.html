@@ -39,261 +39,284 @@
                     <div class="form-check form-check-inline">
                       <input class="form-check-input" type="checkbox" id="plateau" [(ngModel)]="campus.plateau"
                         name="plateau">
-                      <label class="form-check-label" for="plateau">ABIDJAN PLATEAU</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="checkbox" id="yopougon" [(ngModel)]="campus.yopougon"
-                        name="yopougon">
-                      <label class="form-check-label" for="yopougon">ABIDJAN YOPOUGON</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="checkbox" id="yamoussoukro"
-                        [(ngModel)]="campus.yamoussoukro" name="yamoussoukro">
-                      <label class="form-check-label" for="yamoussoukro">YAMOUSSOUKRO</label>
-                    </div>
+                        <label class="form-check-label" for="plateau">ABIDJAN PLATEAU</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="yopougon" [(ngModel)]="campus.yopougon"
+                          name="yopougon">
+                          <label class="form-check-label" for="yopougon">ABIDJAN YOPOUGON</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="checkbox" id="yamoussoukro"
+                            [(ngModel)]="campus.yamoussoukro" name="yamoussoukro">
+                            <label class="form-check-label" for="yamoussoukro">YAMOUSSOUKRO</label>
+                          </div>
 
-                  </div>
-                </div>
+                        </div>
+                      </div>
 
-                <!-- Modes de règlement -->
-                <div class="form-group mb-4">
-                  <label class="form-label fw-bold mb-3">Mode de règlement :</label>
-                  <div class="d-flex flex-wrap gap-3">
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="checkbox" id="carte_bancaire"
-                        [(ngModel)]="reglement.carte_bancaire" name="carte_bancaire">
-                      <label class="form-check-label" for="carte_bancaire">Carte bancaire</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="checkbox" id="cheque" [(ngModel)]="reglement.cheque"
-                        name="cheque">
-                      <label class="form-check-label" for="cheque">Chèque</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="checkbox" id="espece" [(ngModel)]="reglement.espece"
-                        name="espece">
-                      <label class="form-check-label" for="espece">Espèce</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="checkbox" id="mobile_money"
-                        [(ngModel)]="reglement.mobile_money" name="mobile_money">
-                      <label class="form-check-label" for="mobile_money">Mobile</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="checkbox" id="virement_banq_a_banque"
-                        [(ngModel)]="reglement.virement_banq_a_banque" name="virement_banq_a_banque">
-                      <label class="form-check-label" for="virement_banq_a_banque">Virement Banque/Banque</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="checkbox" id="virement_espece_banque"
-                        [(ngModel)]="reglement.virement_espece_banque" name="virement_espece_banque">
-                      <label class="form-check-label" for="virement_espece_banque">Virement Espèce/Banque</label>
-                    </div>
-                  </div>
-                </div>
+                      <!-- Modes de règlement -->
+                      <div class="form-group mb-4">
+                        <label class="form-label fw-bold mb-3">Mode de règlement :</label>
+                        <div class="d-flex flex-wrap gap-3">
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="carte_bancaire"
+                              [(ngModel)]="reglement.carte_bancaire" name="carte_bancaire">
+                              <label class="form-check-label" for="carte_bancaire">Carte bancaire</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="checkbox" id="cheque" [(ngModel)]="reglement.cheque"
+                                name="cheque">
+                                <label class="form-check-label" for="cheque">Chèque</label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="espece" [(ngModel)]="reglement.espece"
+                                  name="espece">
+                                  <label class="form-check-label" for="espece">Espèce</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="checkbox" id="mobile_money"
+                                    [(ngModel)]="reglement.mobile_money" name="mobile_money">
+                                    <label class="form-check-label" for="mobile_money">Mobile</label>
+                                  </div>
+                                  <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="virement_banq_a_banque"
+                                      [(ngModel)]="reglement.virement_banq_a_banque" name="virement_banq_a_banque">
+                                      <label class="form-check-label" for="virement_banq_a_banque">Virement Banque/Banque</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                      <input class="form-check-input" type="checkbox" id="virement_espece_banque"
+                                        [(ngModel)]="reglement.virement_espece_banque" name="virement_espece_banque">
+                                        <label class="form-check-label" for="virement_espece_banque">Virement Espèce/Banque</label>
+                                      </div>
+                                    </div>
+                                  </div>
 
-                <!-- Dates et caisse -->
-                <div class="row mb-4">
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label for="caisse" class="form-label fw-bold">Caisse</label>
-                      <select class="form-select" id="caisse" [(ngModel)]="selectedCaisse" name="caisse">
-                        <option *ngFor="let num of [1,2,3,4,5,6,7,8,9,10]" [value]="num">Caisse {{num}}</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label for="dateDebut" class="form-label fw-bold">Début</label>
-                      <input type="date" class="form-control" id="dateDebut" [(ngModel)]="dateDebut" name="dateDebut">
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label for="dateFin" class="form-label fw-bold">Fin</label>
-                      <input type="date" class="form-control" id="dateFin" [(ngModel)]="dateFin" name="dateFin">
-                    </div>
-                  </div>
-                </div>
+                                  <!-- Dates et caisse -->
+                                  <div class="row mb-4">
+                                    <div class="col-md-4">
+                                      <div class="form-group">
+                                        <label for="caisse" class="form-label fw-bold">Caisse</label>
+                                        <select class="form-select" id="caisse" [(ngModel)]="selectedCaisse" name="caisse">
+                                          @for (num of [1,2,3,4,5,6,7,8,9,10]; track num) {
+                                            <option [value]="num">Caisse {{num}}</option>
+                                          }
+                                        </select>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <div class="form-group">
+                                        <label for="dateDebut" class="form-label fw-bold">Début</label>
+                                        <input type="date" class="form-control" id="dateDebut" [(ngModel)]="dateDebut" name="dateDebut">
+                                      </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <div class="form-group">
+                                        <label for="dateFin" class="form-label fw-bold">Fin</label>
+                                        <input type="date" class="form-control" id="dateFin" [(ngModel)]="dateFin" name="dateFin">
+                                      </div>
+                                    </div>
+                                  </div>
 
-                <!-- Boutons -->
-                <div class="d-grid gap-2">
-                  <button type="submit" class="btn btn-primary" (click)="printScolarite()">
-                    <i class="fas fa-print me-2"></i>Scolarité + Droit d'Inscription+Droit d'examen+Accessoire
-                  </button>
-                  <button type="submit" class="btn btn-primary" (click)="printDroitInsc()">
-                    <i class="fas fa-print me-2"></i>Droit d'Inscription
-                  </button>
-                </div>
-              </form>
-            </div>
+                                  <!-- Boutons -->
+                                  <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary" (click)="printScolarite()">
+                                      <i class="fas fa-print me-2"></i>Scolarité + Droit d'Inscription+Droit d'examen+Accessoire
+                                    </button>
+                                    <button type="submit" class="btn btn-primary" (click)="printDroitInsc()">
+                                      <i class="fas fa-print me-2"></i>Droit d'Inscription
+                                    </button>
+                                  </div>
+                                </form>
+                              </div>
 
-            <!-- Onglet Facture / Chiffre d’Affaire -->
-            <div class="tab-pane fade" id="facture" role="tabpanel" aria-labelledby="facture-tab">
-              <h5 class="fw-bold mb-3">Factures & Chiffre d’Affaire</h5>
-              <label class="form-label fw-bold mb-3">Campus :</label>
-              <div class="d-flex flex-wrap gap-3">
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="checkbox" id="plateau" [(ngModel)]="campus.plateau"
-                    name="plateau">
-                  <label class="form-check-label" for="plateau">ABIDJAN PLATEAU</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="checkbox" id="yopougon" [(ngModel)]="campus.yopougon"
-                    name="yopougon">
-                  <label class="form-check-label" for="yopougon">ABIDJAN YOPOUGON</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="checkbox" id="yamoussoukro" [(ngModel)]="campus.yamoussoukro"
-                    name="yamoussoukro">
-                  <label class="form-check-label" for="yamoussoukro">YAMOUSSOUKRO</label>
-                </div>
-              </div>
-              <div class="row mb-4">
-                <div class="col-md-4">
-                  <label for="dateDebut" class="form-label fw-bold">Date Début</label>
-                  <input type="date" id="dateDebut" class="form-control" [(ngModel)]="dateDebutFacture"
-                    name="dateDebutFacture">
-                </div>
-                <div class="col-md-4">
-                  <label for="dateFin" class="form-label fw-bold">Date Fin</label>
-                  <input type="date" id="dateFin" class="form-control" [(ngModel)]="dateFinFacture"
-                    name="dateFinFacture">
-                </div>
-                <div class="col-md-4 d-flex align-items-end">
-                  <button class="btn btn-primary w-100" (click)="rechercher()">
-                    <i class="fas fa-search me-2"></i>Rechercher
-                  </button>
-                </div>
-                <div *ngIf="errorMessage().length!=0" class="alert alert-danger mt-3">
-                  {{ errorMessage() }}
-                </div>
-                <div class="d-flex justify-content-between align-items-center mt-4">
-                  <label style="font-weight: bold;">Chiffre d'Affaire Hors Taxe en FCFA( Scolarité+Frais
-                    d"examen+Droit d"examen -assurance -jsp)</label>
-                  <button class="btn btn-success btn-sm" (click)="exportToExcel()" *ngIf="encaissementsCA().length > 0"
-                    title="Exporter en Excel">
-                    <i class="fas fa-file-excel"></i>
-                  </button>
-                </div>
-                <table class="table mt-2">
-                  <thead>
-                    <tr>
-                      <th>Mois</th>
-                      <th>Niveau</th>
-                      <th>Montant</th>
-                    </tr>
-                  </thead>
-                  <tbody *ngIf="paginatedEncaissements().length > 0">
-                    <tr *ngFor="let e of paginatedEncaissements()">
-                      <td>{{ getMonthName(e.mois!) }} {{e.annee}}</td>
-                      <td>{{ e.niveauLibelle }}</td>
+                              <!-- Onglet Facture / Chiffre d’Affaire -->
+                              <div class="tab-pane fade" id="facture" role="tabpanel" aria-labelledby="facture-tab">
+                                <h5 class="fw-bold mb-3">Factures & Chiffre d’Affaire</h5>
+                                <label class="form-label fw-bold mb-3">Campus :</label>
+                                <div class="d-flex flex-wrap gap-3">
+                                  <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="plateau" [(ngModel)]="campus.plateau"
+                                      name="plateau">
+                                      <label class="form-check-label" for="plateau">ABIDJAN PLATEAU</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                      <input class="form-check-input" type="checkbox" id="yopougon" [(ngModel)]="campus.yopougon"
+                                        name="yopougon">
+                                        <label class="form-check-label" for="yopougon">ABIDJAN YOPOUGON</label>
+                                      </div>
+                                      <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="yamoussoukro" [(ngModel)]="campus.yamoussoukro"
+                                          name="yamoussoukro">
+                                          <label class="form-check-label" for="yamoussoukro">YAMOUSSOUKRO</label>
+                                        </div>
+                                      </div>
+                                      <div class="row mb-4">
+                                        <div class="col-md-4">
+                                          <label for="dateDebut" class="form-label fw-bold">Date Début</label>
+                                          <input type="date" id="dateDebut" class="form-control" [(ngModel)]="dateDebutFacture"
+                                            name="dateDebutFacture">
+                                          </div>
+                                          <div class="col-md-4">
+                                            <label for="dateFin" class="form-label fw-bold">Date Fin</label>
+                                            <input type="date" id="dateFin" class="form-control" [(ngModel)]="dateFinFacture"
+                                              name="dateFinFacture">
+                                            </div>
+                                            <div class="col-md-4 d-flex align-items-end">
+                                              <button class="btn btn-primary w-100" (click)="rechercher()">
+                                                <i class="fas fa-search me-2"></i>Rechercher
+                                              </button>
+                                            </div>
+                                            @if (errorMessage().length!=0) {
+                                              <div class="alert alert-danger mt-3">
+                                                {{ errorMessage() }}
+                                              </div>
+                                            }
+                                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                              <label style="font-weight: bold;">Chiffre d'Affaire Hors Taxe en FCFA( Scolarité+Frais
+                                              d"examen+Droit d"examen -assurance -jsp)</label>
+                                              @if (encaissementsCA().length > 0) {
+                                                <button class="btn btn-success btn-sm" (click)="exportToExcel()"
+                                                  title="Exporter en Excel">
+                                                  <i class="fas fa-file-excel"></i>
+                                                </button>
+                                              }
+                                            </div>
+                                            <table class="table mt-2">
+                                              <thead>
+                                                <tr>
+                                                  <th>Mois</th>
+                                                  <th>Niveau</th>
+                                                  <th>Montant</th>
+                                                </tr>
+                                              </thead>
+                                              @if (paginatedEncaissements().length > 0) {
+                                                <tbody>
+                                                  @for (e of paginatedEncaissements(); track e) {
+                                                    <tr>
+                                                      <td>{{ getMonthName(e.mois!) }} {{e.annee}}</td>
+                                                      <td>{{ e.niveauLibelle }}</td>
+                                                      <td>{{ e.sommeMontantEncais | number:'1.0-0' }}</td>
+                                                    </tr>
+                                                  }
+                                                </tbody>
+                                              }
+                                              @if (paginatedEncaissements().length === 0) {
+                                                <tbody>
+                                                  <tr>
+                                                    <td colspan="3" class="text-center">Aucune donnée à afficher.</td>
+                                                  </tr>
+                                                </tbody>
+                                              }
+                                            </table>
 
-                      <td>{{ e.sommeMontantEncais | number:'1.0-0' }}</td>
+                                            <!-- Contrôles de Pagination -->
+                                            @if (encaissementsCA().length > 0) {
+                                              <div class="d-flex justify-content-between align-items-center mt-3"
+                                                >
+                                                <div>
+                                                  <label for="itemsPerPage" class="me-2 form-label">Afficher :</label>
+                                                  <select id="itemsPerPage" class="form-select form-select-sm d-inline-block" style="width: auto;"
+                                                    [ngModel]="itemsPerPage()" (ngModelChange)="onItemsPerPageChange($event)">
+                                                    @for (option of itemsPerPageOptions; track option) {
+                                                      <option [value]="option">{{ option }}</option>
+                                                    }
+                                                  </select>
+                                                  <span class="ms-2">éléments</span>
+                                                </div>
+                                                @if (totalPages() > 1) {
+                                                  <nav>
+                                                    <ul class="pagination justify-content-center mb-0">
+                                                      <li class="page-item" [class.disabled]="currentPage() === 1">
+                                                        <a class="page-link" href="#"
+                                                        (click)="goToPage(currentPage() - 1); $event.preventDefault()">Précédent</a>
+                                                      </li>
+                                                      @for (page of pages(); track page) {
+                                                        <li class="page-item" [class.active]="page === currentPage()">
+                                                          <a class="page-link" href="#" (click)="goToPage(page); $event.preventDefault()">{{ page }}</a>
+                                                        </li>
+                                                      }
+                                                      <li class="page-item" [class.disabled]="currentPage() === totalPages()">
+                                                        <a class="page-link" href="#"
+                                                        (click)="goToPage(currentPage() + 1); $event.preventDefault()">Suivant</a>
+                                                      </li>
+                                                    </ul>
+                                                  </nav>
+                                                }
+                                              </div>
+                                            }
 
-                    </tr>
-                  </tbody>
-                  <tbody *ngIf="paginatedEncaissements().length === 0">
-                    <tr>
-                      <td colspan="3" class="text-center">Aucune donnée à afficher.</td>
-                    </tr>
-                  </tbody>
-                </table>
+                                            <!-- Section Détail de la Facturation -->
+                                            @if (facturations().length > 0) {
+                                              <div class="mt-5">
+                                                <div class="d-flex justify-content-between align-items-center mt-4">
+                                                  <label style="font-weight: bold;"> Facturation hors Taxe (Scolarité)</label>
+                                                  <button class="btn btn-success btn-sm" (click)="exportFacturationToExcel()"
+                                                    title="Exporter en Excel">
+                                                    <i class="fas fa-file-excel"></i>
+                                                  </button>
+                                                </div>
+                                                <table class="table mt-2">
+                                                  <thead>
+                                                    <tr>
+                                                      <th>Mois</th>
+                                                      <th>Niveau</th>
+                                                      <th>Montant</th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                    @for (f of paginatedFacturations(); track f) {
+                                                      <tr>
+                                                        <td>{{ getMonthName(f.mois!) }} {{f.annee}}</td>
+                                                        <td>{{ f.niveauLibelle }}</td>
+                                                        <td class="text-red"> {{ f.sommeMontantEncais | number:'1.0-0' }}</td>
+                                                      </tr>
+                                                    }
+                                                  </tbody>
+                                                </table>
+                                                <!-- Contrôles de Pagination pour Facturation -->
+                                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                                  <div>
+                                                    <label for="itemsPerPageFacturation" class="me-2 form-label">Afficher :</label>
+                                                    <select id="itemsPerPageFacturation" class="form-select form-select-sm d-inline-block"
+                                                      style="width: auto;" [ngModel]="itemsPerPageFacturation()"
+                                                      (ngModelChange)="onItemsPerPageChangeFacturation($event)">
+                                                      @for (option of itemsPerPageOptions; track option) {
+                                                        <option [value]="option">{{ option }}</option>
+                                                      }
+                                                    </select>
+                                                    <span class="ms-2">éléments</span>
+                                                  </div>
+                                                  @if (totalPagesFacturation() > 1) {
+                                                    <nav>
+                                                      <ul class="pagination justify-content-center mb-0">
+                                                        <li class="page-item" [class.disabled]="currentPageFacturation() === 1">
+                                                          <a class="page-link" href="#"
+                                                          (click)="goToPageFacturation(currentPageFacturation() - 1); $event.preventDefault()">Précédent</a>
+                                                        </li>
+                                                        @for (page of pagesFacturation(); track page) {
+                                                          <li class="page-item"
+                                                            [class.active]="page === currentPageFacturation()">
+                                                            <a class="page-link" href="#" (click)="goToPageFacturation(page); $event.preventDefault()">{{
+                                                            page }}</a>
+                                                          </li>
+                                                        }
+                                                        <li class="page-item" [class.disabled]="currentPageFacturation() === totalPagesFacturation()">
+                                                          <a class="page-link" href="#"
+                                                          (click)="goToPageFacturation(currentPageFacturation() + 1); $event.preventDefault()">Suivant</a>
+                                                        </li>
+                                                      </ul>
+                                                    </nav>
+                                                  }
+                                                </div>
+                                              </div>
+                                            }
+                                          </div>
+                                        </div>
+                                      </div>
 
-                <!-- Contrôles de Pagination -->
-                <div class="d-flex justify-content-between align-items-center mt-3"
-                  *ngIf="encaissementsCA().length > 0">
-                  <div>
-                    <label for="itemsPerPage" class="me-2 form-label">Afficher :</label>
-                    <select id="itemsPerPage" class="form-select form-select-sm d-inline-block" style="width: auto;"
-                      [ngModel]="itemsPerPage()" (ngModelChange)="onItemsPerPageChange($event)">
-                      <option *ngFor="let option of itemsPerPageOptions" [value]="option">{{ option }}</option>
-                    </select>
-                    <span class="ms-2">éléments</span>
-                  </div>
-
-                  <nav *ngIf="totalPages() > 1">
-                    <ul class="pagination justify-content-center mb-0">
-                      <li class="page-item" [class.disabled]="currentPage() === 1">
-                        <a class="page-link" href="#"
-                          (click)="goToPage(currentPage() - 1); $event.preventDefault()">Précédent</a>
-                      </li>
-                      <li class="page-item" *ngFor="let page of pages()" [class.active]="page === currentPage()">
-                        <a class="page-link" href="#" (click)="goToPage(page); $event.preventDefault()">{{ page }}</a>
-                      </li>
-                      <li class="page-item" [class.disabled]="currentPage() === totalPages()">
-                        <a class="page-link" href="#"
-                          (click)="goToPage(currentPage() + 1); $event.preventDefault()">Suivant</a>
-                      </li>
-                    </ul>
-                  </nav>
-                </div>
-
-                <!-- Section Détail de la Facturation -->
-                <div class="mt-5" *ngIf="facturations().length > 0">
-                  <div class="d-flex justify-content-between align-items-center mt-4">
-                    <label style="font-weight: bold;"> Facturation hors Taxe (Scolarité)</label>
-                    <button class="btn btn-success btn-sm" (click)="exportFacturationToExcel()"
-                      title="Exporter en Excel">
-                      <i class="fas fa-file-excel"></i>
-                    </button>
-                  </div>
-                  <table class="table mt-2">
-                    <thead>
-                    <tr>
-                      <th>Mois</th>
-                      <th>Niveau</th>
-                      <th>Montant</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let f of paginatedFacturations()">
-                      <td>{{ getMonthName(f.mois!) }} {{f.annee}}</td>
-                      <td>{{ f.niveauLibelle }}</td>
-
-                      <td class="text-red"> {{ f.sommeMontantEncais | number:'1.0-0' }}</td>
-
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  <!-- Contrôles de Pagination pour Facturation -->
-                  <div class="d-flex justify-content-between align-items-center mt-3">
-                    <div>
-                      <label for="itemsPerPageFacturation" class="me-2 form-label">Afficher :</label>
-                      <select id="itemsPerPageFacturation" class="form-select form-select-sm d-inline-block"
-                        style="width: auto;" [ngModel]="itemsPerPageFacturation()"
-                        (ngModelChange)="onItemsPerPageChangeFacturation($event)">
-                        <option *ngFor="let option of itemsPerPageOptions" [value]="option">{{ option }}</option>
-                      </select>
-                      <span class="ms-2">éléments</span>
-                    </div>
-
-                    <nav *ngIf="totalPagesFacturation() > 1">
-                      <ul class="pagination justify-content-center mb-0">
-                        <li class="page-item" [class.disabled]="currentPageFacturation() === 1">
-                          <a class="page-link" href="#"
-                            (click)="goToPageFacturation(currentPageFacturation() - 1); $event.preventDefault()">Précédent</a>
-                        </li>
-                        <li class="page-item" *ngFor="let page of pagesFacturation()"
-                          [class.active]="page === currentPageFacturation()">
-                          <a class="page-link" href="#" (click)="goToPageFacturation(page); $event.preventDefault()">{{
-                            page }}</a>
-                        </li>
-                        <li class="page-item" [class.disabled]="currentPageFacturation() === totalPagesFacturation()">
-                          <a class="page-link" href="#"
-                            (click)="goToPageFacturation(currentPageFacturation() + 1); $event.preventDefault()">Suivant</a>
-                        </li>
-                      </ul>
-                    </nav>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>

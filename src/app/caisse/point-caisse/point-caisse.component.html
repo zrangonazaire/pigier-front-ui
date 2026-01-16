@@ -5,65 +5,77 @@
   <div class="section">
     <h2>Campus</h2>
     <div class="campus-list">
-      <div *ngFor="let campus of campuses"
-           [class.selected]="isCampusSelected(campus)"
-           (click)="toggleCampusSelection(campus)">
-        {{campus}}<span *ngIf="campus === 'ABIDJAN PLATEAU' || campus === 'FOAD' || campus === 'YAMOUSSOUKRO'">*</span>
+      @for (campus of campuses; track campus) {
+        <div
+          [class.selected]="isCampusSelected(campus)"
+          (click)="toggleCampusSelection(campus)">
+          {{campus}}@if (campus === 'ABIDJAN PLATEAU' || campus === 'FOAD' || campus === 'YAMOUSSOUKRO') {
+          <span>*</span>
+        }
       </div>
-    </div>
-    <div class="selected-campuses" *ngIf="selectedCampuses.length > 0">
+    }
+  </div>
+  @if (selectedCampuses.length > 0) {
+    <div class="selected-campuses">
       Sélectionné(s): {{selectedCampuses.join(', ')}}
     </div>
-  </div>
-  <!-- Section Encaissement indépendante -->
-  <div class="section">
-    <h3>Encaissement</h3>
-    <div class="option-list">
-      <div *ngFor="let enc of encaissements"
-           [class.selected]="enc === selectedEncaissement"
-           (click)="selectedEncaissement = enc">
+  }
+</div>
+<!-- Section Encaissement indépendante -->
+<div class="section">
+  <h3>Encaissement</h3>
+  <div class="option-list">
+    @for (enc of encaissements; track enc) {
+      <div
+        [class.selected]="enc === selectedEncaissement"
+        (click)="selectedEncaissement = enc">
         {{enc}}
       </div>
-    </div>
+    }
   </div>
+</div>
 
-  <div class="section">
-    <h4>Par date</h4>
-    <div class="option-list">
-      <div *ngFor="let filtre of filtres"
-           [class.selected]="filtre === selectedFiltre"
-           (click)="selectedFiltre = filtre">
+<div class="section">
+  <h4>Par date</h4>
+  <div class="option-list">
+    @for (filtre of filtres; track filtre) {
+      <div
+        [class.selected]="filtre === selectedFiltre"
+        (click)="selectedFiltre = filtre">
         {{filtre}}
       </div>
-    </div>
+    }
   </div>
+</div>
 
-  <div class="section">
-    <h4>Mode règlement</h4>
-    <div class="option-list">
-      <div *ngFor="let mode of modesReglement"
-           [class.selected]="mode === selectedModeReglement"
-           (click)="selectedModeReglement = mode">
+<div class="section">
+  <h4>Mode règlement</h4>
+  <div class="option-list">
+    @for (mode of modesReglement; track mode) {
+      <div
+        [class.selected]="mode === selectedModeReglement"
+        (click)="selectedModeReglement = mode">
         {{mode}}
       </div>
-    </div>
+    }
   </div>
+</div>
 
-  <div class="section inline-section">
-    <h4>Caisse:</h4>
-    <input type="number" [(ngModel)]="caisseNumber" min="1">
-  </div>
+<div class="section inline-section">
+  <h4>Caisse:</h4>
+  <input type="number" [(ngModel)]="caisseNumber" min="1">
+</div>
 
-  <div class="section inline-section">
-    <h4>Date:</h4>
-    <input type="date" [(ngModel)]="selectedDate">
-  </div>
+<div class="section inline-section">
+  <h4>Date:</h4>
+  <input type="date" [(ngModel)]="selectedDate">
+</div>
 
-  <div class="section">
-    <h4>Impression par caissière</h4>
-    <div class="button-group">
-      <button class="print-btn">Impression directe</button>
-      <button class="close-btn">Fermer</button>
-    </div>
+<div class="section">
+  <h4>Impression par caissière</h4>
+  <div class="button-group">
+    <button class="print-btn">Impression directe</button>
+    <button class="close-btn">Fermer</button>
   </div>
+</div>
 </div>

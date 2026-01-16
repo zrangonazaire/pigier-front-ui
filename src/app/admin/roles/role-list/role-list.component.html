@@ -2,8 +2,8 @@
 
 <div class="container mt-4">
  <app-user-list></app-user-list>
-  <div class="card shadow role-management-card">
-    <div class="card-header bg-light d-flex justify-content-between align-items-center role-management-header">
+  <div class="card shadow">
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
       <h2 class="h4 mb-0">
         <i class="bi bi-shield-lock me-2"></i>Gestion des rôles
       </h2>
@@ -14,14 +14,14 @@
     @if (showFormMode)
     {
     <!-- Formulaire de création/édition -->
-    <div class="card shadow mb-4 role-form-card">
+    <div class="card shadow mb-4">
       <div class="card-header bg-light">
         <!-- <h2 class="h4 mb-0">
         <i class="bi me-2" [ngClass]="{'bi-plus-circle': !roleRequest.permissionIds, 'bi-pencil': role.id}"></i>
         {{ role.id ? 'Modifier le rôle' : 'Créer un nouveau rôle' }}
       </h2> -->
       </div>
-      <div class="card-body role-form-body">
+      <div class="card-body">
         <form [formGroup]="roleForm">
           <!-- Nom du rôle -->
           <div class="mb-3">
@@ -41,17 +41,17 @@
           <!-- Permissions -->
           <div class="mb-4">
             <label class="form-label">Permissions *</label>
-            <div class="border rounded p-3 bg-light permissions-wrap">
-              <div class="d-flex flex-wrap gap-2 py-1 ps-3 permissions-list">
+            <div class="border rounded p-3 bg-light">
+              <div class="d-flex flex-wrap gap-2">
                 @for (permission of allPermissions; track permission.id) {
-                <div class="form-check d-flex align-items-center gap-2 mb-0 px-2 py-1 bg-white border rounded permission-pill">
-                  <input class="form-check-input mt-0 flex-shrink-0 permission-check" type="checkbox" [id]="'perm-' + permission.id" [value]="permission.id"
-                    [checked]="roleForm.get('permissionIds')?.value?.includes(permission.id)"
-                    (change)="onPermissionChange($event, permission.id!)">
-                  <label class="form-check-label text-nowrap small fw-semibold mb-0 permission-label" [for]="'perm-' + permission.id">
-                    {{ permission.nomPermission }}
-                  </label>
-                </div>
+                 <div class="form-check">
+                      <input class="form-check-input" type="checkbox" [id]="'perm-' + permission.id" [value]="permission.id"
+                             [checked]="roleForm.get('permissionIds')?.value?.includes(permission.id)"
+                             (change)="onPermissionChange($event, permission.id!)">
+                      <label class="form-check-label" [for]="'perm-' + permission.id">
+                        {{ permission.nomPermission }}
+                      </label>
+                    </div>
                 }
               </div>
               @if (roleForm.get('permissionIds')?.invalid && roleForm.get('permissionIds')?.touched) {
@@ -65,9 +65,9 @@
             <button type="button" class="btn btn-outline-secondary" (click)="cancelForm()">
               Annuler
             </button>
-            <button type="submit" class="btn btn-primary" [disabled]="roleForm.invalid" (click)="submitForm()">
-              {{ isEditRoleMode ? 'Mettre a jour' : 'Valider' }}
-            </button>
+           <button type="submit" class="btn btn-primary" [disabled]="roleForm.invalid" (click)="submitForm()">
+                {{ isEditRoleMode ? 'Mettre à jour' : 'Valider' }}
+              </button>
           </div>
         </form>
       </div>
@@ -75,6 +75,22 @@
     }
     @if (!showFormMode) {
     <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <span class="badge text-bg-primary fs-6">
+          Affichage {{ (page - 1) * pageSize + 1 }} -
+          {{ min(page * pageSize, roles.length) }} sur {{ roles.length }} roles
+        </span>
+        <div class="d-flex align-items-center gap-2">
+          <label for="pageSizeSelect" class="mb-0">Afficher</label>
+          <select id="pageSizeSelect" class="form-select form-select-sm w-auto"
+            [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange()">
+            @for (size of pageSizeOptions; track size) {
+            <option [value]="size">{{ size }}</option>
+            }
+          </select>
+          <span class="mb-0">par page</span>
+        </div>
+      </div>
       <div class="table-responsive">
         <table class="table table-hover">
           <thead class="table-light">
@@ -82,11 +98,11 @@
               <th>Nom</th>
               <th>Description</th>
               <th>Permissions</th>
-              <th class="text-center">Actions</th>
+              <th class="text-end">Actions</th>
             </tr>
           </thead>
           <tbody>
-            @for (role of roles; track role.id) {
+            @for (role of pagedRoles; track role.id) {
             <tr>
               <td class="fw-semibold">{{ role.nomRole }}</td>
               <td>{{ role.descriptionRole || '-' }}</td>
@@ -99,11 +115,12 @@
                   }
                 </div>
               </td>
-              <td class="text-center">
-                <div class="d-flex justify-content-center gap-2">
-                  <button class="btn btn-outline-primary btn-sm" title="Modifier" (click)="editRole(role)">
-                    <i class="bi bi-pencil me-1"></i>Modifier
-                  </button>
+              <td class="text-end">
+                <div class="d-flex justify-content-end gap-2">
+                  <button class="btn btn-outline-primary btn-sm"
+                         title="Modifier" (click)="editRole(role)">
+                        <i class="bi bi-pencil me-1"></i>Modifier
+                      </button>
                   <button (click)="confirmDelete(role.id)" class="btn btn-outline-danger btn-sm" title="Supprimer">
                     <i class="bi bi-trash me-1"></i>Supprimer
                   </button>
@@ -133,25 +150,25 @@
         </table>
       </div>
 
-      @if (roles.length > 0) {
-      <nav aria-label="Pagination">
+      <nav aria-label="Pagination" *ngIf="roles.length > 0">
         <ul class="pagination justify-content-center mt-3">
-          <li class="page-item disabled">
-            <a class="page-link" tabindex="-1" aria-disabled="true">
-              <i class="bi bi-chevron-left"></i> Précédent
-            </a>
+          <li class="page-item" [class.disabled]="page === 1">
+            <button class="page-link" (click)="changePage(page - 1)" [disabled]="page === 1">
+              <i class="bi bi-chevron-left"></i>
+            </button>
           </li>
-          <li class="page-item active"><a class="page-link">1</a></li>
-          <li class="page-item"><a class="page-link">2</a></li>
-          <li class="page-item"><a class="page-link">3</a></li>
-          <li class="page-item">
-            <a class="page-link">
-              Suivant <i class="bi bi-chevron-right"></i>
-            </a>
+          @for (p of pages; track p) {
+          <li class="page-item" [class.active]="page === p">
+            <button class="page-link" (click)="changePage(p)">{{ p }}</button>
+          </li>
+          }
+          <li class="page-item" [class.disabled]="page === totalPages">
+            <button class="page-link" (click)="changePage(page + 1)" [disabled]="page === totalPages">
+              <i class="bi bi-chevron-right"></i>
+            </button>
           </li>
         </ul>
       </nav>
-      }
     </div>
     }
 
@@ -159,7 +176,7 @@
   </div>
 
   <!-- Section pour la liste des permissions -->
-  <div class="card shadow mt-4 permission-list-card">
+  <div class="card shadow mt-4">
     <div class="card-header bg-light d-flex justify-content-between align-items-center">
 
       <h2 class="h4 mb-0">
@@ -173,15 +190,15 @@
     {
 
     <form [formGroup]="permissionForm" (ngSubmit)="onSubmitPerm()" class="needs-validation" novalidate>
-      <div class="card shadow permission-form-card">
-        <div class="card-header bg-light permission-form-header">
+      <div class="card shadow">
+        <div class="card-header bg-light">
           <h2 class="h4 mb-0">
             <i class="bi bi-shield-check me-2"></i>
             {{ isEditMode ? 'Modifier la Permission' : 'Créer une Nouvelle Permission' }}
           </h2>
         </div>
 
-        <div class="card-body permission-form-body">
+        <div class="card-body">
           <!-- Nom de la Permission -->
           <div class="mb-3">
             <label for="nomPermission" class="form-label">Nom de la Permission *</label>
@@ -217,11 +234,11 @@
           <!-- Droits d'accès -->
           <div class="mb-4">
             <label class="form-label">Droits d'accès *</label>
-            <div class="card access-rights-card">
+            <div class="card">
               <div class="card-body">
-                <div class="row g-3">
-                  <div class="col-12 col-sm-6 col-lg-3" *ngFor="let right of accessRights">
-                    <div class="form-check form-switch access-right">
+                <div class="row">
+                  <div class="col-md-3" *ngFor="let right of accessRights">
+                    <div class="form-check form-switch">
                       <input class="form-check-input" type="checkbox" [id]="'right-' + right.key"
                         [formControlName]="right.key">
                       <label class="form-check-label" [for]="'right-' + right.key">
@@ -236,7 +253,7 @@
           </div>
         </div>
 
-        <div class="card-footer bg-light d-flex justify-content-end gap-2 permission-form-footer">
+        <div class="card-footer bg-light d-flex justify-content-between">
           <button type="button" class="btn btn-outline-secondary" (click)="onCancelPerm()">
             <i class="bi bi-x-circle me-1"></i> Annuler
           </button>
@@ -248,7 +265,7 @@
     </form>
     }
     @if (!showPermissionForm) {
-    <div class="card-body permission-list-body">
+    <div class="card-body">
       <div class="table-responsive">
         <table class="table table-hover align-middle">
           <thead class="table-light">
@@ -257,11 +274,11 @@
               <th width="25%">Module</th>
               <th width="30%">Description</th>
               <th width="20%" class="text-center">Droits d'accès</th>
-              <th class="text-center">Actions</th> <!-- Ajout colonne actions -->
+              <th class="text-end">Actions</th> <!-- Ajout colonne actions -->
             </tr>
           </thead>
           <tbody>
-            @for (permission of allPermissions; track permission.id) {
+            @for (permission of pagedPermissions; track permission.id) {
             <tr>
               <td class="fw-semibold">{{ permission.nomPermission || '-' }}</td>
               <td>
@@ -276,24 +293,24 @@
                 <div class="d-flex justify-content-center gap-2">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" [checked]="permission.canRead" disabled>
-                    <label class="form-check-label text-success text-nowrap rights-label" title="Lecture">Lecture</label>
+                    <label class="form-check-label text-success" title="Lecture">Lecture</label>
                   </div>
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" [checked]="permission.canWrite" disabled>
-                    <label class="form-check-label text-warning text-nowrap rights-label" title="Écriture">Écriture</label>
+                    <label class="form-check-label text-warning" title="Écriture">Écriture</label>
                   </div>
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" [checked]="permission.canEdit" disabled>
-                    <label class="form-check-label text-primary text-nowrap rights-label" title="Modification">Modification</label>
+                    <label class="form-check-label text-primary" title="Modification">Modification</label>
                   </div>
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" [checked]="permission.canDelete" disabled>
-                    <label class="form-check-label text-danger text-nowrap rights-label" title="Suppression">Suppression</label>
+                    <label class="form-check-label text-danger" title="Suppression">Suppression</label>
                   </div>
                 </div>
               </td>
-              <td class="text-center">
-                <div class="d-flex justify-content-center gap-2">
+              <td class="text-end">
+                <div class="d-flex justify-content-end gap-2">
                   <button class="btn btn-outline-primary btn-sm"
                           (click)="editPermission(permission)" title="Modifier">
                     <i class="bi bi-pencil me-1"></i>Modifier
@@ -327,11 +344,26 @@
           </tbody>
         </table>
       </div>
+      <nav aria-label="Pagination permissions" *ngIf="allPermissions.length > 0">
+        <ul class="pagination justify-content-center mt-3">
+          <li class="page-item" [class.disabled]="permPage === 1">
+            <button class="page-link" (click)="changePermPage(permPage - 1)" [disabled]="permPage === 1">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+          </li>
+          @for (p of permPages; track p) {
+          <li class="page-item" [class.active]="permPage === p">
+            <button class="page-link" (click)="changePermPage(p)">{{ p }}</button>
+          </li>
+          }
+          <li class="page-item" [class.disabled]="permPage === permTotalPages">
+            <button class="page-link" (click)="changePermPage(permPage + 1)" [disabled]="permPage === permTotalPages">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
     </div>
     }
   </div>
-
-
-
-
 </div>

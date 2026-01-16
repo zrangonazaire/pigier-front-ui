@@ -137,7 +137,7 @@ export class AddPreinscriptionComponent implements OnInit {
         break;
     }
   }
-  etabSource = ['ABIDJAN PLATEAU', 'ABIDJAN YOPOUGON', 'YAMOUSSOUKRO'];
+  etabSource = ['ABIDJAN PLATEAU', 'ABIDJAN YOPOUGON','CAMPUS EN LIGNE', 'YAMOUSSOUKRO'];
   constructor(private fb: FormBuilder) {}
   private generateId(etabSource: string): string {
     const randomDigits = Math.floor(100000 + Math.random() * 900000); // 6 chiffres
@@ -149,6 +149,9 @@ export class AddPreinscriptionComponent implements OnInit {
         break;
       case 'ABIDJAN YOPOUGON':
         suffix = 'AY';
+        break;
+      case 'CAMPUS EN LIGNE':
+        suffix = 'CL';
         break;
       case 'YAMOUSSOUKRO':
         suffix = 'YA'; // Note: le fichier build minifié génère 'Y'. Assurez-vous que 'YA' est correct.

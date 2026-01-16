@@ -13,8 +13,7 @@
     <div class="card shadow mb-4 user-form-card">
         <div class="card-header bg-light user-form-header">
             <h2 class="h4 mb-0">
-                <i class="bi me-2"
-                    [ngClass]="{'bi-person-plus': !userRequest.id, 'bi-person-gear': userRequest.id}"></i>
+                <i class="bi me-2" [ngClass]="{'bi-person-plus': !userRequest.id, 'bi-person-gear': userRequest.id}"></i>
                 {{ userRequest.id ? 'Modifier Utilisateur' : 'Nouvel Utilisateur' }}
             </h2>
         </div>
@@ -26,17 +25,13 @@
                         <label class="form-label">Nom complet *</label>
                         <input type="text" class="form-control" formControlName="nomPrenoms"
                             [ngClass]="{'is-invalid': userForm.get('nomPrenoms')?.invalid && userForm.get('nomPrenoms')?.touched}">
-                        <div class="invalid-feedback">
-                            Le nom complet est requis
-                        </div>
+                        <div class="invalid-feedback">Le nom complet est requis</div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Nom d'utilisateur *</label>
                         <input type="text" class="form-control" formControlName="username"
                             [ngClass]="{'is-invalid': userForm.get('username')?.invalid && userForm.get('username')?.touched}">
-                        <div class="invalid-feedback">
-                            Un nom d'utilisateur est requis
-                        </div>
+                        <div class="invalid-feedback">Un nom d'utilisateur est requis</div>
                     </div>
                 </div>
 
@@ -46,9 +41,7 @@
                         <label class="form-label">Email *</label>
                         <input type="email" class="form-control" formControlName="email"
                             [ngClass]="{'is-invalid': userForm.get('email')?.invalid && userForm.get('email')?.touched}">
-                        <div class="invalid-feedback">
-                            Veuillez entrer un email valide
-                        </div>
+                        <div class="invalid-feedback">Veuillez entrer un email valide</div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Téléphone</label>
@@ -62,54 +55,53 @@
                         <label class="form-label">Statut *</label>
                         <select class="form-select" formControlName="statut"
                             [ngClass]="{'is-invalid': userForm.get('statut')?.invalid && userForm.get('statut')?.touched}">
-                            <option *ngFor="let statut of statutOptionsForForm" [value]="statut">{{ statut }}</option>
+                            @for (statut of statutOptionsForForm; track statut) {
+                            <option [value]="statut">{{ statut }}</option>
+                            }
                         </select>
-                        <div class="invalid-feedback">
-                            Le statut est requis
-                        </div>
+                        <div class="invalid-feedback">Le statut est requis</div>
                     </div>
                 </div>
                 }
 
                 <!-- Mot de passe -->
+                @if (!userRequest.id) {
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label">Mot de passe *</label>
                         <input type="password" class="form-control" formControlName="password"
                             [ngClass]="{'is-invalid': userForm.get('password')?.invalid && userForm.get('password')?.touched}">
-                        <div class="invalid-feedback">
-                            Le mot de passe est requis (min. 8 caractères)
-                        </div>
+                        <div class="invalid-feedback">Le mot de passe est requis (min. 8 caractères)</div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Confirmation *</label>
                         <input type="password" class="form-control" formControlName="passwordConfirm"
                             [ngClass]="{'is-invalid': userForm.get('passwordConfirm')?.invalid && userForm.get('passwordConfirm')?.touched}">
-                        <div class="invalid-feedback">
-                            Doit correspondre au mot de passe
-                        </div>
+                        <div class="invalid-feedback">Doit correspondre au mot de passe</div>
                     </div>
                 </div>
+                }
 
                 <!-- Rôles -->
                 <div class="mb-4">
                     <label class="form-label">Rôles *</label>
                     <div class="border rounded p-3 bg-light roles-box">
                         <div class="d-flex flex-wrap gap-2 roles-options">
-                            <ng-container *ngFor="let role of allRoles(); trackBy: trackById">
-                                <div class="role-option">
-                                    <input class="form-check-input role-check role-checkmark"
-                                           type="checkbox"
-                                           [id]="'user-role-' + role.id"
-                                           [checked]="userForm.value.roleIds?.includes(role.id)"
-                                           (change)="onRoleChange($event, role.id!)">
-                                    <label class="form-check-label role-label" [for]="'user-role-' + role.id">
-                                        {{ role.nomRole }}
-                                    </label>
-                                </div>
-                            </ng-container>
+                            @for (role of allRoles(); track role.id) {
+                            <div class="role-option">
+                                <input class="form-check-input role-check role-checkmark"
+                                    type="checkbox"
+                                    [id]="'user-role-' + role.id"
+                                    [checked]="userForm.value.roleIds?.includes(role.id)"
+                                    (change)="onRoleChange($event, role.id!)">
+                                <label class="form-check-label role-label" [for]="'user-role-' + role.id">
+                                    {{ role.nomRole }}
+                                </label>
+                            </div>
+                            }
                         </div>
-                        <div *ngIf="userForm.get('roleIds')?.invalid && userForm.get('roleIds')?.touched" class="text-danger small mt-2">
+                        <div *ngIf="userForm.get('roleIds')?.invalid && userForm.get('roleIds')?.touched"
+                            class="text-danger small mt-2">
                             Au moins un rôle doit être sélectionné
                         </div>
                     </div>
@@ -120,7 +112,7 @@
                     <button type="button" class="btn btn-outline-secondary" (click)="cancelForm()">
                         Annuler
                     </button>
-                    <button type="submit" class="btn btn-primary" >
+                    <button type="submit" class="btn btn-primary">
                         {{ userRequest.id ? 'Mettre à jour' : 'Créer' }}
                     </button>
                 </div>
@@ -132,7 +124,6 @@
     <!-- Liste des utilisateurs -->
     @if (!showFormMode) {
     <div class="card-body">
-
         <div class="d-flex justify-content-between align-items-center mb-2">
             <span class="badge text-bg-primary fs-6">
                 Affichage {{ (page - 1) * pageSize + 1 }} -
@@ -142,7 +133,9 @@
                 <label for="pageSizeSelect" class="mb-0">Afficher</label>
                 <select id="pageSizeSelect" class="form-select form-select-sm w-auto"
                     [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange()">
-                    <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
+                    @for (size of pageSizeOptions; track size) {
+                    <option [value]="size">{{ size }}</option>
+                    }
                 </select>
                 <span class="mb-0">par page</span>
             </div>
@@ -162,7 +155,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let user of pagedUsers; trackBy: trackById">
+                    @for (user of pagedUsers; track trackById($index, user)) {
+                    <tr>
                         <td class="text-start">{{ user.username }}</td>
                         <td>{{ user.lastname }}</td>
                         <td>
@@ -172,16 +166,17 @@
                         </td>
                         <td>{{ user.email || 'Non défini' }}</td>
                         <td>
-                            <ng-container *ngIf="user.roles?.length; else noRole">
-                                <div class="d-flex flex-wrap gap-1">
-                                    <span *ngFor="let role of user.roles" class="badge bg-primary bg-opacity-10 text-primary">
-                                        {{ role.nomRole }}
-                                    </span>
-                                </div>
-                            </ng-container>
-                            <ng-template #noRole>
-                                <span class="text-muted">Aucun rôle</span>
-                            </ng-template>
+                            @if (user.roles?.length) {
+                            <div class="d-flex flex-wrap gap-1">
+                                @for (role of user.roles; track role) {
+                                <span class="badge bg-primary bg-opacity-10 text-primary">
+                                    {{ role.nomRole }}
+                                </span>
+                                }
+                            </div>
+                            } @else {
+                            <span class="text-muted">Aucun rôle</span>
+                            }
                         </td>
                         <td>
                             <span data-bs-toggle="tooltip" data-bs-placement="top"
@@ -200,6 +195,7 @@
                             </div>
                         </td>
                     </tr>
+                    }
 
                     @if (loading) {
                     <tr>
@@ -223,16 +219,19 @@
             </table>
         </div>
 
-        <nav aria-label="Pagination" *ngIf="listeUsers().length > 0">
+        @if (listeUsers().length > 0) {
+        <nav aria-label="Pagination">
             <ul class="pagination justify-content-center mt-3">
                 <li class="page-item" [class.disabled]="page === 1">
                     <button class="page-link" (click)="changePage(page - 1)" [disabled]="page === 1">
                         <i class="bi bi-chevron-left"></i>
                     </button>
                 </li>
-                <li class="page-item" *ngFor="let p of pages" [class.active]="page === p">
+                @for (p of pages; track p) {
+                <li class="page-item" [class.active]="page === p">
                     <button class="page-link" (click)="changePage(p)">{{ p }}</button>
                 </li>
+                }
                 <li class="page-item" [class.disabled]="page === totalPages">
                     <button class="page-link" (click)="changePage(page + 1)" [disabled]="page === totalPages">
                         <i class="bi bi-chevron-right"></i>
@@ -240,7 +239,7 @@
                 </li>
             </ul>
         </nav>
+        }
     </div>
     }
 </div>
-

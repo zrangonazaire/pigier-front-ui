@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { MenuComponent } from '../../components/menu/menu.component';
 //import { EtudiantControllerService } from '../../../api/etudiantController.service';
 import { EtudiantControllerService } from '../../../api-client';
@@ -9,10 +9,7 @@ import { EtudiantControllerService } from '../../../api-client';
 
 @Component({
   standalone: true, // ← Ajoutez cette ligne
-  imports: [CommonModule, 
-    FormsModule,
-    MenuComponent  
-  ], // ← AJOUTEZ FormsModule
+  imports: [FormsModule, MenuComponent], // ← AJOUTEZ FormsModule
   selector: 'app-student-list',
   templateUrl: './student-list.component.html',
   styleUrls: ['./student-list.component.css']

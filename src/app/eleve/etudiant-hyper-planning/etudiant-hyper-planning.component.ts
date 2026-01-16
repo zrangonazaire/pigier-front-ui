@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ElevesService } from '../../../api-client/api/eleves.service';
 import { AnneeScolaireControllerService } from '../../../api-client/api/anneeScolaireController.service';
@@ -14,7 +14,7 @@ import { EleveRecordAvecPayerDto, EleveRecordDTO } from '../../../api-client';
 @Component({
   selector: 'app-etudiant-hyper-planning',
   standalone: true,
-  imports: [CommonModule, FormsModule, MenuComponent,],
+  imports: [FormsModule, MenuComponent],
   templateUrl: './etudiant-hyper-planning.component.html',
   styleUrls: ['./etudiant-hyper-planning.component.scss'],
 })
@@ -113,8 +113,9 @@ export class EtudiantHyperPlanningComponent implements OnInit {
     this.error = null;
     this.elevesService.getAllClasses(this.anneeScolaire).subscribe({
       next: (data) => {
-        this.allClasses = data;
-        this.classes = data.map((cls) => ({ name: cls, checked: false }));
+        const sortedClasses = this.sortClasses(data);
+        this.allClasses = sortedClasses;
+        this.classes = sortedClasses.map((cls) => ({ name: cls, checked: false }));
         this.selectedClasses = []; // Reset selected classes when new classes are loaded
         this.loadingClasses = false;
       },
@@ -266,58 +267,37 @@ export class EtudiantHyperPlanningComponent implements OnInit {
     return Math.ceil(this.eleves.length / this.pageSize);
   }
 
-  exportExcels(): void {
+  private sortClasses(classes: string[]): string[] {
+    return [...classes].sort((a, b) => {
+      const left = this.parseClassCode(a);
+      const right = this.parseClassCode(b);
 
-    if (!this.anneeScolaire ||
-      this.selectedEtablissements.length === 0 ||
-      this.selectedClasses.length === 0) {
-      this.error = "Veuillez remplir tous les critères d'export.";
-      return;
-    }
-
-    const anne = this.anneeScolaire.replace('/', '-');
-    this.loadingExport = true;
-
-    let params = new HttpParams();
-    this.selectedClasses.forEach(p =>
-      params = params.append('promotions', p)
-    );
-    this.selectedEtablissements.forEach(e =>
-      params = params.append('etablissements', e)
-    );
-
-    params = params
-      .append('anneeScolaire', anne)
-      .append('startStr', this.dateDebut)
-      .append('endStr', this.dateFin);
-
-    const token = localStorage.getItem('access_token');
-
-    this.http.get(
-      `${this.elevesService.configuration.basePath}/eleves/getPromotionsElevesExcels`,
-      {
-        params,
-        responseType: 'blob',
-        headers: new HttpHeaders({
-          Authorization: `Bearer ${token}`
-        })
+      if (left.prefix !== right.prefix) {
+        return left.prefix.localeCompare(right.prefix);
       }
-    ).subscribe({
-      next: (blob) => {
-        saveAs(
-          new Blob(
-            [blob],
-            { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }
-          ),
-          `Promotions_Eleves_${anne}.xlsx`
-        );
-        this.loadingExport = false;
-      },
-      error: () => {
-        this.error = "Erreur lors de l’export Excel.";
-        this.loadingExport = false;
+      if (left.level !== right.level) {
+        return left.level - right.level;
       }
+      if (left.isLevelStar !== right.isLevelStar) {
+        return left.isLevelStar ? -1 : 1;
+      }
+      const suffixCompare = left.suffix.localeCompare(right.suffix);
+      return suffixCompare !== 0 ? suffixCompare : a.localeCompare(b);
     });
   }
 
+  private parseClassCode(code: string): {
+    prefix: string;
+    level: number;
+    isLevelStar: boolean;
+    suffix: string;
+  } {
+    const match = code.match(/^([A-Za-z]+)(\d+)?(.*)$/);
+    const prefix = (match?.[1] ?? code).toUpperCase();
+    const level = match?.[2] ? parseInt(match[2], 10) : 0;
+    const suffixRaw = (match?.[3] ?? '').toUpperCase().trim();
+    const isLevelStar = suffixRaw === '*';
+    const suffix = suffixRaw.replace('*', '');
+    return { prefix, level, isLevelStar, suffix };
+  }
 }

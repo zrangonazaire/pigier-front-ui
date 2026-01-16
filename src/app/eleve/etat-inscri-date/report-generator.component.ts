@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { saveAs } from 'file-saver';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { MenuComponent } from '../../components/menu/menu.component';
 import { EleveControllerEtatService } from '../../../api-client';
 
 @Component({
   selector: 'app-report-generator-excel',
   standalone: true,
-  imports: [CommonModule, FormsModule, MenuComponent],
+  imports: [FormsModule, MenuComponent],
   templateUrl: './report-generator.component.html',
   styleUrls: ['./report-generator.component.scss']
 })
