@@ -163,6 +163,12 @@ export class RoleListComponent implements OnInit {
     this.selectedRoleId = undefined;
   }
   roles: RoleResponse[] = [];
+  page: number = 1;
+  pageSize: number = 10;
+  pageSizeOptions: number[] = [5, 10, 20, 50];
+  permPage: number = 1;
+  permPageSize: number = 10;
+  permPageSizeOptions: number[] = [5, 10, 20, 50];
 
   showPermissionFormMode() {
     this.showPermissionForm = true;
@@ -290,6 +296,7 @@ export class RoleListComponent implements OnInit {
     this.permissionService.getAllPermissions().subscribe({
       next: (permissions) => {
         this.allPermissions = permissions;
+        this.changePermPage(this.permPage);
         console.log('**** PERMISSIONS ****', permissions);
       },
       error: (err) => {
@@ -312,6 +319,7 @@ export class RoleListComponent implements OnInit {
     this.roleService.listDesRoles().subscribe({
       next: (roles) => {
         this.roles = roles;
+        this.changePage(this.page);
         this.loading = false;
       },
       error: (error) => {
@@ -319,6 +327,63 @@ export class RoleListComponent implements OnInit {
         console.log('error de chargement', error);
       },
     });
+  }
+  onPageSizeChange() {
+    this.page = 1;
+  }
+
+  changePage(newPage: number) {
+    if (newPage < 1) {
+      this.page = 1;
+    } else if (newPage > this.totalPages) {
+      this.page = this.totalPages;
+    } else {
+      this.page = newPage;
+    }
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.roles.length / this.pageSize) || 1;
+  }
+
+  get pages(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  min(a: number, b: number): number {
+    return Math.min(a, b);
+  }
+
+  get pagedRoles(): RoleResponse[] {
+    const start = (this.page - 1) * this.pageSize;
+    return this.roles.slice(start, start + this.pageSize);
+  }
+
+  onPermPageSizeChange() {
+    this.permPage = 1;
+  }
+
+  changePermPage(newPage: number) {
+    if (newPage < 1) {
+      this.permPage = 1;
+    } else if (newPage > this.permTotalPages) {
+      this.permPage = this.permTotalPages;
+    } else {
+      this.permPage = newPage;
+    }
+  }
+
+  get permTotalPages(): number {
+    return Math.ceil(this.allPermissions.length / this.permPageSize) || 1;
+  }
+
+  get permPages(): number[] {
+    return Array.from({ length: this.permTotalPages }, (_, i) => i + 1);
+  }
+
+  get pagedPermissions(): PermissionResponse[] {
+    const start = (this.permPage - 1) * this.permPageSize;
+    return this.allPermissions.slice(start, start + this.permPageSize);
   }
 
   // Pour l'action Modifier une permission

@@ -75,6 +75,22 @@
     }
     @if (!showFormMode) {
     <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <span class="badge text-bg-primary fs-6">
+          Affichage {{ (page - 1) * pageSize + 1 }} -
+          {{ min(page * pageSize, roles.length) }} sur {{ roles.length }} roles
+        </span>
+        <div class="d-flex align-items-center gap-2">
+          <label for="pageSizeSelect" class="mb-0">Afficher</label>
+          <select id="pageSizeSelect" class="form-select form-select-sm w-auto"
+            [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange()">
+            @for (size of pageSizeOptions; track size) {
+            <option [value]="size">{{ size }}</option>
+            }
+          </select>
+          <span class="mb-0">par page</span>
+        </div>
+      </div>
       <div class="table-responsive">
         <table class="table table-hover">
           <thead class="table-light">
@@ -86,7 +102,7 @@
             </tr>
           </thead>
           <tbody>
-            @for (role of roles; track role.id) {
+            @for (role of pagedRoles; track role.id) {
             <tr>
               <td class="fw-semibold">{{ role.nomRole }}</td>
               <td>{{ role.descriptionRole || '-' }}</td>
@@ -134,25 +150,25 @@
         </table>
       </div>
 
-      @if (roles.length > 0) {
-      <nav aria-label="Pagination">
+      <nav aria-label="Pagination" *ngIf="roles.length > 0">
         <ul class="pagination justify-content-center mt-3">
-          <li class="page-item disabled">
-            <a class="page-link" tabindex="-1" aria-disabled="true">
-              <i class="bi bi-chevron-left"></i> Précédent
-            </a>
+          <li class="page-item" [class.disabled]="page === 1">
+            <button class="page-link" (click)="changePage(page - 1)" [disabled]="page === 1">
+              <i class="bi bi-chevron-left"></i>
+            </button>
           </li>
-          <li class="page-item active"><a class="page-link">1</a></li>
-          <li class="page-item"><a class="page-link">2</a></li>
-          <li class="page-item"><a class="page-link">3</a></li>
-          <li class="page-item">
-            <a class="page-link">
-              Suivant <i class="bi bi-chevron-right"></i>
-            </a>
+          @for (p of pages; track p) {
+          <li class="page-item" [class.active]="page === p">
+            <button class="page-link" (click)="changePage(p)">{{ p }}</button>
+          </li>
+          }
+          <li class="page-item" [class.disabled]="page === totalPages">
+            <button class="page-link" (click)="changePage(page + 1)" [disabled]="page === totalPages">
+              <i class="bi bi-chevron-right"></i>
+            </button>
           </li>
         </ul>
       </nav>
-      }
     </div>
     }
 
@@ -262,7 +278,7 @@
             </tr>
           </thead>
           <tbody>
-            @for (permission of allPermissions; track permission.id) {
+            @for (permission of pagedPermissions; track permission.id) {
             <tr>
               <td class="fw-semibold">{{ permission.nomPermission || '-' }}</td>
               <td>
@@ -328,6 +344,25 @@
           </tbody>
         </table>
       </div>
+      <nav aria-label="Pagination permissions" *ngIf="allPermissions.length > 0">
+        <ul class="pagination justify-content-center mt-3">
+          <li class="page-item" [class.disabled]="permPage === 1">
+            <button class="page-link" (click)="changePermPage(permPage - 1)" [disabled]="permPage === 1">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+          </li>
+          @for (p of permPages; track p) {
+          <li class="page-item" [class.active]="permPage === p">
+            <button class="page-link" (click)="changePermPage(p)">{{ p }}</button>
+          </li>
+          }
+          <li class="page-item" [class.disabled]="permPage === permTotalPages">
+            <button class="page-link" (click)="changePermPage(permPage + 1)" [disabled]="permPage === permTotalPages">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
     </div>
     }
   </div>

@@ -18,6 +18,7 @@
   border-bottom: 1px solid var(--border);
 }
 
+
 .role-form-card {
   border: 1px solid var(--border);
   background: linear-gradient(135deg, #eaf3ff 0%, #ffffff 45%, #fff4cc 100%);
@@ -31,6 +32,7 @@
   border: 1px solid var(--border);
   background: linear-gradient(135deg, #eaf3ff 0%, #ffffff 45%, #fff4cc 100%);
 }
+
 
 .permission-list-body {
   background: transparent;
@@ -159,6 +161,61 @@
   from {
     opacity: 0;
     transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pagination {
+  animation: pagination-fade 0.25s ease;
+}
+
+.pagination .page-item {
+  opacity: 0;
+  animation: page-in 0.25s ease forwards;
+}
+
+.pagination .page-item:nth-child(1) { animation-delay: 0ms; }
+.pagination .page-item:nth-child(2) { animation-delay: 40ms; }
+.pagination .page-item:nth-child(3) { animation-delay: 80ms; }
+.pagination .page-item:nth-child(4) { animation-delay: 120ms; }
+.pagination .page-item:nth-child(5) { animation-delay: 160ms; }
+.pagination .page-item:nth-child(6) { animation-delay: 200ms; }
+.pagination .page-item:nth-child(7) { animation-delay: 240ms; }
+.pagination .page-item:nth-child(8) { animation-delay: 280ms; }
+
+.pagination .page-link {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.pagination .page-link:hover,
+.pagination .page-link:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-soft);
+}
+
+.pagination .page-item.active .page-link {
+  box-shadow: var(--shadow-active);
+  transform: translateY(-1px);
+}
+
+@keyframes pagination-fade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
