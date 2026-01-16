@@ -265,4 +265,59 @@ export class EtudiantHyperPlanningComponent implements OnInit {
   get totalPages() {
     return Math.ceil(this.eleves.length / this.pageSize);
   }
+
+  exportExcels(): void {
+
+    if (!this.anneeScolaire ||
+      this.selectedEtablissements.length === 0 ||
+      this.selectedClasses.length === 0) {
+      this.error = "Veuillez remplir tous les critères d'export.";
+      return;
+    }
+
+    const anne = this.anneeScolaire.replace('/', '-');
+    this.loadingExport = true;
+
+    let params = new HttpParams();
+    this.selectedClasses.forEach(p =>
+      params = params.append('promotions', p)
+    );
+    this.selectedEtablissements.forEach(e =>
+      params = params.append('etablissements', e)
+    );
+
+    params = params
+      .append('anneeScolaire', anne)
+      .append('startStr', this.dateDebut)
+      .append('endStr', this.dateFin);
+
+    const token = localStorage.getItem('access_token');
+
+    this.http.get(
+      `${this.elevesService.configuration.basePath}/eleves/getPromotionsElevesExcels`,
+      {
+        params,
+        responseType: 'blob',
+        headers: new HttpHeaders({
+          Authorization: `Bearer ${token}`
+        })
+      }
+    ).subscribe({
+      next: (blob) => {
+        saveAs(
+          new Blob(
+            [blob],
+            { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }
+          ),
+          `Promotions_Eleves_${anne}.xlsx`
+        );
+        this.loadingExport = false;
+      },
+      error: () => {
+        this.error = "Erreur lors de l’export Excel.";
+        this.loadingExport = false;
+      }
+    });
+  }
+
 }
