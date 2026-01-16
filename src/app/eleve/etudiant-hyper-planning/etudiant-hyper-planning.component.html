@@ -156,10 +156,12 @@
                 <table class="table table-striped table-hover table-bordered align-middle">
                   <thead class="table-light">
                     <tr>
+                      <th scope="col">Matricule</th>
                       <th scope="col">Nom</th>
                       <th scope="col">Prénoms</th>
                       <th scope="col">Sexe</th>
-                      <th scope="col">Date Naissance</th>
+                      <th scope="col">Date de Naissance</th>
+                      <th scope="col">Lieu de Naissance</th>
                       <th scope="col">Classe</th>
                       <th scope="col">Tél. Etudiant</th>
                       <th>Tél. Parent</th>
@@ -169,10 +171,12 @@
                   <tbody>
                     @for (eleve of pagedEleves; track eleve; let i = $index) {
                       <tr>
+                        <td>{{ eleve.matriElev }}</td>
                         <td>{{ eleve.nom }}</td>
                         <td>{{ eleve.prenoms }}</td>
                         <td>{{ eleve.sexe }}</td>
                         <td>{{ formatDate(eleve.dateNaissance) }}</td>
+                        <td>{{ eleve.lieunaisElev }}</td>
                         <td>{{ eleve.codeDetcla }}</td>
                         <td>{{eleve.telEleve}}</td>
                         <td>{{ eleve.telParent }}</td>
