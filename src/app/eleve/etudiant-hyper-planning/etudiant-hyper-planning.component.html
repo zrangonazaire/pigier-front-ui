@@ -32,9 +32,9 @@
           </div>
           <div class="col-md-8">
             <label class="form-label fw-semibold d-block mb-2">Établissements :</label>
-            <div class="d-flex flex-wrap gap-3">
+            <div class="d-flex gap-3 campus-options">
               <div class="form-check form-check-inline" *ngFor="let etab of etablissements">
-                <input class="form-check-input" type="checkbox" [id]="etab.id" [value]="etab.value"
+                <input class="form-check-input campus-check" type="checkbox" [id]="etab.id" [value]="etab.value"
                   [checked]="etab.checked" (change)="onEtablissementChange(etab)">
                 <label class="form-check-label" [for]="etab.id">{{ etab.name }}</label>
               </div>

@@ -113,8 +113,9 @@ export class EtudiantHyperPlanningComponent implements OnInit {
     this.error = null;
     this.elevesService.getAllClasses(this.anneeScolaire).subscribe({
       next: (data) => {
-        this.allClasses = data;
-        this.classes = data.map((cls) => ({ name: cls, checked: false }));
+        const sortedClasses = this.sortClasses(data);
+        this.allClasses = sortedClasses;
+        this.classes = sortedClasses.map((cls) => ({ name: cls, checked: false }));
         this.selectedClasses = []; // Reset selected classes when new classes are loaded
         this.loadingClasses = false;
       },
@@ -264,5 +265,39 @@ export class EtudiantHyperPlanningComponent implements OnInit {
 
   get totalPages() {
     return Math.ceil(this.eleves.length / this.pageSize);
+  }
+
+  private sortClasses(classes: string[]): string[] {
+    return [...classes].sort((a, b) => {
+      const left = this.parseClassCode(a);
+      const right = this.parseClassCode(b);
+
+      if (left.prefix !== right.prefix) {
+        return left.prefix.localeCompare(right.prefix);
+      }
+      if (left.level !== right.level) {
+        return left.level - right.level;
+      }
+      if (left.isLevelStar !== right.isLevelStar) {
+        return left.isLevelStar ? -1 : 1;
+      }
+      const suffixCompare = left.suffix.localeCompare(right.suffix);
+      return suffixCompare !== 0 ? suffixCompare : a.localeCompare(b);
+    });
+  }
+
+  private parseClassCode(code: string): {
+    prefix: string;
+    level: number;
+    isLevelStar: boolean;
+    suffix: string;
+  } {
+    const match = code.match(/^([A-Za-z]+)(\d+)?(.*)$/);
+    const prefix = (match?.[1] ?? code).toUpperCase();
+    const level = match?.[2] ? parseInt(match[2], 10) : 0;
+    const suffixRaw = (match?.[3] ?? '').toUpperCase().trim();
+    const isLevelStar = suffixRaw === '*';
+    const suffix = suffixRaw.replace('*', '');
+    return { prefix, level, isLevelStar, suffix };
   }
 }
