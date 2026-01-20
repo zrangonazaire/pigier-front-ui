@@ -15,7 +15,10 @@ export class JwtInterceptor implements HttpInterceptor {
 
 token=inject(TokenService);
 router=inject(Router);
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  intercept(request: HttpRequest<unknown>, next: HttpHandler) : Observable<HttpEvent<unknown>> {
+    if (request.url.includes('/auth/login')) {
+      return next.handle(request);
+    }
     const token =  this.token.getToken(); ;
     console.log('Token from localStorage:', token);
     if (token) {
@@ -30,7 +33,7 @@ router=inject(Router);
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
        //   this.authService.logout();
-          this.router.navigate(['/login']);
+          // this.router.navigate(['/login']);
         }
         return throwError(() => error);
       })

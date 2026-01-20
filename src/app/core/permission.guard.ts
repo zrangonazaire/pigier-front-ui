@@ -8,7 +8,6 @@ import { UserAuthservice } from "../services/user.auth.service";
 export class PermissionGuard implements CanActivate {
     router = inject(Router);
     userServiceAuth = inject(UserAuthservice);
-
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean {
