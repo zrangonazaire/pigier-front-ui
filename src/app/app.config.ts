@@ -14,6 +14,7 @@ import {
 } from '@angular/common/http';
 import { JwtInterceptor } from './core/interceptor';
 import { provideToastr } from 'ngx-toastr';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -28,7 +29,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(withInterceptorsFromDi()),
-    { provide: 'HTTP_INTERCEPTORS', useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     importProvidersFrom(
       ApiModule.forRoot(
         () => new Configuration({ basePath: 'http://192.168.0.125:8084/api/v1' })
