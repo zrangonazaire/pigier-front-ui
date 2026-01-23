@@ -110,26 +110,41 @@ export class RoleListComponent implements OnInit {
     this.isEditMode = false;
     this.permissionForm.reset();
   }
-  submitPermissionForm() {
-    console.log('Données du formulaire de permission:', this.permissionForm.value);
+  submitPermissionForm(): void {
+    if (this.permissionForm.invalid) return;
 
-    this.permissionService.createPermission(this.permissionForm.value).subscribe({
-      next: () => {
+    const request: PermissionRequest = this.permissionForm.value;
 
-        this.loadPermissions();
-        this.cancelPermissionForm();
-      },
-      error: (err) => {
-        this.loading = false;
-        console.log('ERREUR DE CREATION DE PERMISSION', err);
-        this.toastService.error('Erreur lors de la création de la permission', 'Erreur');
-      },
-      complete: () => {
-        this.loading = false;
-        this.toastService.success('Permission créée avec succès');
-      }
-    });
+    if (this.isEditMode && this.selectedPermissionId) {
+      this.permissionService
+        .updatePermission(this.selectedPermissionId, request)
+        .subscribe({
+          next: () => {
+            this.toastService.success('Permission modifiée avec succès');
+            this.loadPermissions();
+            this.cancelPermissionForm();
+          },
+          error: (err) => {
+            console.error('Erreur modification permission', err);
+            this.toastService.error('Erreur lors de la modification');
+          },
+        });
+    }
+    else {
+      this.permissionService.createPermission(request).subscribe({
+        next: () => {
+          this.toastService.success('Permission créée avec succès');
+          this.loadPermissions();
+          this.cancelPermissionForm();
+        },
+        error: (err) => {
+          console.error('Erreur création permission', err);
+          this.toastService.error('Erreur lors de la création');
+        },
+      });
+    }
   }
+
   permRequest: Signal<PermissionRequest> = signal({
     nomPermission: '',
     descriptionPermission: '',
@@ -167,7 +182,7 @@ export class RoleListComponent implements OnInit {
   roleRequest: RoleRequest = {
     nomRole: '',
     descriptionRole: '',
-    permissionIds: new Set(),
+    permissionIds: [],
   };
   allPermissions: PermissionResponse[] = [];
   roleForm!: FormGroup;
@@ -187,7 +202,7 @@ export class RoleListComponent implements OnInit {
     this.roleForm = this.fb.group({
       nomRole: ['', Validators.required],
       descriptionRole: [''],
-      permissionIds: [[]],
+      permissionIds: ['', Validators.required],
     });
     this.permissionForm = this.fb.group({
       nomPermission: ['', Validators.required],
@@ -203,7 +218,7 @@ export class RoleListComponent implements OnInit {
     this.roleRequest = {
       nomRole: '',
       descriptionRole: '',
-      permissionIds: new Set(),
+      permissionIds: [],
     };
     this.roleForm.reset({
       nomRole: '',
@@ -249,27 +264,46 @@ export class RoleListComponent implements OnInit {
     permissionsControl.setValue(permissions);
   }
   submitForm(): void {
-    if (this.roleForm.valid) {
-      const formValue = this.roleForm.value;
-      const roleRequest: RoleRequest = {
-        nomRole: formValue.nomRole,
-        descriptionRole: formValue.descriptionRole,
-        permissionIds: new Set(formValue.permissionIds),
-      };
-      this.roleService.createRole(this.roleForm.value).subscribe({
+    if (this.roleForm.invalid) return;
+
+    const formValue = this.roleForm.value;
+
+    const roleRequest: RoleRequest = {
+      nomRole: formValue.nomRole,
+      descriptionRole: formValue.descriptionRole,
+      permissionIds: formValue.permissionIds || []
+    };
+
+    if (this.isEditRoleMode && this.selectedRoleId) {
+      this.roleService
+        .updateRole(this.selectedRoleId, roleRequest)
+        .subscribe({
+          next: () => {
+            this.toastService.success('Rôle modifié avec succès');
+            this.loadRoles();
+            this.cancelForm();
+          },
+          error: (err) => {
+            console.error('Erreur modification rôle', err);
+            this.toastService.error('Erreur lors de la modification');
+          },
+        });
+    }
+    else {
+      this.roleService.createRole(roleRequest).subscribe({
         next: () => {
-          alert('Rôle créé avec succès');
-          this.showFormMode = false;
+          this.toastService.success('Rôle créé avec succès');
           this.loadRoles();
+          this.cancelForm();
         },
-        error: (err) =>
-          console.error(
-            "Une erreur s'est produite lors de la création du rôle",
-            err.message
-          ),
+        error: (err) => {
+          console.error('Erreur création rôle', err);
+          this.toastService.error('Erreur lors de la création');
+        },
       });
     }
   }
+
 
   loadPermissions(): void {
     this.permissionService.getAllPermissions().subscribe({
@@ -283,15 +317,23 @@ export class RoleListComponent implements OnInit {
       },
     });
   }
-  confirmDelete(role: any): void {
+  confirmDelete(roleId: number): void {
+    if (!roleId) return;
+
     if (confirm('Voulez-vous vraiment supprimer ce rôle ?')) {
-      this.roleService.deleteRole(role).subscribe({
+      this.roleService.deleteRole(roleId).subscribe({
         next: () => {
+          this.toastService.success('Rôle supprimé');
           this.loadRoles();
         },
+        error: (err) => {
+          console.error('Erreur suppression rôle', err);
+          this.toastService.error('Suppression impossible');
+        }
       });
     }
   }
+
   loadRoles(): void {
     this.loading = true;
     this.roleService.listDesRoles().subscribe({
@@ -383,8 +425,19 @@ export class RoleListComponent implements OnInit {
 
   // Pour l'action Supprimer une permission
   confirmDeletePermission(permissionId: number) {
+    if (!permissionId) return;
+
     if (confirm('Voulez-vous vraiment supprimer cette permission ?')) {
-      this.deletePermission(permissionId);
+      this.permissionService.deletePermission(permissionId).subscribe({
+        next: () => {
+          this.toastService.success('Permission supprimée');
+          this.loadPermissions();
+        },
+        error: (err) => {
+          console.error(err);
+          this.toastService.error('Erreur suppression permission');
+        }
+      });
     }
   }
 

@@ -9,9 +9,9 @@
  */
 
 
-export interface RoleRequest { 
+export interface RoleRequest {
     nomRole?: string;
     descriptionRole?: string;
-    permissionIds?: Set<number>;
+    permissionIds: number[];
 }
 
