@@ -257,6 +257,7 @@
                 </div>
               </a>
             </li>
+            @if (isAdmin()) {
             <li>
               <a class="dropdown-item d-flex align-items-center py-3" routerLink="/users-roles/role-list">
                 <div class="icon-container bg-warning-subtle me-3">
@@ -268,6 +269,7 @@
                 </div>
               </a>
             </li>
+            }
             }
 
             <li>

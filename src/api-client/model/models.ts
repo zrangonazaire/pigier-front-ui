@@ -15,7 +15,7 @@ export * from './preinscriptionRequestDto';
 export * from './preinscriptionResponseDto';
 export * from './roleRequest';
 export * from './roleResponse';
+export * from './statutUtilisateur';
 export * from './uRole';
 export * from './userRequest';
 export * from './userResponse';
-export * from './statutUtilisateur';

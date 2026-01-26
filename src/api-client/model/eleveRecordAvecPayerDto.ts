@@ -9,17 +9,18 @@
  */
 
 
-export interface EleveRecordAvecPayerDto {
-  matriElev?: string;
-  nom?: string;
-  prenoms?: string;
-  dateNaissance?: string;
-  lieunaisElev?: string;
-  sexe?: string;
-  emailPersonnel?: string;
-  codeDetcla?: string;
-  telEleve?: string;
-  telParent?: string;
-  montantPayer?: number;
-  dateIns?: string;
+export interface EleveRecordAvecPayerDto { 
+    matriElev?: string;
+    nom?: string;
+    prenoms?: string;
+    dateNaissance?: string;
+    lieunaisElev?: string;
+    sexe?: string;
+    emailPersonnel?: string;
+    codeDetcla?: string;
+    telEleve?: string;
+    telParent?: string;
+    montantPayer?: number;
+    dateIns?: string;
 }
+

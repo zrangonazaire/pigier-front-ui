@@ -85,7 +85,7 @@ export class PermissionService {
     const roleRequest: RoleRequest = {
       nomRole: role.name,
       descriptionRole: role.description,
-      permissionIds: (role.permissions)
+      permissionIds: new Set(role.permissions)
     };
     return this.rolesApiService.updateRole(role.id, roleRequest);
   }

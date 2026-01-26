@@ -8,7 +8,6 @@
  * Do not edit the class manually.
  */
 
-import { StatutUtilisateur } from './statutUtilisateur';
 
 export interface UserRequest { 
     id?: number;
@@ -17,7 +16,16 @@ export interface UserRequest {
     nomPrenoms?: string;
     telephone?: string;
     email?: string;
-    statut?: StatutUtilisateur;
+    statut?: UserRequest.StatutEnum;
     roleIds?: Set<number>;
 }
+export namespace UserRequest {
+    export type StatutEnum = 'ACTIVE' | 'DESACTIVE' | 'SUSPENDUE';
+    export const StatutEnum = {
+        Active: 'ACTIVE' as StatutEnum,
+        Desactive: 'DESACTIVE' as StatutEnum,
+        Suspendue: 'SUSPENDUE' as StatutEnum
+    };
+}
+
 

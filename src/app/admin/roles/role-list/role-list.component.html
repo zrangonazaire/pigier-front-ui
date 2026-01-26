@@ -253,7 +253,8 @@
           </div>
         </div>
 
-        <div class="card-footer bg-light d-flex justify-content-between">
+        <!-- ⭐ MODIFICATION: Boutons rapprochés -->
+        <div class="card-footer bg-light d-flex justify-content-end gap-2">
           <button type="button" class="btn btn-outline-secondary" (click)="onCancelPerm()">
             <i class="bi bi-x-circle me-1"></i> Annuler
           </button>
@@ -261,6 +262,7 @@
             <i class="bi bi-save me-1"></i> {{ isEditMode ? 'Mettre à jour' : 'Enregistrer' }}
           </button>
         </div>
+        <!-- ⭐ FIN MODIFICATION -->
       </div>
     </form>
     }

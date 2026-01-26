@@ -182,7 +182,7 @@ export class RoleListComponent implements OnInit {
   roleRequest: RoleRequest = {
     nomRole: '',
     descriptionRole: '',
-    permissionIds: [],
+    permissionIds: new Set<number>(),
   };
   allPermissions: PermissionResponse[] = [];
   roleForm!: FormGroup;
@@ -218,7 +218,7 @@ export class RoleListComponent implements OnInit {
     this.roleRequest = {
       nomRole: '',
       descriptionRole: '',
-      permissionIds: [],
+      permissionIds: new Set<number>(),
     };
     this.roleForm.reset({
       nomRole: '',
