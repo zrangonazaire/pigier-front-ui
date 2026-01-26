@@ -443,6 +443,98 @@ export class ElevesService extends BaseService {
      * @param anneeScolaire 
      * @param startStr 
      * @param endStr 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getPromotionsElevesExcels(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<string>;
+    public getPromotionsElevesExcels(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
+    public getPromotionsElevesExcels(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
+    public getPromotionsElevesExcels(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (promotions === null || promotions === undefined) {
+            throw new Error('Required parameter promotions was null or undefined when calling getPromotionsElevesExcels.');
+        }
+        if (etablissements === null || etablissements === undefined) {
+            throw new Error('Required parameter etablissements was null or undefined when calling getPromotionsElevesExcels.');
+        }
+        if (anneeScolaire === null || anneeScolaire === undefined) {
+            throw new Error('Required parameter anneeScolaire was null or undefined when calling getPromotionsElevesExcels.');
+        }
+        if (startStr === null || startStr === undefined) {
+            throw new Error('Required parameter startStr was null or undefined when calling getPromotionsElevesExcels.');
+        }
+        if (endStr === null || endStr === undefined) {
+            throw new Error('Required parameter endStr was null or undefined when calling getPromotionsElevesExcels.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (promotions) {
+            promotions.forEach((element) => {
+                localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+                  <any>element, 'promotions');
+            })
+        }
+        if (etablissements) {
+            etablissements.forEach((element) => {
+                localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+                  <any>element, 'etablissements');
+            })
+        }
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>anneeScolaire, 'anneeScolaire');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>startStr, 'startStr');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>endStr, 'endStr');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            '*/*'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/eleves/getPromotionsElevesExcels`;
+        return this.httpClient.request<string>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param promotions 
+     * @param etablissements 
+     * @param anneeScolaire 
+     * @param startStr 
+     * @param endStr 
      * @param montantpayer 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

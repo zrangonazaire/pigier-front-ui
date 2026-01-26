@@ -119,4 +119,13 @@ export class UserAuthservice {
     if (!permissionCodes || permissionCodes.length === 0) return true;
     return permissionCodes.some((code) => this.hasPermission(code));
   }
+
+  isAdmin(): boolean {
+    const user = this.currentUserSubject.getValue();
+    if (!user || !user.roles) return false;
+    return user.roles.some((role: any) => 
+      role.nomRole?.toUpperCase() === 'ROLE_ADMIN' || 
+      role.nomRole?.toUpperCase() === 'ADMIN'
+    );
+  }
 }

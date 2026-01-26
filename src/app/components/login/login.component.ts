@@ -64,7 +64,7 @@ export class LoginComponent {
         error: (error) => {
           this.errorMessage.set('Email ou mot de passe incorrect');
           this.isLoading.set(false);
-          console.error('Login error', error);
+          console.error('Login error', error.message);
         },
         complete: () => {
           this.isLoading.set(false);

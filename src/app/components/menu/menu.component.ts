@@ -71,6 +71,14 @@ export class MenuComponent implements OnInit {
     ]);
   }
 
+  isNotAdmin(): boolean {
+    return !this.authService.isAdmin();
+  }
+
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
+
   logout() {
     console.log('DǸconnexion...');
     this.authService.logout();

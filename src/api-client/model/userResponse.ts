@@ -7,7 +7,6 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { StatutUtilisateur } from './statutUtilisateur';
 import { URole } from './uRole';
 
 
@@ -15,7 +14,7 @@ export interface UserResponse {
     id?: number;
     username?: string;
     enable?: boolean;
-    statut?: StatutUtilisateur;
+    statut?: UserResponse.StatutEnum;
     firstname?: string;
     lastname?: string;
     telephone?: string;
@@ -25,4 +24,13 @@ export interface UserResponse {
     lastModifiedDate?: string;
     formattedCreatedDate?: string;
 }
+export namespace UserResponse {
+    export type StatutEnum = 'ACTIVE' | 'DESACTIVE' | 'SUSPENDUE';
+    export const StatutEnum = {
+        Active: 'ACTIVE' as StatutEnum,
+        Desactive: 'DESACTIVE' as StatutEnum,
+        Suspendue: 'SUSPENDUE' as StatutEnum
+    };
+}
+
 

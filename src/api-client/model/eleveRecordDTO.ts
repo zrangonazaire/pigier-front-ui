@@ -9,16 +9,17 @@
  */
 
 
-export interface EleveRecordDTO {
-  matriElev?: string;
-  nom?: string;
-  prenoms?: string;
-  dateNaissance?: string;
-  lieunaisElev?: string;
-  sexe?: string;
-  emailPersonnel?: string;
-  codeDetcla?: string;
-  telEleve?: string;
-  telParent?: string;
-  dateIns?: string;
+export interface EleveRecordDTO { 
+    matriElev?: string;
+    nom?: string;
+    prenoms?: string;
+    dateNaissance?: string;
+    lieunaisElev?: string;
+    sexe?: string;
+    emailPersonnel?: string;
+    codeDetcla?: string;
+    telEleve?: string;
+    telParent?: string;
+    dateIns?: string;
 }
+
