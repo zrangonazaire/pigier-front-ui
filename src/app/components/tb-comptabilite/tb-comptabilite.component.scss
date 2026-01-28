@@ -1,0 +1,43 @@
+.container-fluid {
+  background: #f8f9fc;
+  padding: 20px;
+}
+
+.filters-bar {
+  display: flex;
+  gap: 15px;
+  background: #ff8c00;
+  padding: 15px;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.filters-bar label {
+  font-size: 13px;
+}
+
+.filters-bar .form-control {
+  min-width: 150px;
+}
+
+.kpi-row {
+  margin-top: 20px;
+}
+
+.kpi-card {
+  border-radius: 8px;
+  transition: transform .2s;
+}
+
+.kpi-card:hover {
+  transform: translateY(-4px);
+}
+
+.border-left-primary { border-left: 5px solid #4e73df; }
+.border-left-success { border-left: 5px solid #1cc88a; }
+.border-left-danger  { border-left: 5px solid #e74a3b; }
+.border-left-warning { border-left: 5px solid #f6c23e; }
+
+table {
+  background: #fff;
+}
