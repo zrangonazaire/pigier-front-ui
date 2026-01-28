@@ -40,25 +40,32 @@
 
           <!-- Permissions -->
           <div class="mb-4">
-            <label class="form-label">Permissions *</label>
-            <div class="border rounded p-3 bg-light">
-              <div class="d-flex flex-wrap gap-2">
-                @for (permission of allPermissions; track permission.id) {
-                 <div class="form-check">
-                      <input class="form-check-input" type="checkbox" [id]="'perm-' + permission.id" [value]="permission.id"
-                             [checked]="roleForm.get('permissionIds')?.value?.includes(permission.id)"
-                             (change)="onPermissionChange($event, permission.id!)">
-                      <label class="form-check-label" [for]="'perm-' + permission.id">
+    <label class="form-label">Permissions *</label>
+    <div class="border rounded p-3 bg-light permissions-box">
+        <div class="d-flex flex-wrap gap-2 permissions-options">
+            @for (permission of allPermissions; track permission.id) {
+                <div class="permission-option">
+                    <input class="form-check-input permission-check permission-checkmark"
+                        type="checkbox"
+                        [id]="'perm-' + permission.id"
+                        [value]="permission.id"
+                        [checked]="roleForm.value.permissionIds?.includes(permission.id)"
+                        (change)="onPermissionChange($event, permission.id!)">
+                    <label class="form-check-label permission-label" [for]="'perm-' + permission.id">
                         {{ permission.nomPermission }}
-                      </label>
-                    </div>
-                }
-              </div>
-              @if (roleForm.get('permissionIds')?.invalid && roleForm.get('permissionIds')?.touched) {
-              <div class="text-danger small mt-2">Au moins une permission doit être sélectionnée</div>
-              }
-            </div>
-          </div>
+                        <i class="bi bi-arrow-right ms-1 fw-bold permission-arrow"
+                           [style.display]="roleForm.value.permissionIds?.includes(permission.id) ? 'inline' : 'none'"
+                           style="color: #28a745;"></i>
+                    </label>
+                </div>
+            }
+        </div>
+        <div *ngIf="roleForm.get('permissionIds')?.invalid && roleForm.get('permissionIds')?.touched"
+            class="text-danger small mt-2">
+            Au moins une permission doit être sélectionnée
+        </div>
+    </div>
+</div>
 
           <!-- Actions -->
           <div class="d-flex justify-content-end gap-2">
@@ -253,7 +260,7 @@
           </div>
         </div>
 
-        <div class="card-footer bg-light d-flex justify-content-between">
+        <div class="card-footer bg-light d-flex justify-content-end gap-2">
           <button type="button" class="btn btn-outline-secondary" (click)="onCancelPerm()">
             <i class="bi bi-x-circle me-1"></i> Annuler
           </button>
@@ -289,8 +296,8 @@
                 }
               </td>
               <td>{{ permission.descriptionPermission || '-' }}</td>
-              <td class="text-center">
-                <div class="d-flex justify-content-center gap-2">
+              <td class="text-center" style="white-space: nowrap;">
+                <div class="d-flex justify-content-center gap-1">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" [checked]="permission.canRead" disabled>
                     <label class="form-check-label text-success" title="Lecture">Lecture</label>

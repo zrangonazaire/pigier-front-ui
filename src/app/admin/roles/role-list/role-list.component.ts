@@ -1,5 +1,6 @@
 import {
   Component,
+  ChangeDetectorRef,
   EventEmitter,
   Inject,
   inject,
@@ -56,6 +57,7 @@ export class RoleListComponent implements OnInit {
   @Output() submitFormPerm = new EventEmitter<PermissionRequest>();
   @Output() cancelFormPerm = new EventEmitter<void>();
   toastService = inject(ToastrService);
+  cdr = inject(ChangeDetectorRef);
 
   permissionForm!: FormGroup;
   submitted = false;
@@ -262,6 +264,16 @@ export class RoleListComponent implements OnInit {
       }
     }
     permissionsControl.setValue(permissions);
+    permissionsControl.markAsTouched();
+    this.cdr.markForCheck();
+  }
+
+  isPermissionSelected(permissionId: number): boolean {
+    const permissionsControl = this.roleForm.get('permissionIds');
+    if (!permissionsControl || !permissionsControl.value) {
+      return false;
+    }
+    return (permissionsControl.value as number[]).includes(permissionId);
   }
   submitForm(): void {
     if (this.roleForm.invalid) return;
