@@ -1,0 +1,95 @@
+<app-menu></app-menu>
+
+<div class="container-fluid" *ngIf="dashboard as d">
+
+  <h2 class="mb-4">{{ title }}</h2>
+
+  <div class="filters-bar">
+    <div>
+      <label>Année scolaire</label>
+      <input class="form-control" [(ngModel)]="annee" (change)="onFiltreChange()">
+    </div>
+
+    <div>
+      <label>Mois</label>
+      <select class="form-control" [(ngModel)]="mois" (change)="onFiltreChange()">
+        <option [ngValue]="undefined">Tous</option>
+        <option *ngFor="let m of [1,2,3,4,5,6,7,8,9,10,11,12]" [value]="m">{{ m }}</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Niveau</label>
+      <select class="form-control" [(ngModel)]="niveau" (change)="onFiltreChange()">
+        <option [ngValue]="undefined">Tous</option>
+        <option *ngFor="let n of niveauxDisponibles" [value]="n">{{ n }}</option>
+      </select>
+    </div>
+
+    <button class="btn btn-success mt-4" (click)="onFiltreChange()">🔍 Rechercher</button>
+  </div>
+
+  <div class="row kpi-row">
+    <div class="col" *ngFor="let k of [
+      ['Étudiants', d.totalEleves, 'primary'],
+      ['Soldés', d.totalElevesSoldes, 'success'],
+      ['Non soldés', d.totalElevesNonSoldes, 'danger'],
+      ['Total attendu', formatMontant(d.montantTotalAttendu), 'warning'],
+      ['Total encaissé', formatMontant(d.montantTotalEncaisse), 'success'],
+      ['Restant dû', formatMontant(d.montantTotalRestant), 'danger']
+    ]">
+      <div class="card kpi-card border-left-{{k[2]}}">
+        <div class="card-body">
+          <small>{{ k[0] }}</small>
+          <h5>{{ k[1] }}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <canvas id="chartNiveau"></canvas>
+    </div>
+    <div class="col-md-3">
+      <canvas id="chartSolde"></canvas>
+    </div>
+    <div class="col-md-3">
+      <canvas id="chartFiliere"></canvas>
+    </div>
+  </div>
+
+  <div class="mt-5">
+    <h4>Liste des étudiants</h4>
+
+    <input class="form-control mb-2" placeholder="🔎 Rechercher..." [(ngModel)]="searchText">
+
+    <table class="table table-striped table-hover">
+      <thead class="table-dark">
+      <tr>
+        <th>Matricule</th>
+        <th>Nom</th>
+        <th>Niveau</th>
+        <th>Filière</th>
+        <th>Attendu</th>
+        <th>Encaissé</th>
+        <th>Solde</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let e of filteredDetails | paginate: { itemsPerPage: 15, currentPage: page }">
+        <td>{{ e.matricule }}</td>
+        <td>{{ e.nomPrenom }}</td>
+        <td>{{ e.niveau }}</td>
+        <td>{{ e.filiere }}</td>
+        <td>{{ formatMontant(e.montantAttendu) }}</td>
+        <td>{{ formatMontant(e.montantEncaisse) }}</td>
+        <td [class.text-danger]="e.solde > 0">{{ formatMontant(e.solde) }}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <pagination-controls (pageChange)="page = $event"></pagination-controls>
+  </div>
+
+</div>

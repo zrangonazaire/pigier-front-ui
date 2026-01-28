@@ -114,7 +114,7 @@ export const routes: Routes = [
   {
     path: 'compta',
     loadChildren: () =>
-      import('./components/tb-comptablilite/tb-comptabilite.routes').then(
+      import('./components/tb-comptabilite/tb-comptabilite.routes').then(
         (m) => m.TB_COMPTABILITE_ROUTES
       ),
     canActivate: [PermissionGuard],
