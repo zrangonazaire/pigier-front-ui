@@ -1,6 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary shadow-lg">
   <div class="container">
-    <!-- Logo avec effet de profondeur -->
+
+    <!-- Logo -->
     <a routerLink="/tb-preinscr" class="navbar-brand fw-bold d-flex align-items-center">
       <div class="logo-icon bg-white rounded-circle p-2 me-2 shadow-sm">
         <i class="fas fa-graduation-cap fa-lg text-primary"></i>
@@ -11,282 +12,122 @@
       </div>
     </a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-      aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavDropdown"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
+      <!-- MENU PRINCIPAL -->
       <ul class="navbar-nav me-auto">
-        <!-- Gestion Commerciale -->
+
+        <!-- COMMERCIAL -->
         @if (hasModuleAccess('COMMERCIALE') || hasModuleAccess('PREINSCRIPTION')) {
-        <li class="nav-item dropdown mx-1">
-          <a class="nav-link dropdown-toggle d-flex align-items-center px-3" href="#" id="commercialDropdown"
-            role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fas fa-chart-line me-2"></i>
-            <span>Commercial</span>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle d-flex align-items-center px-3"
+             href="#" data-bs-toggle="dropdown">
+            <i class="fas fa-chart-line me-2"></i> Commercial
           </a>
-          <ul class="dropdown-menu dropdown-menu-dark shadow-lg rounded-0 border-0 mt-2"
-            aria-labelledby="commercialDropdown">
-            <li>
-              <a class="dropdown-item d-flex align-items-center py-2" routerLink="/tb-preinscr"
-                routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                <i class="fas fa-list me-3 text-primary"></i>
-                <div>
-                  <div>Préinscriptions</div>
 
-                </div>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li>
+              <a class="dropdown-item" routerLink="/tb-preinscr">
+                Préinscriptions
               </a>
             </li>
             <li>
-              <a class="dropdown-item d-flex align-items-center py-2" routerLink="/preinscription/add-preins"
-                routerLinkActive="active">
-                <i class="fas fa-plus-circle me-3 text-success"></i>
-                <div>
-                  <div>Nouvelle Préinscription</div>
-
-                </div>
+              <a class="dropdown-item" routerLink="/preinscription/add-preins">
+                Nouvelle Préinscription
               </a>
             </li>
           </ul>
         </li>
         }
 
-
-        <!-- Gestion Comptable -->
-         @if (hasModuleAccess('COMPTABILITE')) {
-        <li class="nav-item dropdown mx-1">
-          <a class="nav-link dropdown-toggle d-flex align-items-center px-3" href="#" id="comptableDropdown"
-            role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fas fa-calculator me-2"></i>
-            <span>Comptabilité</span>
+        <!-- COMPTABILITÉ -->
+        @if (hasModuleAccess('COMPTABILITE')) {
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle d-flex align-items-center px-3"
+             href="#" data-bs-toggle="dropdown">
+            <i class="fas fa-calculator me-2"></i> Comptabilité
           </a>
-          <ul class="dropdown-menu dropdown-menu-dark shadow-lg rounded-0 border-0 mt-2"
-            aria-labelledby="comptableDropdown">
-             <li>
-              <a class="dropdown-item d-flex align-items-center py-2" routerLink="/compta/tb-compta"
-                routerLinkActive="active">
-                <i class="fas fa-table me-3 text-success"></i>
-                <div>
-                  <div>Tableau de bord</div>
 
-                </div>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li>
+              <a class="dropdown-item" routerLink="/compta/tb-compta">
+                Tableau de bord
               </a>
             </li>
             <li>
-              <a class="dropdown-item d-flex align-items-center py-2" routerLink="/tb-preinscr"
-                routerLinkActive="active">
-                <i class="fas fa-money-bill-wave me-3 text-success"></i>
-                <div>
-                  <div>Encaissements</div>
-                  <small class="text-muted">Gestion des paiements</small>
-                </div>
+              <a class="dropdown-item">
+                Encaissements
               </a>
-            </li>
-
-            <li class="dropdown-submenu">
-              <a class="dropdown-item d-flex align-items-center py-2 dropdown-toggle justify-content-between">
-                <div class="d-flex align-items-center">
-                  <i class="fas fa-book me-3 text-info"></i>
-                  <div>
-                    <div>Journaux</div>
-                    <small class="text-muted">Documents comptables</small>
-                  </div>
-                </div>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-dark shadow-sm rounded-0 border-0">
-                <li>
-                  <a class="dropdown-item d-flex align-items-center py-2" routerLink="/caisse/journal-caisse"
-                    routerLinkActive="active">
-                    <i class="fas fa-file-invoice me-3"></i>
-                    Caisse
-                  </a>
-                </li>
-                <!-- <li>
-                  <a class="dropdown-item d-flex align-items-center py-2" routerLink="/caisse/point-caisse"
-                    routerLinkActive="active">
-                    <i class="fas fa-file-alt me-3"></i>
-                    Point Caisse
-                  </a>
-                </li> -->
-              </ul>
             </li>
           </ul>
         </li>
         }
 
-
-        <!-- Gestion pédagogique -->
+        <!-- PÉDAGOGIQUE -->
         @if (hasModuleAccess('NOTE') || hasModuleAccess('EXAMEN') || hasModuleAccess('ELEVE')) {
-               <li class="nav-item dropdown mx-1">
-          <a class="nav-link dropdown-toggle d-flex align-items-center px-3" href="#" id="pedagogiqueDropdown"
-            role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fas fa-graduation-cap me-2"></i>
-            <span>Pédagogique</span>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle d-flex align-items-center px-3"
+             href="#" data-bs-toggle="dropdown">
+            <i class="fas fa-graduation-cap me-2"></i> Pédagogique
           </a>
-          <ul class="dropdown-menu dropdown-menu-dark shadow-lg rounded-0 border-0 mt-2"
-            aria-labelledby="pedagogiqueDropdown">
-                <li>
-              <a class="dropdown-item d-flex align-items-center py-2" routerLink="/tb-peda"
-                routerLinkActive="active">
-                <i class="fas fa-table me-3 text-success"></i>
-                <div>
-                  <div>Tableau de bord</div>
 
-                </div>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li>
+              <a class="dropdown-item" routerLink="/tb-peda">
+                Tableau de bord
               </a>
-            </li>
-            <li class="dropdown-submenu">
-              <a class="dropdown-item d-flex align-items-center py-2 dropdown-toggle justify-content-between">
-                <div class="d-flex align-items-center">
-                  <i class="fas fa-user-graduate me-3 text-warning"></i>
-                  <div>
-                    <div>Étudiants</div>
-                  </div>
-                </div>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-dark shadow-sm rounded-0 border-0">
-                <li>
-                  <a class="dropdown-item d-flex align-items-center py-2" routerLink="/eleve/etat-etudiant-dianenew"
-                    routerLinkActive="active">
-                    <i class="fas fa-list me-3"></i>
-                    Liste des étudiants
-                  </a>
-                </li>
-                              <li>
-                  <a class="dropdown-item d-flex align-items-center py-2" routerLink="/eleve/liste-hyper-planning"
-                    routerLinkActive="active">
-                    <i class="fa-solid fa-people-group me-3"></i>
-                    Etudiants (Hyper Planning)
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item d-flex align-items-center py-2" routerLink="/eleve/recap-etudiant"
-                    routerLinkActive="active">
-                    <i class="fas fa-user-plus me-3"></i>
-                    Récapitulatif étudiant
-                  </a>
-                </li>
-
-                <li>
-                  <a class="dropdown-item d-flex align-items-center py-2" routerLink="/eleve/list-etudiant-date"
-                    routerLinkActive="active">
-                    <i class="fas fa-user-clock me-3"></i>
-                    Liste des étudiants (Mails Univmetiers)
-                  </a>
-              </ul>
-            </li>
-            <!-- EVAKUATION -->
-      <li class="dropdown-submenu">
-              <a class="dropdown-item d-flex align-items-center py-2 dropdown-toggle justify-content-between">
-                <div class="d-flex align-items-center">
-                  <i class="fas fa-user-graduate me-3 text-warning"></i>
-                  <div>
-                    <div>Evaluation</div>
-                  </div>
-                </div>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-dark shadow-sm rounded-0 border-0">
-                <li>
-                  <a class="dropdown-item d-flex align-items-center py-2" routerLink="/notes/note"
-                    routerLinkActive="active">
-                    <i class="fas fa-list me-3"></i>
-                   Notes
-                  </a>
-                </li>
-
-
-
-                <li>
-                  <a class="dropdown-item d-flex align-items-center py-2" routerLink="/eleve/list-etudiant-date"
-                    routerLinkActive="active">
-                    <i class="fas fa-user-clock me-3"></i>
-                    Liste des étudiants (Mails Univmetiers)
-                  </a>
-              </ul>
             </li>
             <li>
-              <a class="dropdown-item d-flex align-items-center py-2">
-                <i class="fas fa-book-open me-3 text-info"></i>
-                <div>
-                  <div>Cours</div>
-                  <small class="text-muted">Programmes académiques</small>
-                </div>
+              <a class="dropdown-item" routerLink="/eleve/etat-etudiant-dianenew">
+                Liste des étudiants
               </a>
             </li>
           </ul>
         </li>
         }
+
+        <!-- ADMINISTRATION (CORRIGÉ) -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle d-flex align-items-center px-3"
+             href="#" data-bs-toggle="dropdown">
+            <i class="fas fa-cogs me-2"></i> Administration
+          </a>
+
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li>
+              <a class="dropdown-item" routerLink="/admin/importer-fichier">
+                Importer un fichier
+              </a>
+            </li>
+          </ul>
+        </li>
 
       </ul>
 
-      <!-- Menu utilisateur -->
+      <!-- UTILISATEUR -->
       <ul class="navbar-nav ms-auto">
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle d-flex align-items-center py-0" href="#" id="userDropdown" role="button"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="position-relative">
-            </div>
-            <div class="d-none d-lg-flex flex-column text-start ms-1">
-              <span class="fw-medium text-white">{{currentUser}}</span>
-
-            </div>
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+            {{ currentUser }}
           </a>
-          <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow-lg rounded-0 border-0 mt-2"
-            aria-labelledby="userDropdown">
+
+          <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
             <li>
-              <a class="dropdown-item d-flex align-items-center py-3" href="#">
-                <div class="icon-container bg-primary-subtle me-3">
-                  <i class="fas fa-user-circle text-primary"></i>
-                </div>
-                <div>
-                  <div>Mon profil</div>
-
-                </div>
-              </a>
-            </li>
-            @if (hasAnyAccess()) {
-               <li>
-              <a class="dropdown-item d-flex align-items-center py-3" href="#">
-                <div class="icon-container bg-info-subtle me-3">
-                  <i class="fas fa-cog text-info"></i>
-                </div>
-                <div>
-                  <div>Paramètres</div>
-
-                </div>
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item d-flex align-items-center py-3" routerLink="/users-roles/role-list">
-                <div class="icon-container bg-warning-subtle me-3">
-                  <i class="fas fa-users-cog text-warning"></i>
-                </div>
-                <div>
-                  <div>Gestion des accès</div>
-
-                </div>
-              </a>
-            </li>
-            }
-
-            <li>
-              <hr class="dropdown-divider my-1 mx-3">
-            </li>
-            <li>
-              <a class="dropdown-item d-flex align-items-center py-3" (click)="logout()">
-                <div class="icon-container bg-danger-subtle me-3">
-                  <i class="fas fa-sign-out-alt text-danger"></i>
-                </div>
-                <div>
-                  <div>Déconnexion</div>
-
-                </div>
-              </a>
+              <a class="dropdown-item" (click)="logout()">Déconnexion</a>
             </li>
           </ul>
         </li>
       </ul>
+
     </div>
   </div>
 </nav>

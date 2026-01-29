@@ -68,6 +68,7 @@ export class MenuComponent implements OnInit {
       ...this.modulePermissions('EXAMEN'),
       ...this.modulePermissions('NOTE'),
       ...this.modulePermissions('ELEVE'),
+      ...this.modulePermissions('ADMINISTRATION'),
     ]);
   }
 

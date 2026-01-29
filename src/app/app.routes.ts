@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 
+// Dans app-routing.module.ts
+import { ImporterFichierComponent } from './admin/importer-fichier/importer-fichier';
 import { LoginComponent } from './components/login/login.component';
 import { DashboardPreinscriptionComponent } from './components/dashboard-preinscription/dashboard-preinscription.component';
 import { TbPedaComponent } from './components/tb-peda/tb-peda.component';
@@ -135,4 +137,8 @@ export const routes: Routes = [
       permissions: ['READ_NOTE', 'WRITE_NOTE', 'EDIT_NOTE', 'DELETE_NOTE'],
     },
   },
+  {
+  path: 'admin/importer-fichier',
+  component: ImporterFichierComponent
+}
 ];

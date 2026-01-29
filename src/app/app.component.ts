@@ -1,34 +1,36 @@
 // src/app/app.component.ts
 import { Component, inject, OnInit } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
- // Import CommonModule for NgClass
-import { RouterOutlet } from '@angular/router'; // Import RouterOutlet
+
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
+import { MenuComponent } from './components/menu/menu.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  standalone: true, // Si votre app.component est standalone
-  imports: [RouterOutlet, ToastModule, ConfirmDialogModule] // Ajoutez RouterOutlet ici si standalone
+  standalone: true,
+  imports: [
+    RouterOutlet,
+    ToastModule,
+    ConfirmDialogModule,
+    MenuComponent
+  ]
 })
 export class AppComponent implements OnInit {
-  router = inject(Router); 
-  title = 'Kranja App';
+
+  private router = inject(Router);
 
   isLoginPage: boolean = false;
 
-  constructor() {}
-
   ngOnInit(): void {
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: NavigationEnd) => {
-      // Vérifie si l'URL actuelle contient '/login'
-      this.isLoginPage = event.urlAfterRedirects.includes('/login');
-      // Pour une correspondance exacte: this.isLoginPage = event.urlAfterRedirects === '/login';
-    });
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        this.isLoginPage = event.urlAfterRedirects === '/login';
+      });
   }
 }

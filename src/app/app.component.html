@@ -1,2 +1,8 @@
+<!-- MENU + LAYOUT (sauf page login) -->
+<app-menu *ngIf="!isLoginPage"></app-menu>
+
+<!-- CONTENU DES PAGES -->
+<router-outlet></router-outlet>
+<app-menu *ngIf="!isLoginPage"></app-menu>
 
 <router-outlet></router-outlet>
