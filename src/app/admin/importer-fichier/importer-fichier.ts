@@ -165,4 +165,15 @@ export class ImporterFichierComponent {
     alert('Traitement des données lancé !');
     console.log('Données à traiter:', this.filteredData);
   }
+
+  formatCell(value: any, col: string): any {
+  const colsToFormat = ['Moyenne CC', 'Moyenne Exam', 'Moyenne Gle'];
+
+  if (colsToFormat.includes(col) && value !== '' && !isNaN(value)) {
+    return Number(value).toFixed(2);
+  }
+
+  return value;
+}
+
 }

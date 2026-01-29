@@ -5,8 +5,7 @@ import { filter } from 'rxjs/operators';
 
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-
-import { MenuComponent } from './components/menu/menu.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -15,9 +14,9 @@ import { MenuComponent } from './components/menu/menu.component';
   standalone: true,
   imports: [
     RouterOutlet,
+    CommonModule,
     ToastModule,
-    ConfirmDialogModule,
-    MenuComponent
+    ConfirmDialogModule
   ]
 })
 export class AppComponent implements OnInit {

@@ -92,23 +92,29 @@
             </div>
             
             <div class="table-responsive">
-              <table class="table table-bordered table-striped">
+              <table class="table table-bordered table-striped text-nowrap">
                 <thead class="table-dark">
                   <tr>
-                    <th *ngFor="let col of columns">{{ col }}</th>
+                    <th *ngFor="let col of columns" class="text-nowrap">
+                      {{ col }}
+                    </th>
                   </tr>
                   <tr>
                     <th *ngFor="let col of columns">
-                      <input type="text" class="form-control form-control-sm"
-                             placeholder="Recherche..."
-                             [(ngModel)]="filters[col]"
-                             (ngModelChange)="filtrerTableau()" />
+                      <input type="text"
+                            class="form-control form-control-sm"
+                            placeholder="Recherche..."
+                            [(ngModel)]="filters[col]"
+                            (ngModelChange)="filtrerTableau()" />
                     </th>
                   </tr>
                 </thead>
+
                 <tbody>
                   <tr *ngFor="let row of paginatedData">
-                    <td *ngFor="let col of columns">{{ row[col] }}</td>
+                    <td *ngFor="let col of columns" class="text-nowrap">
+                      {{ formatCell(row[col], col) }}
+                    </td>
                   </tr>
                 </tbody>
               </table>
