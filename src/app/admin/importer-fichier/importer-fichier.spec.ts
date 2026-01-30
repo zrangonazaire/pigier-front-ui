@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ImporterFichierComponent } from './importer-fichier';
+import {ImporterFichierComponent} from './importer-fichier';
 
 describe('ImporterFichier', () => {
   let component: ImporterFichierComponent;

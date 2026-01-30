@@ -1,9 +1,11 @@
-import { Component } from '@angular/core'; 
+import {Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from "@angular/router";
+import { RouterModule } from '@angular/router';
 import { MenuComponent } from '../../components/menu/menu.component';
 import * as XLSX from 'xlsx';
+import {AdministrationService} from '../../../api-client/api/administration.service';
+import {AdministrationTempo} from '../../../api-client/model/administrationTempo';
 
 @Component({
   selector: 'app-importer-fichier',
@@ -12,168 +14,185 @@ import * as XLSX from 'xlsx';
   templateUrl: './importer-fichier.html',
   styleUrls: ['./importer-fichier.scss']
 })
-export class ImporterFichierComponent {
+export class ImporterFichierComponent implements OnInit{
   fileName: string = '';
   selectedFile: File | null = null;
   allowedFileTypes = ['.csv', '.xlsx', '.xls', '.txt'];
-  showTraitement: boolean = false;
-
-  // Colonnes + nouvelle colonne Étape
-  columns: string[] = [
-    'Matri_Elev','nomPrenoms','Groupe','CodeUE','ecue1','ecue2',
-    'Dte_Deliber','Moyenne CC','Moyenne Exam','Moyenne Gle','decision',
-    'Annee','date_operation','creditUE','classActu','classExam','Etape'
+  showTraitement = false;
+  tableSource: 'FILE' | 'BACK' = 'FILE';
+  totalLignes = 0;
+  columns = [
+    { label: 'Matri_Elev', key: 'matriElev' },
+    { label: 'nomPrenoms', key: 'nomPrenoms' },
+    { label: 'Groupe', key: 'groupe' },
+    { label: 'CodeUE', key: 'codeUE' },
+    { label: 'ecue1', key: 'ecue1' },
+    { label: 'ecue2', key: 'ecue2' },
+    { label: 'Dte_Deliber', key: 'dteDeliber' },
+    { label: 'Moyenne CC', key: 'moyenneCC' },
+    { label: 'Moyenne Exam', key: 'moyenneExam' },
+    { label: 'Moyenne Gle', key: 'moyenneGle' },
+    { label: 'decision', key: 'decision' },
+    { label: 'Annee', key: 'annee' },
+    { label: 'date_operation', key: 'dateOperation' },
+    { label: 'creditUE', key: 'creditUE' },
+    { label: 'classActu', key: 'classActu' },
+    { label: 'classExam', key: 'classExam' },
+    { label: 'Etat', key: 'traitement' }
   ];
-
   data: any[] = [];
   filteredData: any[] = [];
-  filters: any = {};
-
-  // Pagination
-  page: number = 1;
-  pageSize: number = 10;
-  totalPages: number = 1;
   paginatedData: any[] = [];
+  filters: any = {};
+  page = 1;
+  pageSize = 10;
+  totalPages = 1;
 
-  // 1️⃣ Quand on choisit un fichier
+  constructor(private administrationService: AdministrationService) {}
+
+  ngOnInit(): void {
+  }
+
   onFileSelected(event: any): void {
     const file: File = event.target.files[0];
     if (!file) return;
-
-    const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
-    if (!this.allowedFileTypes.includes(fileExtension)) {
-      alert('Type de fichier non supporté. Utilisez: ' + this.allowedFileTypes.join(', '));
+    const extension = '.' + file.name.split('.').pop()?.toLowerCase();
+    if (!this.allowedFileTypes.includes(extension)) {
+      alert('Type de fichier non supporté');
       this.resetForm();
       return;
     }
-
     this.selectedFile = file;
     this.fileName = file.name;
     this.showTraitement = false;
-
-    // Lire le fichier et afficher son contenu dans le tableau
+    this.tableSource = 'FILE';
     this.lireFichier(file);
   }
 
-  // 2️⃣ Lire le fichier Excel/CSV
-  lireFichier(file: File) {
+  lireFichier(file: File): void {
     const reader = new FileReader();
-
     reader.onload = (e: any) => {
       let workbook;
       try {
-        const data = new Uint8Array(e.target.result);
-        workbook = XLSX.read(data, { type: 'array' });
+        workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
       } catch {
-        // Si CSV, on le lit comme texte
-        const csvData = e.target.result;
         const ws = XLSX.utils.aoa_to_sheet(
-          csvData.split(/\r\n|\n/).map((line: string) => line.split(',')) // séparer par virgule
+          e.target.result.split(/\r\n|\n/).map((l: string) => l.split(','))
         );
         workbook = { Sheets: { Sheet1: ws }, SheetNames: ['Sheet1'] };
       }
-
-      const firstSheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[firstSheetName];
-      let jsonData: any[] = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
-
-      // Ajouter la colonne "Etape" vide
-      this.data = jsonData.map(row => {
-        const filteredRow: any = {};
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+      const json = XLSX.utils.sheet_to_json<any>(worksheet, { defval: '' });
+      this.data = json.map(row => {
+        const obj: any = {};
         this.columns.forEach(col => {
-          filteredRow[col] = col === 'Etape' ? '' : (row[col] !== undefined ? row[col] : '');
+          obj[col.key] = row[col.label] ?? '';
         });
-        return filteredRow;
+        return obj;
       });
-
-      this.filteredData = [...this.data];
-      this.updatePagination();
+      this.refreshTable();
     };
-
-    if (file.name.endsWith('.csv') || file.name.endsWith('.txt')) {
-      reader.readAsText(file);
-    } else {
-      reader.readAsArrayBuffer(file);
-    }
+    file.name.endsWith('.csv') || file.name.endsWith('.txt')
+      ? reader.readAsText(file)
+      : reader.readAsArrayBuffer(file);
   }
 
-  // 3️⃣ Bouton Importer → active le bouton Traitement
   importerFichier(): void {
-    if (!this.selectedFile) {
-      alert('Veuillez sélectionner un fichier');
-      return;
-    }
-    alert(`Fichier "${this.selectedFile.name}" importé avec succès !`);
-    this.showTraitement = true;
+    if (!this.selectedFile) return;
+    this.administrationService.importExcel(this.selectedFile).subscribe({
+      next: () => {
+        alert('Import effectué avec succès');
+        this.tableSource = 'BACK';
+        this.listerAdministrationTempo();
+        this.showTraitement = true;
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Erreur lors de l’import');
+      }
+    });
   }
 
-  // 4️⃣ Annuler
+  listerAdministrationTempo(): void {
+    this.administrationService.getListe().subscribe({
+      next: (list: AdministrationTempo[]) => {
+        this.data = list;
+        this.refreshTable();
+      },
+      error: () => alert('Erreur chargement des données')
+    });
+  }
+
+  traiterDonnees(): void {
+    this.administrationService.traiter().subscribe({
+      next: () => {
+        alert('Traitement terminé');
+        this.listerAdministrationTempo();
+      },
+      error: () => alert('Erreur traitement')
+    });
+  }
+
+  filtrerTableau(): void {
+    this.filteredData = this.data.filter(row =>
+      this.columns.every(col =>
+        !this.filters[col.key] ||
+        row[col.key]?.toString().toLowerCase().includes(
+          this.filters[col.key].toLowerCase()
+        )
+      )
+    );
+    this.page = 1;
+    this.updatePagination();
+  }
+
+  refreshTable(): void {
+    this.filteredData = [...this.data];
+    this.totalLignes = this.data.length;
+    this.page = 1;
+    this.updatePagination();
+  }
+
+  updatePagination(): void {
+    this.totalPages = Math.ceil(this.filteredData.length / this.pageSize);
+    const start = (this.page - 1) * this.pageSize;
+    this.paginatedData = this.filteredData.slice(start, start + this.pageSize);
+  }
+
+  changePage(page: number): void {
+    if (page < 1 || page > this.totalPages) return;
+    this.page = page;
+    this.updatePagination();
+  }
+
+  changePageSize(size: number): void {
+    this.pageSize = Number(size);
+    this.page = 1;
+    this.updatePagination();
+  }
+
   annulerImport(): void {
-    if (confirm('Voulez-vous vraiment annuler l\'importation ?')) {
-      this.resetForm();
-    }
+    if (confirm('Annuler l’import ?')) this.resetForm();
   }
 
-  // 5️⃣ Réinitialiser
   resetForm(): void {
     this.selectedFile = null;
     this.fileName = '';
-    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
-    if (fileInput) fileInput.value = '';
     this.data = [];
     this.filteredData = [];
-    this.filters = {};
-    this.showTraitement = false;
-    this.page = 1;
     this.paginatedData = [];
+    this.filters = {};
+    this.totalLignes = 0;
+    this.showTraitement = false;
+    this.tableSource = 'FILE';
   }
 
-  // 6️⃣ Filtrer le tableau
-  filtrerTableau() {
-    this.filteredData = this.data.filter(row => {
-      return this.columns.every(col => {
-        if (!this.filters[col]) return true;
-        return row[col].toString().toLowerCase().includes(this.filters[col].toLowerCase());
-      });
-    });
-    this.page = 1;
-    this.updatePagination();
+  formatCell(value: any, label: string): any {
+    const numericLabels = ['Moyenne CC', 'Moyenne Exam', 'Moyenne Gle'];
+
+    if (numericLabels.includes(label) && value !== null && value !== undefined) {
+      return Number(value).toFixed(2);
+    }
+    return value ?? '';
   }
-
-  // 7️⃣ Pagination
-  updatePagination() {
-    this.totalPages = Math.ceil(this.filteredData.length / this.pageSize);
-    const start = (this.page - 1) * this.pageSize;
-    const end = start + this.pageSize;
-    this.paginatedData = this.filteredData.slice(start, end);
-  }
-
-  changePage(newPage: number) {
-    if (newPage < 1 || newPage > this.totalPages) return;
-    this.page = newPage;
-    this.updatePagination();
-  }
-
-  changePageSize(newSize: number) {
-    this.pageSize = Number(newSize);
-    this.page = 1;
-    this.updatePagination();
-  }
-
-  // 8️⃣ Traitement des données
-  traiterDonnees() {
-    alert('Traitement des données lancé !');
-    console.log('Données à traiter:', this.filteredData);
-  }
-
-  formatCell(value: any, col: string): any {
-  const colsToFormat = ['Moyenne CC', 'Moyenne Exam', 'Moyenne Gle'];
-
-  if (colsToFormat.includes(col) && value !== '' && !isNaN(value)) {
-    return Number(value).toFixed(2);
-  }
-
-  return value;
-}
-
 }

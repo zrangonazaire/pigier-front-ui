@@ -1,11 +1,9 @@
 import { Routes } from '@angular/router';
-
-// Dans app-routing.module.ts
-import { ImporterFichierComponent } from './admin/importer-fichier/importer-fichier';
 import { LoginComponent } from './components/login/login.component';
 import { DashboardPreinscriptionComponent } from './components/dashboard-preinscription/dashboard-preinscription.component';
 import { TbPedaComponent } from './components/tb-peda/tb-peda.component';
 import { PermissionGuard } from './core/permission.guard';
+import {ImporterFichierComponent} from './admin/importer-fichier/importer-fichier';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
