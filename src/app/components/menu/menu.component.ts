@@ -68,7 +68,16 @@ export class MenuComponent implements OnInit {
       ...this.modulePermissions('EXAMEN'),
       ...this.modulePermissions('NOTE'),
       ...this.modulePermissions('ELEVE'),
+      ...this.modulePermissions('ADMINISTRATION'),
     ]);
+  }
+
+  isNotAdmin(): boolean {
+    return !this.authService.isAdmin();
+  }
+
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
   }
 
   logout() {
@@ -78,4 +87,5 @@ export class MenuComponent implements OnInit {
     this.router.navigate(['/login']);
     this.currentUser = '';
   }
+
 }

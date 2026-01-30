@@ -15,9 +15,11 @@ import {
 import { JwtInterceptor } from './core/interceptor';
 import { provideToastr } from 'ngx-toastr';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import {provideAnimations} from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideAnimations(),
     provideToastr({
       positionClass: 'toast-top-center',
       timeOut: 3000,

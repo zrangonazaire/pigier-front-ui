@@ -137,4 +137,16 @@
   .navbar-nav .nav-link {
     padding: 0.75rem 1rem;
   }
+  /* SUPPRIMER TOUTES LES PUCES */
+.navbar-nav,
+.navbar-nav ul {
+  list-style: none !important;
+  padding-left: 0 !important;
+  margin: 0 !important;
+}
+
+/* SUPPRIMER LA FLÈCHE BOOTSTRAP */
+.dropdown-toggle::after {
+  display: none !important;
+}
 }

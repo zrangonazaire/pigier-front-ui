@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-
 import { LoginComponent } from './components/login/login.component';
 import { DashboardPreinscriptionComponent } from './components/dashboard-preinscription/dashboard-preinscription.component';
 import { TbPedaComponent } from './components/tb-peda/tb-peda.component';
 import { PermissionGuard } from './core/permission.guard';
+import {ImporterFichierComponent} from './admin/importer-fichier/importer-fichier';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -135,4 +135,8 @@ export const routes: Routes = [
       permissions: ['READ_NOTE', 'WRITE_NOTE', 'EDIT_NOTE', 'DELETE_NOTE'],
     },
   },
+  {
+  path: 'admin/importer-fichier',
+  component: ImporterFichierComponent
+}
 ];
