@@ -2,10 +2,8 @@
 export interface EncaissementEleveBIBaseDTO {
   matricule: string;
   nomPrenom: string;
-
-  niveau: string;    // BTS | L | M
+  niveau: string;
   filiere: string;
-
   montantAttendu: number;
   montantEncaisse: number;
   solde: number;

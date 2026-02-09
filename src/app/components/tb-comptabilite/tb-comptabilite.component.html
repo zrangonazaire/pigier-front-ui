@@ -1,95 +1,326 @@
 <app-menu></app-menu>
 
-<div class="container-fluid" *ngIf="dashboard as d">
-
-  <h2 class="mb-4">{{ title }}</h2>
-
-  <div class="filters-bar">
-    <div>
-      <label>Année scolaire</label>
-      <input class="form-control" [(ngModel)]="annee" (change)="onFiltreChange()">
+<div class="dashboard-container">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <h1><i class="pi pi-chart-bar"></i> {{ title }}</h1>
+      <p class="subtitle">Suivi des paiements et encaissements des étudiants</p>
     </div>
-
-    <div>
-      <label>Mois</label>
-      <select class="form-control" [(ngModel)]="mois" (change)="onFiltreChange()">
-        <option [ngValue]="undefined">Tous</option>
-        <option *ngFor="let m of [1,2,3,4,5,6,7,8,9,10,11,12]" [value]="m">{{ m }}</option>
-      </select>
-    </div>
-
-    <div>
-      <label>Niveau</label>
-      <select class="form-control" [(ngModel)]="niveau" (change)="onFiltreChange()">
-        <option [ngValue]="undefined">Tous</option>
-        <option *ngFor="let n of niveauxDisponibles" [value]="n">{{ n }}</option>
-      </select>
-    </div>
-
-    <button class="btn btn-success mt-4" (click)="onFiltreChange()">🔍 Rechercher</button>
   </div>
 
-  <div class="row kpi-row">
-    <div class="col" *ngFor="let k of [
-      ['Étudiants', d.totalEleves, 'primary'],
-      ['Soldés', d.totalElevesSoldes, 'success'],
-      ['Non soldés', d.totalElevesNonSoldes, 'danger'],
-      ['Total attendu', formatMontant(d.montantTotalAttendu), 'warning'],
-      ['Total encaissé', formatMontant(d.montantTotalEncaisse), 'success'],
-      ['Restant dû', formatMontant(d.montantTotalRestant), 'danger']
-    ]">
-      <div class="card kpi-card border-left-{{k[2]}}">
-        <div class="card-body">
-          <small>{{ k[0] }}</small>
-          <h5>{{ k[1] }}</h5>
-        </div>
+  <!-- Barre de filtres -->
+  <div class="filters-section">
+    <div class="filters-card">
+      <div class="filter-group">
+        <label><i class="pi pi-calendar"></i> Année scolaire</label>
+        <p-select
+          [options]="anneeOptions"
+          [(ngModel)]="annee"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Sélectionner une année"
+          styleClass="filter-select"
+          (onChange)="onFiltreChange()">
+        </p-select>
+      </div>
+
+      <div class="filter-group">
+        <label><i class="pi pi-calendar-times"></i> Mois</label>
+        <p-select
+          [options]="moisOptions"
+          [(ngModel)]="mois"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Sélectionner un mois"
+          styleClass="filter-select"
+          (onChange)="onFiltreChange()">
+        </p-select>
+      </div>
+
+      <div class="filter-group">
+        <label><i class="pi pi-graduation-cap"></i> Niveau</label>
+        <p-select
+          [options]="niveauxOptions"
+          [(ngModel)]="niveau"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Sélectionner un niveau"
+          styleClass="filter-select"
+          (onChange)="onFiltreChange()">
+        </p-select>
+      </div>
+
+      <div class="filter-actions">
+        <button
+          pButton
+          icon="pi pi-search"
+          label="Rechercher"
+          class="btn-search"
+          (click)="onFiltreChange()">
+        </button>
       </div>
     </div>
   </div>
 
-  <div class="row mt-4">
-    <div class="col-md-6">
-      <canvas id="chartNiveau"></canvas>
-    </div>
-    <div class="col-md-3">
-      <canvas id="chartSolde"></canvas>
-    </div>
-    <div class="col-md-3">
-      <canvas id="chartFiliere"></canvas>
-    </div>
+  <!-- Loading / Error -->
+  <div *ngIf="loading" class="loading-overlay">
+    <p-progressSpinner strokeWidth="4" animationDuration="1s"></p-progressSpinner>
+    <span>Chargement des données...</span>
   </div>
 
-  <div class="mt-5">
-    <h4>Liste des étudiants</h4>
+  <div *ngIf="errorMessage" class="error-banner">
+    <i class="pi pi-exclamation-circle"></i>
+    {{ errorMessage }}
+  </div>
 
-    <input class="form-control mb-2" placeholder="🔎 Rechercher..." [(ngModel)]="searchText">
+  <!-- Contenu principal -->
+  <div *ngIf="dashboard && !loading" class="dashboard-content">
 
-    <table class="table table-striped table-hover">
-      <thead class="table-dark">
-      <tr>
-        <th>Matricule</th>
-        <th>Nom</th>
-        <th>Niveau</th>
-        <th>Filière</th>
-        <th>Attendu</th>
-        <th>Encaissé</th>
-        <th>Solde</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let e of filteredDetails | paginate: { itemsPerPage: 15, currentPage: page }">
-        <td>{{ e.matricule }}</td>
-        <td>{{ e.nomPrenom }}</td>
-        <td>{{ e.niveau }}</td>
-        <td>{{ e.filiere }}</td>
-        <td>{{ formatMontant(e.montantAttendu) }}</td>
-        <td>{{ formatMontant(e.montantEncaisse) }}</td>
-        <td [class.text-danger]="e.solde > 0">{{ formatMontant(e.solde) }}</td>
-      </tr>
-      </tbody>
-    </table>
+    <!-- KPI Cards - 12 cards sur 4 colonnes -->
+    <div class="kpi-grid">
+      <div *ngFor="let kpi of kpiCards" class="kpi-card {{ kpi.bg }}">
+        <div class="kpi-icon">
+          <i [ngClass]="kpi.icon"></i>
+        </div>
+        <div class="kpi-info">
+          <span class="kpi-value">{{ kpi.value }}</span>
+          <span class="kpi-label">{{ kpi.label }}</span>
+        </div>
+      </div>
+    </div>
 
-    <pagination-controls (pageChange)="page = $event"></pagination-controls>
+    <!-- Section Charts - 8 charts sur 2 lignes de 4 -->
+    <div class="charts-section">
+      <!-- Ligne 1 : 4 charts -->
+      <div class="charts-grid">
+        <!-- Chart 1: Encaissement par Niveau -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3><i class="pi pi-chart-bar"></i> Par niveau</h3>
+          </div>
+          <div class="chart-body">
+            <p-chart
+              type="bar"
+              [data]="chartNiveauData"
+              [options]="chartNiveauOptions">
+            </p-chart>
+          </div>
+        </div>
+
+        <!-- Chart 2: Encaissement par Filière (Pyramide) -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3><i class="pi pi-sitemap"></i> Par filière</h3>
+          </div>
+          <div class="chart-body">
+            <p-chart
+              type="bar"
+              [data]="chartFiliereData"
+              [options]="chartFiliereOptions">
+            </p-chart>
+          </div>
+        </div>
+
+        <!-- Chart 3: Soldés vs Non Soldés -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3><i class="pi pi-users"></i> Soldés / Non soldés</h3>
+          </div>
+          <div class="chart-body">
+            <p-chart
+              type="doughnut"
+              [data]="chartSoldeData"
+              [options]="chartSoldeOptions">
+            </p-chart>
+          </div>
+        </div>
+
+        <!-- Chart 4: Taux de Recouvrement (Gauge) -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3><i class="pi pi-percentage"></i> Taux recouvrement</h3>
+          </div>
+          <div class="chart-body gauge-container">
+            <p-chart
+              type="doughnut"
+              [data]="chartRecouvrementData"
+              [options]="chartRecouvrementOptions">
+            </p-chart>
+            <div class="gauge-value">{{ formatPercent(dashboard.tauxRecouvrement) }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ligne 2 : 4 charts -->
+      <div class="charts-grid">
+        <!-- Chart 5: Comparaison Attendu/Encaissé/Restant -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3><i class="pi pi-chart-line"></i> Comparaison montants</h3>
+          </div>
+          <div class="chart-body">
+            <p-chart
+              type="bar"
+              [data]="chartComparaisonData"
+              [options]="chartComparaisonOptions">
+            </p-chart>
+          </div>
+        </div>
+
+        <!-- Chart 6: Top 5 Filières (Polar) -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3><i class="pi pi-star"></i> Top 5 filières</h3>
+          </div>
+          <div class="chart-body">
+            <p-chart
+              type="polarArea"
+              [data]="chartTopFilieresData"
+              [options]="chartTopFilieresOptions">
+            </p-chart>
+          </div>
+        </div>
+
+        <!-- Chart 7: Répartition Montants -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3><i class="pi pi-wallet"></i> Répartition montants</h3>
+          </div>
+          <div class="chart-body">
+            <p-chart
+              type="pie"
+              [data]="chartMontantsData"
+              [options]="chartMontantsOptions">
+            </p-chart>
+          </div>
+        </div>
+
+        <!-- Chart 8: Taux Élèves Soldés (Gauge) -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3><i class="pi pi-check-circle"></i> Taux élèves soldés</h3>
+          </div>
+          <div class="chart-body gauge-container">
+            <p-chart
+              type="doughnut"
+              [data]="chartTauxSoldesData"
+              [options]="chartTauxSoldesOptions">
+            </p-chart>
+            <div class="gauge-value gauge-green">{{ formatPercent(dashboard.tauxElevesSoldes) }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section Tableau -->
+    <div class="table-section">
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">
+            <h3><i class="pi pi-list"></i> Détails par étudiant</h3>
+            <span class="record-count">{{ filteredDetails.length }} enregistrement(s)</span>
+          </div>
+          <button
+            pButton
+            icon="pi pi-filter-slash"
+            label="Effacer filtres"
+            class="p-button-outlined p-button-secondary btn-clear"
+            (click)="clearFilters()"
+            *ngIf="filterMatricule || filterNom || filterNiveau || filterFiliere">
+          </button>
+        </div>
+
+        <p-table
+          [value]="filteredDetails"
+          [paginator]="true"
+          [rows]="15"
+          [rowsPerPageOptions]="[10, 15, 25, 50, 100]"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Affichage {first} à {last} sur {totalRecords} entrées"
+          [globalFilterFields]="['matricule', 'nomPrenom', 'niveau', 'filiere']"
+          styleClass="p-datatable-sm custom-table"
+          responsiveLayout="scroll"
+          paginatorDropdownAppendTo="body">
+
+          <!-- Header avec filtres -->
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="matricule">
+                Matricule <p-sortIcon field="matricule"></p-sortIcon>
+              </th>
+              <th pSortableColumn="nomPrenom">
+                Nom & Prénom <p-sortIcon field="nomPrenom"></p-sortIcon>
+              </th>
+              <th pSortableColumn="niveau">
+                Niveau <p-sortIcon field="niveau"></p-sortIcon>
+              </th>
+              <th pSortableColumn="filiere">
+                Filière <p-sortIcon field="filiere"></p-sortIcon>
+              </th>
+              <th pSortableColumn="montantAttendu">
+                Attendu <p-sortIcon field="montantAttendu"></p-sortIcon>
+              </th>
+              <th pSortableColumn="montantEncaisse">
+                Encaissé <p-sortIcon field="montantEncaisse"></p-sortIcon>
+              </th>
+              <th pSortableColumn="solde">
+                Solde <p-sortIcon field="solde"></p-sortIcon>
+              </th>
+            </tr>
+            <tr class="filter-row">
+              <th>
+                <input pInputText type="text" [(ngModel)]="filterMatricule" placeholder="🔍 Matricule" class="col-filter">
+              </th>
+              <th>
+                <input pInputText type="text" [(ngModel)]="filterNom" placeholder="🔍 Nom" class="col-filter">
+              </th>
+              <th>
+                <input pInputText type="text" [(ngModel)]="filterNiveau" placeholder="🔍 Niveau" class="col-filter">
+              </th>
+              <th>
+                <input pInputText type="text" [(ngModel)]="filterFiliere" placeholder="🔍 Filière" class="col-filter">
+              </th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </ng-template>
+
+          <!-- Body -->
+          <ng-template pTemplate="body" let-eleve>
+            <tr [ngStyle]="rowStyle(eleve.niveau)">
+              <td><strong class="matricule">{{ eleve.matricule }}</strong></td>
+              <td>{{ eleve.nomPrenom }}</td>
+              <td>
+                <p-tag [value]="eleve.niveau" [ngStyle]="niveauStyle(eleve.niveau)" styleClass="niveau-tag"></p-tag>
+              </td>
+              <td class="filiere-cell">{{ eleve.filiere }}</td>
+              <td class="text-right montant">{{ formatMontant(eleve.montantAttendu) }}</td>
+              <td class="text-right montant-encaisse">{{ formatMontant(eleve.montantEncaisse) }}</td>
+              <td class="text-right">
+                <p-tag
+                  [value]="formatMontant(eleve.solde)"
+                  [severity]="getSoldeSeverity(eleve.solde)"
+                  styleClass="solde-tag">
+                </p-tag>
+              </td>
+            </tr>
+          </ng-template>
+
+          <!-- Empty -->
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="7" class="empty-message">
+                <i class="pi pi-inbox"></i>
+                <span>Aucun enregistrement trouvé</span>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+
   </div>
 
 </div>
