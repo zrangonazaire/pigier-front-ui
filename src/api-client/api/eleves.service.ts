@@ -11,7 +11,7 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpParameterCodec, HttpContext 
+         HttpResponse, HttpEvent, HttpParameterCodec, HttpContext
         }       from '@angular/common/http';
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
@@ -38,10 +38,10 @@ export class ElevesService extends BaseService {
     }
 
     /**
-     * @param paramClasse 
-     * @param paramAnneDebut 
-     * @param paramAnneFin 
-     * @param paramEtab 
+     * @param paramClasse
+     * @param paramAnneDebut
+     * @param paramAnneFin
+     * @param paramEtab
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -116,10 +116,10 @@ export class ElevesService extends BaseService {
     }
 
     /**
-     * @param paramClasse 
-     * @param paramAnneDebut 
-     * @param paramAnneFin 
-     * @param paramEtab 
+     * @param paramClasse
+     * @param paramAnneDebut
+     * @param paramAnneFin
+     * @param paramEtab
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -194,7 +194,7 @@ export class ElevesService extends BaseService {
     }
 
     /**
-     * @param anneeScolaire 
+     * @param anneeScolaire
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -254,18 +254,18 @@ export class ElevesService extends BaseService {
     }
 
     /**
-     * @param promotions 
-     * @param etablissements 
-     * @param anneeScolaire 
-     * @param startStr 
-     * @param endStr 
+     * @param promotions
+     * @param etablissements
+     * @param anneeScolaire
+     * @param startStr
+     * @param endStr
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPromotionsEleves(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EleveRecordDTO>>;
-    public getPromotionsEleves(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EleveRecordDTO>>>;
-    public getPromotionsEleves(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EleveRecordDTO>>>;
-    public getPromotionsEleves(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getPromotionsEleves(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, nomElev?: string, matriElev?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EleveRecordDTO>>;
+    public getPromotionsEleves(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, nomElev?: string, matriElev?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EleveRecordDTO>>>;
+    public getPromotionsEleves(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, nomElev?: string, matriElev?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EleveRecordDTO>>>;
+    public getPromotionsEleves(promotions: Array<string>, etablissements: Array<string>, anneeScolaire: string, startStr: string, endStr: string, nomElev?: string, matriElev?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (promotions === null || promotions === undefined) {
             throw new Error('Required parameter promotions was null or undefined when calling getPromotionsEleves.');
         }
@@ -283,17 +283,24 @@ export class ElevesService extends BaseService {
         }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        if (promotions) {
+        const hasPromotions = promotions && promotions.length > 0;
+        const hasEtablissements = etablissements && etablissements.length > 0;
+        if (hasPromotions) {
             promotions.forEach((element) => {
                 localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
                   <any>element, 'promotions');
             })
+        } else {
+            // envoie un paramètre vide pour que le back accepte la liste et la traite comme optionnelle
+            localVarQueryParameters = this.addToHttpParams(localVarQueryParameters, '', 'promotions');
         }
-        if (etablissements) {
+        if (hasEtablissements) {
             etablissements.forEach((element) => {
                 localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
                   <any>element, 'etablissements');
             })
+        } else {
+            localVarQueryParameters = this.addToHttpParams(localVarQueryParameters, '', 'etablissements');
         }
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>anneeScolaire, 'anneeScolaire');
@@ -301,6 +308,14 @@ export class ElevesService extends BaseService {
           <any>startStr, 'startStr');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>endStr, 'endStr');
+        if (nomElev !== undefined && nomElev !== null && nomElev !== '') {
+            localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+              <any>nomElev, 'nomElev');
+        }
+        if (matriElev !== undefined && matriElev !== null && matriElev !== '') {
+            localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+              <any>matriElev, 'matriElev');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -346,11 +361,11 @@ export class ElevesService extends BaseService {
     }
 
     /**
-     * @param promotions 
-     * @param etablissements 
-     * @param anneeScolaire 
-     * @param startStr 
-     * @param endStr 
+     * @param promotions
+     * @param etablissements
+     * @param anneeScolaire
+     * @param startStr
+     * @param endStr
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -438,12 +453,12 @@ export class ElevesService extends BaseService {
     }
 
     /**
-     * @param promotions 
-     * @param etablissements 
-     * @param anneeScolaire 
-     * @param startStr 
-     * @param endStr 
-     * @param montantpayer 
+     * @param promotions
+     * @param etablissements
+     * @param anneeScolaire
+     * @param startStr
+     * @param endStr
+     * @param montantpayer
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
