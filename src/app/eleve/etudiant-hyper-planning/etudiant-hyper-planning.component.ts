@@ -63,6 +63,20 @@ export class EtudiantHyperPlanningComponent implements OnInit {
   pageSize: number = 10;
   montantPaye: number=0;
 
+  nomElev: string = '';
+  matriElev: string = '';
+
+  filterMatricule = '';
+  filterNom = '';
+  filterPrenoms = '';
+  filterSexe = '';
+  filterDateNaissance = '';
+  filterLieuNaissance = '';
+  filterClasse = '';
+  filterTelEleve = '';
+  filterTelParent = '';
+  filterEmail = '';
+
   constructor(
     private elevesService: ElevesService,
     private anneeScolaireService: AnneeScolaireControllerService,
@@ -153,11 +167,15 @@ export class EtudiantHyperPlanningComponent implements OnInit {
   search(): void {
     if (
       !this.anneeScolaire ||
-      this.selectedEtablissements.length === 0 ||
-      this.selectedClasses.length === 0
+      (
+        this.selectedEtablissements.length === 0 &&
+        this.selectedClasses.length === 0 &&
+        !this.nomElev.trim() &&
+        !this.matriElev.trim()
+      )
     ) {
       this.error =
-        'Veuillez sélectionner une année scolaire, au moins un établissement et au moins une classe.';
+        'Veuillez saisir au moins un filtre : année scolaire et (établissement+classe) ou nom ou matricule.';
       this.eleves = [];
       return;
     }
@@ -170,7 +188,9 @@ export class EtudiantHyperPlanningComponent implements OnInit {
         this.selectedEtablissements,
         annee,
         this.dateDebut,
-        this.dateFin
+        this.dateFin,
+        this.nomElev,
+        this.matriElev
       )
       .subscribe({
         next: (data) => {
@@ -219,6 +239,12 @@ export class EtudiantHyperPlanningComponent implements OnInit {
     params = params.append('anneeScolaire', anne);
     params= params.append('startStr', this.dateDebut || '');
     params= params.append('endStr', this.dateFin || '');
+    if (this.nomElev?.trim()) {
+      params = params.append('nomElev', this.nomElev.trim());
+    }
+    if (this.matriElev?.trim()) {
+      params = params.append('matriElev', this.matriElev.trim());
+    }
     // Ajout de l'en-tête d'authentification
     const token = localStorage.getItem('access_token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
@@ -258,13 +284,31 @@ export class EtudiantHyperPlanningComponent implements OnInit {
     return Math.min(a, b);
   }
 
+  get filteredEleves() {
+    const filtre = (val: string | undefined, motif: string) =>
+      !motif.trim() || (val ?? '').toLowerCase().includes(motif.trim().toLowerCase());
+    return this.eleves.filter((e) =>
+      filtre(e.matriElev, this.filterMatricule) &&
+      filtre(e.nom, this.filterNom) &&
+      filtre(e.prenoms, this.filterPrenoms) &&
+      filtre(e.sexe, this.filterSexe) &&
+      filtre(this.formatDate(e.dateNaissance), this.filterDateNaissance) &&
+      filtre(e.lieunaisElev, this.filterLieuNaissance) &&
+      filtre(e.codeDetcla, this.filterClasse) &&
+      filtre(e.telEleve, this.filterTelEleve) &&
+      filtre(e.telParent, this.filterTelParent) &&
+      filtre(e.emailPersonnel, this.filterEmail)
+    );
+  }
+
   get pagedEleves() {
     const start = (this.page - 1) * this.pageSize;
-    return this.eleves.slice(start, start + this.pageSize);
+    const data = this.filteredEleves;
+    return data.slice(start, start + this.pageSize);
   }
 
   get totalPages() {
-    return Math.ceil(this.eleves.length / this.pageSize);
+    return Math.ceil(this.filteredEleves.length / this.pageSize);
   }
 
   private sortClasses(classes: string[]): string[] {
