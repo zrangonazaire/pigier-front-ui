@@ -26,7 +26,7 @@ export class StudentListComponent implements OnInit {
   apiStatus = '';
 
   campuses = ['ABIDJAN PLATEAU', 'ABIDJAN YOPOUGON', 'YAMOUSSOUKRO'];
-  anneesScolaires = ['2023/2024', '2024/2025', '2025/2026'];
+  anneesScolaires = [ '2021/2022', '2022/2023', '2023/2024', '2024/2025', '2025/2026'];
   classesExamples = ['URGL1', 'URGL2', 'BTS1', 'BTS2', 'LICENCE1', 'LICENCE2', 'LICENCE3'];
 
   constructor(private etudiantService: EtudiantControllerService) {}
